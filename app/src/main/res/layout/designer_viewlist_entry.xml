@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="45.0dip">
 
@@ -14,13 +14,13 @@
         android:padding="4.0dip"
         android:visibility="gone">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/designerViewlistEntryImage"
             android:layout_width="30.0dip"
             android:layout_height="30.0dip"
             android:src="@drawable/round_category_24" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/designerViewlistEntryName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,29 +28,31 @@
             android:paddingStart="10.0dip"
             android:paddingEnd="5.0dip"
             android:text=" "
-            android:textSize="16.0sp" />
+            android:textSize="16.0sp"
+            android:paddingLeft="10.0dip"
+            android:paddingRight="5.0dip" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/designerViewlistentryFileLayout"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <RadioButton
+        <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/designerViewlistentryFileRadioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/designerViewlistFileImage"
             android:layout_width="30.0dip"
             android:layout_height="30.0dip"
             android:src="@drawable/round_insert_drive_file_24" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/designerViewlistentryFileName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -59,14 +61,17 @@
             android:ellipsize="start"
             android:singleLine="true"
             android:text="layout.xml"
-            android:textSize="16.0sp" />
+            android:textSize="16.0sp"
+            android:layout_marginLeft="10.0dip" />
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/designerViewlistentryDelete"
             android:layout_width="30.0dip"
             android:layout_height="30.0dip"
             android:layout_marginStart="10.0dip"
             android:layout_marginEnd="5.0dip"
-            android:src="?icon_delete" />
+            android:src="?icon_delete"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginRight="5.0dip" />
     </LinearLayout>
 </FrameLayout>

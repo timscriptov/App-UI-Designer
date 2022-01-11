@@ -2,8 +2,6 @@ package com.mcal.uidesigner.common;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.UiModeManager;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -21,9 +19,13 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.PopupMenu;
-import android.widget.Spinner;
-import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatSpinner;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.PopupMenu;
 
 import com.mcal.designer.R;
 
@@ -35,7 +37,7 @@ public class AndroidHelper {
     private static Locale defaultLocale;
     private static Boolean isAndroidTV;
 
-    public static void switchLanguage(Activity activity, String langCode) {
+    public static void switchLanguage(AppCompatActivity activity, String langCode) {
         Locale locale;
         if (langCode == null || "default".equals(langCode)) {
             locale = defaultLocale;
@@ -67,10 +69,10 @@ public class AndroidHelper {
     }
 
     @TargetApi(21)
-    public static void setAndroidTVPadding(Activity activity) {
+    public static void setAndroidTVPadding(AppCompatActivity activity) {
         if (isAndroidTV(activity)) {
             float density = activity.getResources().getDisplayMetrics().density;
-            activity.getActionBar().setElevation(3.0f * density);
+            activity.getSupportActionBar().setElevation(3.0f * density);
             View av = activity.getWindow().getDecorView().findViewById(activity.getResources().getIdentifier("action_bar_container", "id", "android"));
             if (av != null) {
                 av.setPadding((int) (48.0f * density), (int) (27.0f * density), (int) (48.0f * density), 0);
@@ -86,9 +88,9 @@ public class AndroidHelper {
     public static void setAndroidTVPadding(View contentView, boolean bottomPadding) {
         int i;
         if (isAndroidTV(contentView.getContext())) {
-            Activity activity = (Activity) contentView.getContext();
+            AppCompatActivity activity = (AppCompatActivity) contentView.getContext();
             float density = activity.getResources().getDisplayMetrics().density;
-            activity.getActionBar().setElevation(3.0f * density);
+            activity.getSupportActionBar().setElevation(3.0f * density);
             int i2 = (int) (48.0f * density);
             int i3 = (int) (48.0f * density);
             if (bottomPadding) {
@@ -104,7 +106,7 @@ public class AndroidHelper {
         }
     }
 
-    public static void makeToolbarFocusable(Activity activity) {
+    public static void makeToolbarFocusable(AppCompatActivity activity) {
         if (Build.VERSION.SDK_INT >= 21) {
             View tv = activity.findViewById(activity.getResources().getIdentifier("action_bar", "id", "android"));
             if (tv instanceof ViewGroup) {
@@ -153,24 +155,24 @@ public class AndroidHelper {
         }
     }
 
-    public static void setActionBarEmbeddedTabs(Activity activity, boolean enabled) {
+    public static void setActionBarEmbeddedTabs(AppCompatActivity activity, boolean enabled) {
         try {
-            Method setHasEmbeddedTabsMethod = activity.getActionBar().getClass().getDeclaredMethod("setHasEmbeddedTabs", Boolean.TYPE);
+            Method setHasEmbeddedTabsMethod = activity.getSupportActionBar().getClass().getDeclaredMethod("setHasEmbeddedTabs", Boolean.TYPE);
             setHasEmbeddedTabsMethod.setAccessible(true);
-            setHasEmbeddedTabsMethod.invoke(activity.getActionBar(), Boolean.valueOf(enabled));
+            setHasEmbeddedTabsMethod.invoke(activity.getSupportActionBar(), Boolean.valueOf(enabled));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void setActionBarReplacementPopup(final Activity activity) {
+    public static void setActionBarReplacementPopup(final AppCompatActivity activity) {
         new Handler().postDelayed(new Runnable() {
             @SuppressLint("PrivateApi")
             @Override
             public void run() {
                 try {
-                    final ActionBar actionBar = activity.getActionBar();
-                    final Spinner spinner = (Spinner) AndroidHelper.findViewOf(activity.findViewById(activity.getResources().getIdentifier("action_bar_container", "id", "android")), Spinner.class);
+                    final ActionBar actionBar = activity.getSupportActionBar();
+                    final AppCompatSpinner spinner = (AppCompatSpinner) AndroidHelper.findViewOf(activity.findViewById(activity.getResources().getIdentifier("action_bar_container", "id", "android")), AppCompatSpinner.class);
                     if (spinner != null) {
                         View.OnClickListener onClickListener = new View.OnClickListener() {
                             @Override
@@ -217,7 +219,7 @@ public class AndroidHelper {
         return null;
     }
 
-    public static void forceOptionsMenuButton(Activity activity) {
+    public static void forceOptionsMenuButton(AppCompatActivity activity) {
         if (getScreenSizeDip(activity) >= 540.0f) {
             try {
                 ViewConfiguration config = ViewConfiguration.get(activity);
@@ -250,7 +252,7 @@ public class AndroidHelper {
     }
 
     public static float getWindowHeightDip(Context context) {
-        Activity activity = (Activity) context;
+        AppCompatActivity activity = (AppCompatActivity) context;
         float density = activity.getResources().getDisplayMetrics().density;
         Rect outRect = new Rect();
         activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(outRect);
@@ -274,7 +276,7 @@ public class AndroidHelper {
         return size;
     }
 
-    public static void correctCodeFontSize(TextView textView) {
+    public static void correctCodeFontSize(@NonNull AppCompatTextView textView) {
         textView.setTextSize(((float) correctCodeFontSize(textView.getContext(), (int) textView.getTextSize())) / textView.getContext().getResources().getDisplayMetrics().scaledDensity);
     }
 

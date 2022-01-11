@@ -5,12 +5,13 @@ import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
-import android.widget.EditText;
+
+import androidx.appcompat.widget.AppCompatEditText;
 
 import com.mcal.uidesigner.common.KeyStroke;
 import com.mcal.uidesigner.common.KeyStrokeDetector;
 
-public class KeyStrokeEditText extends EditText {
+public class KeyStrokeEditText extends AppCompatEditText {
     private KeyStrokeDetector keyStrokeDetector;
     private KeyStroke stroke;
     private final KeyStrokeDetector.KeyStrokeHandler keyStrokeHandler = new KeyStrokeDetector.KeyStrokeHandler() {

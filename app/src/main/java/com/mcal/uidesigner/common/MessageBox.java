@@ -2,15 +2,16 @@ package com.mcal.uidesigner.common;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.util.SparseBooleanArray;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatEditText;
 
 import com.mcal.designer.R;
 import com.mcal.uidesigner.ProxyTextView;
@@ -412,7 +413,7 @@ public abstract class MessageBox {
             @Override
             public Dialog buildDialog(final Activity activity2) {
                 final AlertDialog[] dialog = new AlertDialog[1];
-                final EditText input = new EditText(activity2) {
+                final AppCompatEditText input = new AppCompatEditText(activity2) {
                     @Override
                     public boolean onKeyDown(int keyCode, KeyEvent event) {
                         if (keyCode == 66) {
@@ -524,7 +525,7 @@ public abstract class MessageBox {
             @Override
             public Dialog buildDialog(final Activity activity2) {
                 final AlertDialog[] dialog = new AlertDialog[1];
-                final EditText input = new EditText(activity2) {
+                final AppCompatEditText input = new AppCompatEditText(activity2) {
                     @Override
                     public boolean onKeyDown(int keyCode, KeyEvent event) {
                         if (keyCode == 66) {

@@ -4,11 +4,12 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.mcal.designer.R;
 import com.mcal.uidesigner.appwizard.runtime.AppWizardActivity;
@@ -198,7 +199,7 @@ public class AppWizardDesignActivity extends AppWizardActivity implements UndoMa
 
     @SuppressLint("WrongConstant")
     private void refreshButtons() {
-        ImageView modeButton = (ImageView) findViewById(R.id.appwizardModeButton);
+        AppCompatImageView modeButton = (AppCompatImageView) findViewById(R.id.appwizardModeButton);
         if (isEditMode()) {
             modeButton.setImageResource(R.drawable.round_edit_24);
         } else {

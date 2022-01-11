@@ -1,6 +1,5 @@
 package com.mcal.uidesigner;
 
-import android.R;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -16,22 +15,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TableRow;
-import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatSpinner;
+import androidx.appcompat.widget.AppCompatTextView;
+
+import com.mcal.designer.R;
 import com.mcal.uidesigner.widget.ClickableBorder;
 import com.mcal.uidesigner.common.PositionalXMLReader;
 import com.mcal.uidesigner.common.UndoManager;
 import com.mcal.uidesigner.common.ValueRunnable;
 import com.mcal.uidesigner.utils.Utils;
 
+import org.jetbrains.annotations.Contract;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -69,7 +73,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
     private String xmlContent;
     private String xmlFilePath;
 
-    public XmlLayoutlInflater(ViewGroup parent, String xmlFilePath, String resDirPath, UndoManager undoManager) {
+    public XmlLayoutlInflater(@NonNull ViewGroup parent, String xmlFilePath, String resDirPath, @NonNull UndoManager undoManager) {
         undoManager.addListener(this);
         this.undoManager = undoManager;
         this.context = parent.getContext();
@@ -141,7 +145,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
     }
 
     @Override
-    public void revertToVersion(String filepath, String content, int change) {
+    public void revertToVersion(@NonNull String filepath, String content, int change) {
         if (filepath.equals(getXmlFilePath())) {
             this.xmlContent = content;
             inflate();
@@ -168,7 +172,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         return new ArrayList<>(this.id2Node.keySet());
     }
 
-    public void setIDAttribute(Element node, XmlLayoutProperties.PropertySpec property, Element otherNode, String id) {
+    public void setIDAttribute(@NonNull Element node, @NonNull XmlLayoutProperties.PropertySpec property, Element otherNode, String id) {
         node.setAttribute(property.attrName, "@id/" + id);
         if (otherNode != null) {
             otherNode.setAttribute("android:id", "@+id/" + id);
@@ -271,7 +275,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         return result;
     }
 
-    public void setAttribute(Element node, XmlLayoutProperties.PropertySpec property, String value) {
+    public void setAttribute(Element node, @NonNull XmlLayoutProperties.PropertySpec property, String value) {
         Map<String, String> eventProperties = new HashMap<>();
         eventProperties.put("attrName", property.attrName);
         eventProperties.put("value", value);
@@ -283,7 +287,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         serializeXml();
     }
 
-    public void deleteView(Element node) {
+    public void deleteView(@NonNull Element node) {
         node.getParentNode().removeChild(node);
         serializeXml();
     }
@@ -292,7 +296,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         return this.document.getChildNodes().getLength() > 0;
     }
 
-    public void surroundWithView(Element node, NewWidget widget) {
+    public void surroundWithView(@NonNull Element node, NewWidget widget) {
         Element newNode = createElement(widget);
         Node parentNode = node.getParentNode();
         Node nextSibling = node.getNextSibling();
@@ -316,7 +320,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         }
     }
 
-    public void addViewBehind(Element node, NewWidget widget) {
+    public void addViewBehind(@NonNull Element node, NewWidget widget) {
         Element newNode = createElement(widget);
         if (node.getNextSibling() != null) {
             node.getParentNode().insertBefore(newNode, node.getNextSibling());
@@ -326,17 +330,17 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         serializeXml();
     }
 
-    public void addViewBefore(Element node, NewWidget widget) {
+    public void addViewBefore(@NonNull Element node, NewWidget widget) {
         node.getParentNode().insertBefore(createElement(widget), node);
         serializeXml();
     }
 
-    public void addViewInside(Element node, NewWidget widget) {
+    public void addViewInside(@NonNull Element node, NewWidget widget) {
         node.appendChild(createElement(widget));
         serializeXml();
     }
 
-    public void addViewInside(Element node, NewWidget widget, Element otherNode, XmlLayoutProperties.PropertySpec layoutProperty, String id) {
+    public void addViewInside(@NonNull Element node, NewWidget widget, @NonNull Element otherNode, @NonNull XmlLayoutProperties.PropertySpec layoutProperty, String id) {
         Element newNode = createElement(widget);
         node.appendChild(newNode);
         newNode.setAttribute(layoutProperty.attrName, "@id/" + id);
@@ -359,7 +363,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         onViewClicked(editView);
     }
 
-    public void startSelectingOtherView(Element node, ValueRunnable<XmlLayoutEditView> ok) {
+    public void startSelectingOtherView(@NonNull Element node, ValueRunnable<XmlLayoutEditView> ok) {
         this.selectModeClickRunnable = ok;
         this.selectModeNodes = new ArrayList<>();
         NodeList childNodes = node.getParentNode().getChildNodes();
@@ -375,7 +379,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         refresh();
     }
 
-    private Element createElement(NewWidget widget) throws DOMException {
+    private Element createElement(@NonNull NewWidget widget) throws DOMException {
         Element childNode = this.document.createElement(widget.elementName);
         for (Map.Entry<String, String> entry : widget.attributes.entrySet()) {
             childNode.setAttribute(entry.getKey(), entry.getValue());
@@ -443,7 +447,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
             }
         }
         if (inflateException != null) {
-            TextView textView = new TextView(this.context);
+            AppCompatTextView textView = new AppCompatTextView(this.context);
             if (!inflateException.getMessage().contains("no element")) {
                 textView.setText("Can not view the layout. " + inflateException.getMessage());
             } else if (this.editMode) {
@@ -460,7 +464,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         onInflated();
     }
 
-    private void collectIDs(NodeList nodes) {
+    private void collectIDs(@NonNull NodeList nodes) {
         for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i);
             if (node.getNodeType() == 1) {
@@ -474,7 +478,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         }
     }
 
-    public String getViewID(Node node) {
+    public String getViewID(@NonNull Node node) {
         String idValue;
         Node attr = node.getAttributes().getNamedItem("android:id");
         if (!(attr instanceof Attr) || (idValue = ((Attr) attr).getValue()) == null || !idValue.startsWith("@+id/")) {
@@ -483,7 +487,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         return idValue.substring("@+id/".length());
     }
 
-    public String getStyle(Element node) {
+    public String getStyle(@NonNull Element node) {
         Node styleAttr = node.getAttributes().getNamedItem("style");
         if (styleAttr instanceof Attr) {
             return ((Attr) styleAttr).getValue();
@@ -500,7 +504,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         serializeXml();
     }
 
-    private void inflateElements(NodeList nodes, ViewGroup parent, XmlLayoutEditView parentEditView, int depth) {
+    private void inflateElements(@NonNull NodeList nodes, ViewGroup parent, XmlLayoutEditView parentEditView, int depth) {
         PropertyObject viewObj;
         View actualView;
         for (int i = 0; i < nodes.getLength(); i++) {
@@ -513,8 +517,8 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
                     viewObj = new PropertyObject(view);
                     inflateAttributes(viewObj, node, XmlLayoutProperties.VIEW_PROPERTIES);
                 } else {
-                    view = new TextView(this.context);
-                    ((TextView) view).setText(elementName);
+                    view = new AppCompatTextView(this.context);
+                    ((AppCompatTextView) view).setText(elementName);
                     int p = (int) (5.0f * this.context.getResources().getDisplayMetrics().density);
                     view.setPadding(p, p, p, p);
                     if (this.editMode) {
@@ -559,22 +563,22 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
                 ((ViewGroup) view).setClipToPadding(false);
             }
             view.setFocusable(false);
-            if (view.getClass() == TextView.class || view.getClass() == Button.class) {
-                ((TextView) view).setText(view.getClass().getSimpleName());
+            if (view.getClass() == AppCompatTextView.class || view.getClass() == AppCompatButton.class) {
+                ((AppCompatTextView) view).setText(view.getClass().getSimpleName());
             }
         }
         if (view.getClass() == ListView.class) {
             fillListView((ListView) view);
         }
-        if (view.getClass() == Spinner.class) {
-            fillSpinner((Spinner) view);
+        if (view.getClass().equals(AppCompatSpinner.class)) {
+            fillSpinner((AppCompatSpinner) view);
         }
         if (view.getClass() == ExpandableListView.class) {
             fillExpandableListView((ExpandableListView) view);
         }
     }
 
-    private void fillExpandableListView(ExpandableListView view) {
+    private void fillExpandableListView(@NonNull ExpandableListView view) {
         view.setAdapter(new BaseExpandableListAdapter() {
             @Override
             public int getGroupCount() {
@@ -618,7 +622,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
                 if (view2 == null) {
                     view2 = LayoutInflater.from(XmlLayoutlInflater.this.context).inflate(17367046, parent, false);
                 }
-                ((TextView) view2.findViewById(16908308)).setText("Group " + (groupPosition + 1));
+                ((AppCompatTextView) view2.findViewById(16908308)).setText("Group " + (groupPosition + 1));
                 return view2;
             }
 
@@ -629,8 +633,8 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
                 if (view2 == null) {
                     view2 = LayoutInflater.from(XmlLayoutlInflater.this.context).inflate(17367047, parent, false);
                 }
-                ((TextView) view2.findViewById(16908308)).setText("Item " + (childPosition + 1));
-                ((TextView) view2.findViewById(16908309)).setText("Item " + (childPosition + 1));
+                ((AppCompatTextView) view2.findViewById(16908308)).setText("Item " + (childPosition + 1));
+                ((AppCompatTextView) view2.findViewById(16908309)).setText("Item " + (childPosition + 1));
                 return view2;
             }
 
@@ -642,7 +646,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
     }
 
     @SuppressLint("ResourceType")
-    private void fillSpinner(Spinner view) {
+    private void fillSpinner(AppCompatSpinner view) {
         List<String> items = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
             items.add("Item " + i);
@@ -659,7 +663,8 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         view.setAdapter((ListAdapter) new ArrayAdapter<>(this.context, 17367043, items));
     }
 
-    private View inflateView(Node node, String elementName) {
+    @Nullable
+    private View inflateView(Node node, @NonNull String elementName) {
         if (elementName.contains(".")) {
             return null;
         }
@@ -689,6 +694,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         }
     }
 
+    @NonNull
     private PropertyObject inflateLayoutParams(Node node, ViewGroup parent) {
         ViewGroup.LayoutParams layoutParams;
         try {
@@ -721,7 +727,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         }
     }
 
-    private void inflateAttributes(PropertyObject obj, Node node, XmlLayoutProperties.PropertySpec[] properties) {
+    private void inflateAttributes(PropertyObject obj, Node node, @NonNull XmlLayoutProperties.PropertySpec[] properties) {
         int min;
         for (XmlLayoutProperties.PropertySpec property : properties) {
             if (obj.hasProperty(property)) {
@@ -739,6 +745,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         return val != null ? val : getDirectPropertyAttributeValue(node, property);
     }
 
+    @Nullable
     private Object getSystemStyleAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
         try {
             String stringValue = getPropertyValue(node, property).value;
@@ -797,7 +804,8 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         return null;
     }
 
-    private Object getDirectPropertyAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
+    @Nullable
+    private Object getDirectPropertyAttributeValue(Node node, @NonNull XmlLayoutProperties.PropertySpec property) {
         switch (property.type) {
             case Bool:
                 return getBoolAttributeValue(node, property);
@@ -850,6 +858,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         }
     }
 
+    @Nullable
     private Boolean getBoolAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
         String value = getResourcePropertyValue(node, property);
         if (value == null) {
@@ -858,6 +867,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         return Boolean.valueOf("true".equals(value));
     }
 
+    @Nullable
     private Object getDrawableAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
         String value = getResourcePropertyValue(node, property);
         Drawable drawable = this.finder.findUserDrawable(value);
@@ -874,6 +884,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         return null;
     }
 
+    @Nullable
     private Enum<?> getEnumConstantAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
         try {
             String value = getResourcePropertyValue(node, property);
@@ -892,6 +903,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         return null;
     }
 
+    @Nullable
     private Integer getIntConstantAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
         String value = getResourcePropertyValue(node, property);
         if (value == null) {
@@ -907,7 +919,8 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         return Integer.valueOf(result);
     }
 
-    private Integer getIntConstantAttributeValue(String value, XmlLayoutProperties.PropertySpec property) {
+    @Nullable
+    private Integer getIntConstantAttributeValue(String value, @NonNull XmlLayoutProperties.PropertySpec property) {
         if (property.constantFieldPrefix == null) {
             try {
                 return Integer.valueOf(((Integer) property.constantClass.getField(value.toUpperCase()).get(null)).intValue());
@@ -935,6 +948,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         return getResourcePropertyValue(node, property);
     }
 
+    @Nullable
     private Integer getColorAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
         String value = getResourcePropertyValue(node, property);
         if (value != null) {
@@ -955,6 +969,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         return null;
     }
 
+    @Nullable
     private Float getTextSizeAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
         Integer size = getSizeAttributeValue(node, property);
         if (size != null) {
@@ -963,6 +978,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         return null;
     }
 
+    @Nullable
     private Integer getSizeAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
         String value = getResourcePropertyValue(node, property);
         if (value != null) {
@@ -986,6 +1002,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         return null;
     }
 
+    @Nullable
     private Integer getIntAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
         String value = getResourcePropertyValue(node, property);
         if (value != null) {
@@ -998,6 +1015,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         return null;
     }
 
+    @Nullable
     private Float getFloatAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
         String value = getResourcePropertyValue(node, property);
         if (value != null) {
@@ -1010,6 +1028,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         return null;
     }
 
+    @Nullable
     private Integer getIDAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
         String val = getResourcePropertyValue(node, property);
         if (val != null) {
@@ -1033,7 +1052,9 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         return this.finder.findResourcePropertyValue(getPropertyValue(node, property).value);
     }
 
-    private AttributeValue getPropertyValue(Node node, XmlLayoutProperties.PropertySpec property) {
+    @NonNull
+    @Contract("_, _ -> new")
+    private AttributeValue getPropertyValue(@NonNull Node node, @NonNull XmlLayoutProperties.PropertySpec property) {
         String value;
         Node attr = node.getAttributes().getNamedItem(property.attrName);
         if (attr instanceof Attr) {

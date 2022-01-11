@@ -1,7 +1,6 @@
 package com.mcal.uidesigner.common;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.text.Editable;
@@ -10,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.mcal.designer.R;
 import com.mcal.uidesigner.view.ColorPickerView;

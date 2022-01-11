@@ -1,7 +1,7 @@
 package com.mcal.uidesigner.common;
 
 import android.annotation.SuppressLint;
-import android.support.v4.util.TimeUtils;
+import androidx.core.util.TimeUtils;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 

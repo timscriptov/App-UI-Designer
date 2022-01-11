@@ -2,7 +2,6 @@ package com.mcal.uidesigner;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
@@ -23,6 +22,9 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.mcal.designer.R;
 import com.mcal.uidesigner.appwizard.AppWizardDesignActivity;
@@ -48,7 +50,7 @@ public class XmlLayoutWidgetPicker {
         selectView(activity, title, false, false, ok);
     }
 
-    public static void setTextAppearance(TextView textView, int attrID) {
+    public static void setTextAppearance(AppCompatTextView textView, int attrID) {
         Resources.Theme theme = textView.getContext().getTheme();
         TypedValue styleID = new TypedValue();
         if (theme.resolveAttribute(attrID, styleID, true)) {
@@ -215,7 +217,7 @@ public class XmlLayoutWidgetPicker {
         TextViewSmall("TextView (small)", "View", new WidgetPreview() {
             @Override
             public View create(Context context) {
-                TextView textView = new TextView(context);
+                AppCompatTextView textView = new AppCompatTextView(context);
                 textView.setText("Small Text");
                 XmlLayoutWidgetPicker.setTextAppearance(textView, 16842818);
                 return textView;
@@ -224,7 +226,7 @@ public class XmlLayoutWidgetPicker {
         TextViewMedium("TextView (medium)", "View", new WidgetPreview() {
             @Override
             public View create(Context context) {
-                TextView textView = new TextView(context);
+                AppCompatTextView textView = new AppCompatTextView(context);
                 textView.setText("Medium Text");
                 XmlLayoutWidgetPicker.setTextAppearance(textView, 16842817);
                 return textView;
@@ -233,7 +235,7 @@ public class XmlLayoutWidgetPicker {
         TextViewLarge("TextView (large)", "View", new WidgetPreview() {
             @Override
             public View create(Context context) {
-                TextView textView = new TextView(context);
+                AppCompatTextView textView = new AppCompatTextView(context);
                 textView.setText("Large Text");
                 XmlLayoutWidgetPicker.setTextAppearance(textView, 16842816);
                 return textView;

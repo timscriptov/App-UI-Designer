@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widgetlistGroupName"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="60.0dip"
     android:gravity="center_vertical"
     android:minHeight="60.0dip"
     android:paddingLeft="?android:expandableListPreferredItemPaddingLeft"
-    android:textSize="18.0sp" />
+    android:textSize="18.0sp"
+    android:paddingStart="?android:expandableListPreferredItemPaddingLeft" />

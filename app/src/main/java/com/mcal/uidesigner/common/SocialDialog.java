@@ -1,7 +1,6 @@
 package com.mcal.uidesigner.common;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,14 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.mcal.designer.BuildConfig;
 import com.mcal.designer.R;
+
+import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +92,8 @@ public class SocialDialog extends MessageBox {
                 }
             }
 
+            @NonNull
+            @Contract(pure = true)
             private String getOnMyDeviceString() {
                 String model = Build.MODEL;
                 if (model == null || model.length() > 40) {
@@ -131,7 +137,7 @@ public class SocialDialog extends MessageBox {
         MessageBox.showDialog(activity, new SocialDialog(title, message, entries, null, null));
     }
 
-    public static void showRateDialog(final Activity activity, String title, String message, final String pakage, final String linkId, Runnable done) {
+    public static void showRateDialog(@NonNull final Activity activity, String title, String message, final String pakage, final String linkId, Runnable done) {
         List<SocialListEntry> entries = new ArrayList<>();
         entries.add(new SocialListEntry(R.drawable.round_shop_24, activity.getResources().getString(R.string.dialog_community_rate), new Runnable() {
             @Override
@@ -143,7 +149,7 @@ public class SocialDialog extends MessageBox {
         MessageBox.showDialog(activity, new SocialDialog(title, message, entries, null, done));
     }
 
-    public static void showShareDialog(final Activity activity, String title, final String text, final String link, Runnable done) {
+    public static void showShareDialog(@NonNull final Activity activity, String title, final String text, final String link, Runnable done) {
         List<SocialListEntry> entries = new ArrayList<>();
         entries.add(new SocialListEntry(R.drawable.round_email_24, "Google+", new Runnable() {
             @Override
@@ -182,7 +188,7 @@ public class SocialDialog extends MessageBox {
                 }
             }
         });
-        ((TextView) layout.findViewById(R.id.shareDialogMessage)).setText(this.message);
+        ((AppCompatTextView) layout.findViewById(R.id.shareDialogMessage)).setText(this.message);
         final ListView listView = (ListView) layout.findViewById(R.id.shareDialogList);
         listView.setAdapter((ListAdapter) new ShareEntryAdapter(activity, this.entries1));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -249,8 +255,8 @@ public class SocialDialog extends MessageBox {
                 view = LayoutInflater.from(getContext()).inflate(R.layout.share_dialog_entry, parent, false);
             }
             SocialListEntry entry = getItem(position);
-            ((TextView) view.findViewById(R.id.shareDialogEntryText)).setText(entry.label);
-            ImageView imageView = (ImageView) view.findViewById(R.id.shareDialogEntryImage);
+            ((AppCompatTextView) view.findViewById(R.id.shareDialogEntryText)).setText(entry.label);
+            AppCompatImageView imageView = (AppCompatImageView) view.findViewById(R.id.shareDialogEntryImage);
             if (entry.icon != 0) {
                 imageView.setImageResource(entry.icon);
             }

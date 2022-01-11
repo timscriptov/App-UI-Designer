@@ -1,6 +1,5 @@
 package com.mcal.uidesigner.common;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
@@ -8,18 +7,21 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+
 public class TrainerLogo extends Drawable {
     private final Context context;
     private final Drawable icon;
     private final String[] text;
 
-    public TrainerLogo(Context context, int iconRes, String[] text) {
+    public TrainerLogo(@NonNull Context context, int iconRes, String[] text) {
         this.context = context;
         this.text = text;
         this.icon = context.getResources().getDrawable(iconRes);
     }
 
-    public static void set(ActionBar ab, int iconRes, String[] text) {
+    public static void set(@NonNull ActionBar ab, int iconRes, String[] text) {
         Context context = ab.getThemedContext();
         if (AndroidHelper.isMaterialTheme(context)) {
             ab.setDisplayShowTitleEnabled(true);
@@ -33,7 +35,7 @@ public class TrainerLogo extends Drawable {
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(@NonNull Canvas canvas) {
         Paint paint = new Paint();
         paint.setColor(-13421773);
         paint.setAntiAlias(true);

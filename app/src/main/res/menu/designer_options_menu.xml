@@ -1,40 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/designerMenuRun"
         android:icon="?icon_run"
-        android:showAsAction="always|withText"
+        app:showAsAction="always|withText"
         android:title="Run" />
     <item
         android:id="@+id/designerMenuShowBorders"
         android:icon="?icon_view"
-        android:showAsAction="always"
+        app:showAsAction="always"
         android:title="View" />
     <item
         android:id="@+id/designerMenuHideBorders"
         android:icon="?icon_edit"
-        android:showAsAction="always"
+        app:showAsAction="always"
         android:title="Edit" />
     <item
         android:id="@+id/designerMenuUndo"
         android:icon="?icon_undo"
-        android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom"
         android:title="Undo" />
     <item
         android:id="@+id/designerMenuRedo"
         android:icon="?icon_redo"
-        android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom"
         android:title="Redo" />
     <item
         android:id="@+id/designerMenuPaste"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="Paste XML" />
     <item
         android:id="@+id/designerMenuCopy"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="Copy XML" />
     <item
         android:id="@+id/designerMenuShare"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="Share XML" />
 </menu>

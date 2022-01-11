@@ -2,6 +2,8 @@ package com.mcal.uidesigner.common;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 public class AppLog {
     public static void d(String msg) {
         Log.d("Designer", msg);
@@ -15,7 +17,7 @@ public class AppLog {
         Log.d("Designer", i + "");
     }
 
-    public static void s(Object obj, String method) {
+    public static void s(@NonNull Object obj, String method) {
         Log.i("Designer", obj.getClass().getName() + "." + method);
     }
 

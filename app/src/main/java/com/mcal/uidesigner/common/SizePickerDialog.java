@@ -2,7 +2,6 @@ package com.mcal.uidesigner.common;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.text.Editable;
@@ -12,9 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatSeekBar;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.mcal.designer.R;
 
@@ -36,9 +39,9 @@ public class SizePickerDialog extends MessageBox {
     @Override
     protected Dialog buildDialog(final Activity activity) {
         View content = LayoutInflater.from(activity).inflate(R.layout.designer_sizedialog, (ViewGroup) null);
-        final EditText input = (EditText) content.findViewById(R.id.designersizedialogEditText);
+        final AppCompatEditText input = (AppCompatEditText) content.findViewById(R.id.designersizedialogEditText);
         input.setText(this.oldValue);
-        final SeekBar slider = (SeekBar) content.findViewById(R.id.designersizedialogSeekBar);
+        final AppCompatSeekBar slider = (AppCompatSeekBar) content.findViewById(R.id.designersizedialogSeekBar);
         slider.setMax(100);
         updateSlider(slider, this.oldValue);
         slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -73,14 +76,14 @@ public class SizePickerDialog extends MessageBox {
             public void afterTextChanged(Editable p1) {
             }
         });
-        ((TextView) content.findViewById(R.id.designersizedialogPlusButton)).setOnClickListener(new View.OnClickListener() {
+        ((AppCompatTextView) content.findViewById(R.id.designersizedialogPlusButton)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View p1) {
                 input.setText(increase(input.getText().toString()));
                 updateSlider(slider, input.getText().toString());
             }
         });
-        ((TextView) content.findViewById(R.id.designersizedialogMinusButton)).setOnClickListener(new View.OnClickListener() {
+        ((AppCompatTextView) content.findViewById(R.id.designersizedialogMinusButton)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View p1) {
                 input.setText(decrease(input.getText().toString()));
@@ -132,7 +135,7 @@ public class SizePickerDialog extends MessageBox {
         return this.dialog;
     }
 
-    public String getSliderValue(SeekBar slider, String size) {
+    public String getSliderValue(AppCompatSeekBar slider, String size) {
         String unit = getUnit(size);
         if (unit == null) {
             unit = "";
@@ -140,7 +143,7 @@ public class SizePickerDialog extends MessageBox {
         return slider.getProgress() + unit;
     }
 
-    public void updateSlider(SeekBar slider, String size) {
+    public void updateSlider(AppCompatSeekBar slider, String size) {
         slider.setProgress(Math.max(0, Math.min(100, getValue(size))));
     }
 

@@ -2,6 +2,8 @@ package com.mcal.uidesigner;
 
 import android.app.Activity;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.designer.R;
 import com.mcal.uidesigner.common.MessageBox;
 import com.mcal.uidesigner.common.PropertiesDialog;
@@ -12,10 +14,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class XmlLayoutEditViewMenu {
-    public static void showViewEditMenu(Activity activity, XmlLayoutEditView editView) {
+    public static void showViewEditMenu(Activity activity, @NonNull XmlLayoutEditView editView) {
         MessageBox.showDialog(activity, new PropertiesDialog(editView.getPath(), getContextCommands(activity, editView)));
     }
 
+    @NonNull
     private static List<PropertiesDialog.PropertyCommand> getContextCommands(Activity activity, XmlLayoutEditView editView) {
         List<PropertiesDialog.PropertyCommand> commands = new ArrayList<>();
         commands.addAll(getFixedContextCommands(activity, editView));
@@ -23,7 +26,8 @@ public class XmlLayoutEditViewMenu {
         return commands;
     }
 
-    private static List<PropertiesDialog.PropertyCommand> getPropertyCommands(final Activity activity, final XmlLayoutEditView editView) {
+    @NonNull
+    private static List<PropertiesDialog.PropertyCommand> getPropertyCommands(final Activity activity, @NonNull final XmlLayoutEditView editView) {
         String name;
         List<PropertiesDialog.PropertyCommand> result = new ArrayList<>();
         for (final AttributeValue attribute : editView.getAttributes()) {
@@ -65,6 +69,7 @@ public class XmlLayoutEditViewMenu {
         return result;
     }
 
+    @NonNull
     private static List<PropertiesDialog.PropertyCommand> getFixedContextCommands(final Activity activity, final XmlLayoutEditView editView) {
         return Arrays.asList(new PropertiesDialog.PropertyCommand() {
             @Override

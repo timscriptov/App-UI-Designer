@@ -1,5 +1,7 @@
 package com.mcal.uidesigner.common;
 
+import androidx.annotation.NonNull;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,7 +11,7 @@ import java.io.Reader;
 import java.io.Writer;
 
 public class StreamUtilities {
-    public static void transfer(Reader source, Writer dest) throws IOException {
+    public static void transfer(@NonNull Reader source, Writer dest) throws IOException {
         char[] buffer = new char[4096];
         while (true) {
             try {
@@ -27,7 +29,7 @@ public class StreamUtilities {
         }
     }
 
-    public static void transfer(InputStream source, OutputStream dest, boolean closeStreams) throws IOException {
+    public static void transfer(@NonNull InputStream source, OutputStream dest, boolean closeStreams) throws IOException {
         byte[] buffer = new byte[4096];
         while (true) {
             try {
@@ -52,10 +54,12 @@ public class StreamUtilities {
         transfer(source, dest, true);
     }
 
+    @NonNull
     public static String readFully(InputStream stream) throws IOException {
         return readFully(new InputStreamReader(stream));
     }
 
+    @NonNull
     public static String readFully(Reader reader) throws IOException {
         Reader breader = new BufferedReader(reader);
         StringBuilder builder = new StringBuilder();

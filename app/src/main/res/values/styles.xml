@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="ActivityThemeDesignerDark" parent="@android:style/Theme.Holo">
+    <style name="ActivityThemeDesignerDark" parent="Theme.AppCompat">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:actionBarStyle">@style/MainActionBar</item>
         <item name="Android_Widget">@android:style/Widget</item>
@@ -685,7 +685,7 @@
         <item name="icon_view">@drawable/round_visibility_24</item>
     </style>
 
-    <style name="ActivityThemeDesignerLight" parent="@android:style/Theme.Holo.Light">
+    <style name="ActivityThemeDesignerLight" parent="Theme.AppCompat.Light">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:actionBarStyle">@style/MainActionBar</item>
         <item name="Android_Widget">@android:style/Widget</item>
@@ -1375,7 +1375,7 @@
 
     <style name="TrainerHeaderOuter" />
 
-    <style name="AppTheme" parent="@android:style/Theme.Light" />
+    <style name="AppTheme" parent="Theme.AppCompat.Light" />
 
     <style name="BrowserHelpButton">
         <item name="android:gravity">center</item>

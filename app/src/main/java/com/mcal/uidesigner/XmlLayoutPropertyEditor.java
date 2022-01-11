@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.uidesigner.common.ColorPickerDialog;
 import com.mcal.uidesigner.common.MessageBox;
 import com.mcal.uidesigner.common.SizePickerDialog;
@@ -35,7 +37,7 @@ public class XmlLayoutPropertyEditor {
         }
     }
 
-    public static void queryValue(Activity activity, XmlLayoutEditView editView, AttributeValue attribute) {
+    public static void queryValue(Activity activity, XmlLayoutEditView editView, @NonNull AttributeValue attribute) {
         switch (attribute.property.type) {
             case Drawable:
                 queryDrawable(activity, editView, attribute);
@@ -93,7 +95,7 @@ public class XmlLayoutPropertyEditor {
         queryFromListOrOther(activity, editView, attribute, "?android:attr/", "?android:attr/textAppearanceSmall", "?android:attr/textAppearanceMedium", "?android:attr/textAppearanceLarge");
     }
 
-    private static void queryID(final Activity activity, final XmlLayoutEditView editView, final AttributeValue attribute) {
+    private static void queryID(final Activity activity, final XmlLayoutEditView editView, @NonNull final AttributeValue attribute) {
         if (attribute.value == null) {
             startSelectingOtherView(activity, editView, attribute);
         } else {

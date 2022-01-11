@@ -9,6 +9,8 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.NinePatchDrawable;
 import android.os.Build;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.uidesigner.common.StreamUtilities;
 
 import org.w3c.dom.Attr;
@@ -84,7 +86,7 @@ public class XmlLayoutResourceFinder {
         }
     }
 
-    private void loadValues(Document doc, int sdk, String tag) {
+    private void loadValues(@NonNull Document doc, int sdk, String tag) {
         NodeList nodes = doc.getElementsByTagName(tag);
         for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i);
@@ -96,7 +98,7 @@ public class XmlLayoutResourceFinder {
         }
     }
 
-    private void loadStyles(Document doc, int sdk) throws DOMException {
+    private void loadStyles(@NonNull Document doc, int sdk) throws DOMException {
         NodeList nodes = doc.getElementsByTagName("style");
         for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i);

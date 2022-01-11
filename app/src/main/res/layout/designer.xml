@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/designerFrame"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <android.support.v4.widget.DrawerLayout
+    <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/designerDrawer"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/designerHeaderLearnTask"
                 style="@style/TrainerHeaderOuter"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5.0dip">
 
                 <LinearLayout
                     android:id="@+id/designerHeaderLearnTaskInner"
                     style="@style/TrainerHeaderInner"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="true"
                     android:orientation="vertical">
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/designerHeaderLearnTaskTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
                         android:text=""
                         android:textColor="#ffffffff" />
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/designerHeaderLearnTaskText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
                         android:textColor="#ffffffff"
                         android:textIsSelectable="true" />
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/designerHeaderLearnButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -59,23 +59,27 @@
                         android:paddingRight="10.0dip"
                         android:paddingBottom="10.0dip"
                         android:textColor="#ffffffff" />
+
                 </LinearLayout>
+
             </LinearLayout>
 
             <FrameLayout
                 android:id="@+id/designerContent"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
         </LinearLayout>
 
         <ListView
             android:id="@+id/designerViewList"
             android:layout_width="240.0dip"
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="start"
             android:background="?android:windowBackground"
             android:divider="@android:color/transparent"
             android:dividerHeight="0.0dip" />
-    </android.support.v4.widget.DrawerLayout>
+
+    </androidx.drawerlayout.widget.DrawerLayout>
 
 </FrameLayout>

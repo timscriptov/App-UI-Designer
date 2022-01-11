@@ -1,20 +1,21 @@
 package com.mcal.uidesigner.appwizard.runtime;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
-import android.app.FragmentTransaction;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerTitleStrip;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.PagerTitleStrip;
+import androidx.viewpager.widget.ViewPager;
+import androidx.drawerlayout.widget.DrawerLayout;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -32,7 +33,7 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
-public class AppWizardActivity extends FragmentActivity {
+public class AppWizardActivity extends AppCompatActivity {
     private int containerId;
     private int drawerContentId;
     private int drawerMenuId;
@@ -137,9 +138,9 @@ public class AppWizardActivity extends FragmentActivity {
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(/*int featureId, */MenuItem item) {
         if (this.drawerToggle == null || !this.drawerToggle.onOptionsItemSelected(item)) {
-            return super.onMenuItemSelected(featureId, item);
+            return false;//super.onMenuItemSelected(/*featureId, */item);
         }
         return true;
     }
@@ -153,12 +154,12 @@ public class AppWizardActivity extends FragmentActivity {
         this.drawerContentId = 1003;
         this.containerId = inflateContentView();
         ViewGroup container = (ViewGroup) findViewById(this.containerId);
-        getActionBar().setDisplayShowTitleEnabled(getAppActivity().showTitle());
+        getSupportActionBar().setDisplayShowTitleEnabled(getAppActivity().showTitle());
         setTitle(getAppActivity().getTitle());
         if (getAppActivity().showActionBar()) {
-            getActionBar().show();
+            getSupportActionBar().show();
         } else {
-            getActionBar().hide();
+            getSupportActionBar().hide();
         }
         if (getAppActivity().showFullscreen()) {
             container.setSystemUiVisibility(4);
@@ -173,25 +174,25 @@ public class AppWizardActivity extends FragmentActivity {
         }
         switch (getAppActivity().getType()) {
             case Tabs:
-                getActionBar().setNavigationMode(2);
-                getActionBar().setDisplayHomeAsUpEnabled(false);
-                getActionBar().setHomeButtonEnabled(false);
+                getSupportActionBar().setNavigationMode(2);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                getSupportActionBar().setHomeButtonEnabled(false);
                 inflateTabContent(container);
                 return;
             case TabsDrawer:
-                getActionBar().setNavigationMode(2);
+                getSupportActionBar().setNavigationMode(2);
                 inflateTabContent(inflateDrawerContent(container));
                 return;
             case Spinner:
-                getActionBar().setNavigationMode(1);
-                getActionBar().setDisplayHomeAsUpEnabled(false);
-                getActionBar().setHomeButtonEnabled(false);
-                getActionBar().removeAllTabs();
+                getSupportActionBar().setNavigationMode(1);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                getSupportActionBar().setHomeButtonEnabled(false);
+                getSupportActionBar().removeAllTabs();
                 List<String> names = new ArrayList<>();
                 for (AppWizardProject.AppFragment section : getAppActivity().getFragments()) {
                     names.add(section.getTitle());
                 }
-                getActionBar().setListNavigationCallbacks(new ArrayAdapter<>(getActionBar().getThemedContext(), 17367043, 16908308, names), new ActionBar.OnNavigationListener() {
+                getSupportActionBar().setListNavigationCallbacks(new ArrayAdapter<>(getSupportActionBar().getThemedContext(), 17367043, 16908308, names), new ActionBar.OnNavigationListener() {
                     @Override
                     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
                         AppWizardActivity.this.getSupportFragmentManager().beginTransaction().replace(AppWizardActivity.this.containerId, AppWizardActivity.this.createSectionFragment(AppWizardActivity.this.getAppActivity().getFragments().get(itemPosition))).commit();
@@ -200,15 +201,15 @@ public class AppWizardActivity extends FragmentActivity {
                 });
                 return;
             case SpinnerDrawer:
-                getActionBar().setNavigationMode(1);
+                getSupportActionBar().setNavigationMode(1);
                 inflateDrawerContent(container);
-                getActionBar().removeAllTabs();
+                getSupportActionBar().removeAllTabs();
                 List<String> names2 = new ArrayList<>();
                 int count = getAppActivity().getFragments().size() - 1;
                 for (int i = 0; i < count; i++) {
                     names2.add(getAppActivity().getFragments().get(i).getTitle());
                 }
-                getActionBar().setListNavigationCallbacks(new ArrayAdapter<>(getActionBar().getThemedContext(), 17367043, 16908308, names2), new ActionBar.OnNavigationListener() {
+                getSupportActionBar().setListNavigationCallbacks(new ArrayAdapter<>(getSupportActionBar().getThemedContext(), 17367043, 16908308, names2), new ActionBar.OnNavigationListener() {
                     @Override
                     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
                         AppWizardActivity.this.getSupportFragmentManager().beginTransaction().replace(AppWizardActivity.this.drawerContentId, AppWizardActivity.this.createSectionFragment(AppWizardActivity.this.getAppActivity().getFragments().get(itemPosition))).commit();
@@ -217,26 +218,26 @@ public class AppWizardActivity extends FragmentActivity {
                 });
                 return;
             case Slider:
-                getActionBar().setNavigationMode(0);
-                getActionBar().setDisplayHomeAsUpEnabled(false);
-                getActionBar().setHomeButtonEnabled(false);
+                getSupportActionBar().setNavigationMode(0);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                getSupportActionBar().setHomeButtonEnabled(false);
                 inflateSliderContent(container);
                 return;
             case SliderDrawer:
-                getActionBar().setNavigationMode(0);
+                getSupportActionBar().setNavigationMode(0);
                 inflateSliderContent(inflateDrawerContent(container));
                 return;
             case Single:
-                getActionBar().setNavigationMode(0);
-                getActionBar().setDisplayHomeAsUpEnabled(false);
-                getActionBar().setHomeButtonEnabled(false);
+                getSupportActionBar().setNavigationMode(0);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                getSupportActionBar().setHomeButtonEnabled(false);
                 if (getAppActivity().getFragments().size() > 0) {
                     getSupportFragmentManager().beginTransaction().replace(this.containerId, createSectionFragment(getAppActivity().getFragments().get(0))).commit();
                     return;
                 }
                 return;
             case Drawer:
-                getActionBar().setNavigationMode(0);
+                getSupportActionBar().setNavigationMode(0);
                 inflateDrawerContent(container);
                 if (getAppActivity().getFragments().size() > 0) {
                     getSupportFragmentManager().beginTransaction().replace(this.drawerContentId, createSectionFragment(getAppActivity().getFragments().get(0))).commit();
@@ -250,8 +251,8 @@ public class AppWizardActivity extends FragmentActivity {
 
     @SuppressLint("ResourceType")
     private ViewGroup inflateDrawerContent(ViewGroup container) {
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
         DrawerLayout drawerLayout = new DrawerLayout(this);
         container.addView(drawerLayout, new ViewGroup.LayoutParams(-1, -1));
         FrameLayout drawerContent = new FrameLayout(this);
@@ -264,7 +265,12 @@ public class AppWizardActivity extends FragmentActivity {
         drawerMenu.setDividerDrawable(new ColorDrawable(0));
         drawerMenu.setBackgroundDrawable(getDrawableRes(16842836));
         drawerLayout.addView(drawerMenu, layoutParams);
-        this.drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, getResId("drawable", "ic_drawer"), 17039370, 17039370);
+        this.drawerToggle = new ActionBarDrawerToggle(
+                this,
+                drawerLayout,
+                //getResId("drawable", "ic_drawer"),
+                17039370,
+                17039370);
         drawerLayout.setDrawerListener(this.drawerToggle);
         drawerLayout.openDrawer(3);
         List<AppWizardProject.AppFragment> sections = getAppActivity().getFragments();
@@ -274,6 +280,7 @@ public class AppWizardActivity extends FragmentActivity {
         return drawerLayout;
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private Drawable getDrawableRes(int id) {
         TypedValue a = new TypedValue();
         getTheme().resolveAttribute(id, a, true);
@@ -307,17 +314,13 @@ public class AppWizardActivity extends FragmentActivity {
         this.viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                getActionBar().setSelectedNavigationItem(position);
+                getSupportActionBar().setSelectedNavigationItem(position);
             }
         });
-        getActionBar().removeAllTabs();
+        getSupportActionBar().removeAllTabs();
         int count = getAppActivity().getType().hasDrawer() ? getAppActivity().getFragments().size() - 1 : getAppActivity().getFragments().size();
         for (int i = 0; i < count; i++) {
-            getActionBar().addTab(getActionBar().newTab().setText(getAppActivity().getFragments().get(i).getTitle()).setTabListener(new ActionBar.TabListener() {
-                @Override
-                public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-                }
-
+            getSupportActionBar().addTab(getSupportActionBar().newTab().setText(getAppActivity().getFragments().get(i).getTitle()).setTabListener(new ActionBar.TabListener() {
                 @Override
                 public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
                     if (viewPager != null) {
@@ -326,7 +329,13 @@ public class AppWizardActivity extends FragmentActivity {
                 }
 
                 @Override
+                public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+
+                }
+
+                @Override
                 public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+
                 }
             }));
         }

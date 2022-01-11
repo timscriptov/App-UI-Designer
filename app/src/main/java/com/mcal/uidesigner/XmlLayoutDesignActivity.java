@@ -1,7 +1,6 @@
 package com.mcal.uidesigner;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
@@ -13,9 +12,6 @@ import android.graphics.Typeface;
 import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.accessibility.AccessibilityEventCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,12 +23,18 @@ import android.view.animation.Transformation;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatRadioButton;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.view.accessibility.AccessibilityEventCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.mcal.designer.R;
 import com.mcal.uidesigner.common.ActivityStarter;
@@ -53,7 +55,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class XmlLayoutDesignActivity extends Activity {
+public class XmlLayoutDesignActivity extends AppCompatActivity {
     private static final int DARK = 3;
     private static final int DARK_SMALL = 1;
     private static final String EXTRA_DEMO = "EXTRA_LICENSED";
@@ -128,6 +130,7 @@ public class XmlLayoutDesignActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == -1 && requestCode == 3424345) {
             XmlLayoutPropertyEditor.addImageFromPicker(this, data);
         }
@@ -181,36 +184,42 @@ public class XmlLayoutDesignActivity extends Activity {
             AndroidHelper.setAndroidTVPadding(findViewById(R.id.designerFrame));
         }
         if (isTrainer() && AndroidHelper.isAndroidTV(this)) {
-            getActionBar().hide();
+            getSupportActionBar().hide();
         }
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
         if (isTrainer()) {
-            TrainerLogo.set(getActionBar(), R.mipmap.ic_launcher, getIntent().getStringArrayExtra(EXTRA_TRAINER_HEADER));
+            TrainerLogo.set(getSupportActionBar(), R.mipmap.ic_launcher, getIntent().getStringArrayExtra(EXTRA_TRAINER_HEADER));
         } else {
-            getActionBar().setDisplayShowTitleEnabled(false);
-            getActionBar().setNavigationMode(1);
-            getActionBar().setListNavigationCallbacks(new ArrayAdapter<>(this, 17367049, new String[]{"Light Theme Small", "Dark Theme Small", "Light Theme", "Dark Theme"}), new ActionBar.OnNavigationListener() {
-                @Override
-                public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-                    if (!XmlLayoutDesignActivity.this.initialized || itemPosition == XmlLayoutDesignActivity.this.getViewType()) {
-                        return true;
-                    }
-                    XmlLayoutDesignActivity.this.setViewType(itemPosition);
-                    return true;
-                }
-            });
-            getActionBar().setSelectedNavigationItem(getViewType());
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setNavigationMode(1);
+            getSupportActionBar().setListNavigationCallbacks(new ArrayAdapter<>(this, 17367049, new String[]{"Light Theme Small", "Dark Theme Small", "Light Theme", "Dark Theme"}),
+                    new ActionBar.OnNavigationListener() {
+                        @Override
+                        public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+                            if (!initialized || itemPosition == XmlLayoutDesignActivity.this.getViewType()) {
+                                return true;
+                            }
+                            setViewType(itemPosition);
+                            return true;
+                        }
+                    });
+            getSupportActionBar().setSelectedNavigationItem(getViewType());
             DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.designerDrawer);
-            this.drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.round_menu_24, 17039370, 17039370);
+            this.drawerToggle = new ActionBarDrawerToggle(
+                    this,
+                    drawerLayout,
+                    //R.drawable.round_menu_24,
+                    17039370,
+                    17039370);
             drawerLayout.setDrawerListener(this.drawerToggle);
         }
         if (isTrainer()) {
             final View header = findViewById(R.id.designerHeaderLearnTask);
             header.setVisibility(0);
-            TextView textView = (TextView) header.findViewById(R.id.designerHeaderLearnTaskText);
-            TextView titleView = (TextView) header.findViewById(R.id.designerHeaderLearnTaskTitle);
-            final TextView button = (TextView) header.findViewById(R.id.designerHeaderLearnButton);
+            AppCompatTextView textView = (AppCompatTextView) header.findViewById(R.id.designerHeaderLearnTaskText);
+            AppCompatTextView titleView = (AppCompatTextView) header.findViewById(R.id.designerHeaderLearnTaskTitle);
+            final AppCompatTextView button = (AppCompatTextView) header.findViewById(R.id.designerHeaderLearnButton);
             titleView.setText(getIntent().getStringExtra(EXTRA_TRAINER_TITLE));
             textView.setText(Html.fromHtml(getIntent().getStringExtra(EXTRA_TRAINER_TASK)));
             button.setText(getIntent().getStringExtra(EXTRA_TRAINER_BUTTON));
@@ -385,6 +394,7 @@ public class XmlLayoutDesignActivity extends Activity {
         }
     }
 
+    @SuppressLint("WrongConstant")
     private void initFromIntent(boolean isNewStart) {
         boolean z;
         Intent intent = getIntent();
@@ -586,7 +596,7 @@ public class XmlLayoutDesignActivity extends Activity {
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(/*int featureId, **/MenuItem item) {
         if (this.drawerToggle != null && this.drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
@@ -739,8 +749,8 @@ public class XmlLayoutDesignActivity extends Activity {
                 viewLayout.setVisibility(0);
                 fileLayout.setVisibility(8);
                 viewLayout.setPadding((int) (((float) ((entry.view.getDepth() * 20) + 5)) * getContext().getResources().getDisplayMetrics().density), 0, 0, 0);
-                ((TextView) view.findViewById(R.id.designerViewlistEntryName)).setText(entry.view.getNodeName());
-                ImageView imageView = (ImageView) view.findViewById(R.id.designerViewlistEntryImage);
+                ((AppCompatTextView) view.findViewById(R.id.designerViewlistEntryName)).setText(entry.view.getNodeName());
+                AppCompatImageView imageView = (AppCompatImageView) view.findViewById(R.id.designerViewlistEntryImage);
                 if (entry.view.canAddInside()) {
                     i = R.drawable.round_category_24;
                 } else {
@@ -751,20 +761,20 @@ public class XmlLayoutDesignActivity extends Activity {
                 viewLayout.setVisibility(8);
                 fileLayout.setVisibility(0);
                 fileLayout.setPadding(0, 0, 0, 0);
-                RadioButton fileRadioButton = (RadioButton) view.findViewById(R.id.designerViewlistentryFileRadioButton);
+                AppCompatRadioButton fileRadioButton = (AppCompatRadioButton) view.findViewById(R.id.designerViewlistentryFileRadioButton);
                 fileRadioButton.setFocusable(false);
                 fileRadioButton.setFocusableInTouchMode(false);
                 fileRadioButton.setChecked(XmlLayoutDesignActivity.this.xmlFilePath.equals(entry.file.getPath()));
                 fileRadioButton.setVisibility(XmlLayoutDesignActivity.this.isStandalone ? 0 : 8);
-                TextView fileNameView = (TextView) view.findViewById(R.id.designerViewlistentryFileName);
+                AppCompatTextView fileNameView = (AppCompatTextView) view.findViewById(R.id.designerViewlistentryFileName);
                 fileNameView.setText(entry.file.getName());
                 if (XmlLayoutDesignActivity.this.xmlFilePath.equals(entry.file.getPath())) {
                     fileNameView.setTypeface(Typeface.DEFAULT_BOLD);
                 } else {
                     fileNameView.setTypeface(Typeface.DEFAULT);
                 }
-                ((ImageView) view.findViewById(R.id.designerViewlistFileImage)).setImageResource(R.drawable.round_insert_drive_file_24);
-                ImageView deleteButton = (ImageView) view.findViewById(R.id.designerViewlistentryDelete);
+                ((AppCompatImageView) view.findViewById(R.id.designerViewlistFileImage)).setImageResource(R.drawable.round_insert_drive_file_24);
+                AppCompatImageView deleteButton = (AppCompatImageView) view.findViewById(R.id.designerViewlistentryDelete);
                 deleteButton.setVisibility(XmlLayoutDesignActivity.this.isStandalone ? 0 : 8);
                 deleteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -776,15 +786,15 @@ public class XmlLayoutDesignActivity extends Activity {
                 viewLayout.setVisibility(8);
                 fileLayout.setVisibility(0);
                 fileLayout.setPadding(0, 0, 0, (int) (10.0f * getContext().getResources().getDisplayMetrics().density));
-                RadioButton fileRadioButton2 = (RadioButton) view.findViewById(R.id.designerViewlistentryFileRadioButton);
+                AppCompatRadioButton fileRadioButton2 = (AppCompatRadioButton) view.findViewById(R.id.designerViewlistentryFileRadioButton);
                 fileRadioButton2.setFocusable(false);
                 fileRadioButton2.setFocusableInTouchMode(false);
                 fileRadioButton2.setVisibility(4);
-                TextView fileNameView2 = (TextView) view.findViewById(R.id.designerViewlistentryFileName);
+                AppCompatTextView fileNameView2 = (AppCompatTextView) view.findViewById(R.id.designerViewlistentryFileName);
                 fileNameView2.setText("New layout...");
                 fileNameView2.setTypeface(Typeface.DEFAULT);
-                ((ImageView) view.findViewById(R.id.designerViewlistFileImage)).setImageResource(AndroidHelper.obtainImageResourceId(getContext(), R.attr.icon_add));
-                ((ImageView) view.findViewById(R.id.designerViewlistentryDelete)).setVisibility(8);
+                ((AppCompatImageView) view.findViewById(R.id.designerViewlistFileImage)).setImageResource(AndroidHelper.obtainImageResourceId(getContext(), R.attr.icon_add));
+                ((AppCompatImageView) view.findViewById(R.id.designerViewlistentryDelete)).setVisibility(8);
             }
             return view;
         }

@@ -4,7 +4,8 @@ import android.R;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.util.TypedValue;
-import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatTextView;
 
 public class ProxyTextView {
     public static final int INPUTTYPE_date = 20;
@@ -46,7 +47,7 @@ public class ProxyTextView {
     public static final int TYPEFACE_NORMAL = 0;
     public static final int TYPEFACE_SANS = 1;
     public static final int TYPEFACE_SERIF = 2;
-    private final TextView textView;
+    private final AppCompatTextView textView;
     private int shadowColor;
     private float shadowDx;
     private float shadowDy;
@@ -56,7 +57,7 @@ public class ProxyTextView {
     private String fontFamily = null;
 
     public ProxyTextView(Object obj) {
-        this.textView = (TextView) obj;
+        this.textView = (AppCompatTextView) obj;
     }
 
     public void setInputType(int type) {

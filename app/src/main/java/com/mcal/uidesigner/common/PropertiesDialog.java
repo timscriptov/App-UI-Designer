@@ -1,7 +1,6 @@
 package com.mcal.uidesigner.common;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.text.Html;
@@ -10,10 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.mcal.designer.R;
 import com.mcal.uidesigner.XmlLayoutDesignActivity;
@@ -25,7 +27,7 @@ public class PropertiesDialog extends MessageBox {
     private final List<PropertyCommand> enabledCommands = new ArrayList<>();
     private final String title;
 
-    public PropertiesDialog(String title, List<? extends PropertyCommand> commands) {
+    public PropertiesDialog(String title, @NonNull List<? extends PropertyCommand> commands) {
         this.title = title;
         for (PropertyCommand command : commands) {
             if (command.canRun()) {
@@ -75,8 +77,8 @@ public class PropertiesDialog extends MessageBox {
                 view = LayoutInflater.from(getContext()).inflate(R.layout.propertydialog_entry, parent, false);
             }
             PropertyCommand command = getItem(position);
-            ((TextView) view.findViewById(R.id.widgetmenuEntryName)).setText(Html.fromHtml(command.getName()));
-            ((ImageView) view.findViewById(R.id.widgetmenuEntryImage)).setImageResource(AndroidHelper.obtainImageResourceId(getContext(), command.getIconAttr()));
+            ((AppCompatTextView) view.findViewById(R.id.widgetmenuEntryName)).setText(Html.fromHtml(command.getName()));
+            ((AppCompatImageView) view.findViewById(R.id.widgetmenuEntryImage)).setImageResource(AndroidHelper.obtainImageResourceId(getContext(), command.getIconAttr()));
             final String helpUrl = command.getHelpUrl();
             View helpView = view.findViewById(R.id.widgetmenuHelpButton);
             if (helpUrl == null) {
