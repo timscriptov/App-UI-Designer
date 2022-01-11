@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_community_ask">Ask the community</string>
+    <string name="dialog_community_continue">Continue</string>
+    <string name="dialog_community_message">Get in touch with the AIDE developer community</string>
+    <string name="dialog_community_more">More…</string>
+    <string name="dialog_community_rate">Rate</string>
+    <string name="dialog_community_title">Community</string>
+    <string name="dialog_no">No</string>
+    <string name="dialog_ok">Ok</string>
+    <string name="dialog_yes">Yes</string>
+    <string name="trainer_skip_lesson">Skip lesson</string>
+</resources>

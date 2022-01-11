@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dialog_cancel">Отмена</string>
+    <string name="dialog_community_ask">Обратиться к сообществу</string>
+    <string name="dialog_community_continue">Продолжить</string>
+    <string name="dialog_community_message">Контакты сообществу App UI Designer разработчиков</string>
+    <string name="dialog_community_more">Больше…</string>
+    <string name="dialog_community_rate">Оценить</string>
+    <string name="dialog_community_title">Сообщество</string>
+    <string name="dialog_no">Нет</string>
+    <string name="dialog_ok">Ок</string>
+    <string name="dialog_yes">Да</string>
+    <string name="trainer_skip_lesson">Пропустить урок</string>
+</resources>

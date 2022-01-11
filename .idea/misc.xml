@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/appwizard_edit.xml" value="0.21927083333333333" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/round_add_circle_outline_24.xml" value="0.21927083333333333" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/round_architecture_24.xml" value="0.21927083333333333" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/round_category_24.xml" value="0.21927083333333333" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/round_check_circle_outline_24.xml" value="0.3828125" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/round_content_copy_24.xml" value="0.3828125" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/round_content_cut_24.xml" value="0.3828125" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/round_content_paste_24.xml" value="0.3828125" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/round_delete_24.xml" value="0.21927083333333333" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/round_edit_24.xml" value="0.21927083333333333" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/round_email_24.xml" value="0.21927083333333333" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/round_expand_more_24.xml" value="0.3828125" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/round_image_24.xml" value="0.3828125" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/round_info_24.xml" value="0.21927083333333333" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/round_insert_drive_file_24.xml" value="0.21927083333333333" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/round_keyboard_arrow_right_24.xml" value="0.21927083333333333" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/round_menu_24.xml" value="0.21927083333333333" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/round_play_arrow_24.xml" value="0.3828125" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/round_redo_24.xml" value="0.21927083333333333" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/round_shop_24.xml" value="0.21927083333333333" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/round_sms_24.xml" value="0.21927083333333333" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/round_south_east_24.xml" value="0.21927083333333333" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/round_undo_24.xml" value="0.21927083333333333" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/round_visibility_24.xml" value="0.3828125" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/round_widgets_24.xml" value="0.21927083333333333" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/trainer_header.xml" value="0.21927083333333333" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/trainer_header_normal.xml" value="0.21927083333333333" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/drawable/trainer_header_pressed.xml" value="0.21927083333333333" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/layout/appwizard.xml" value="0.25" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/layout/appwizard_section.xml" value="0.28306159420289856" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/layout/colorpicker.xml" value="0.28306159420289856" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/layout/designer.xml" value="0.203125" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/layout/designer_sizedialog.xml" value="0.203125" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/layout/designer_viewlist_entry.xml" value="0.203125" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/layout/designer_widgetlist_entry.xml" value="0.203125" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/layout/designer_widgetlist_group.xml" value="0.203125" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/layout/propertydialog_entry.xml" value="0.203125" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/layout/share_dialog.xml" value="0.203125" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/layout/share_dialog_entry.xml" value="0.28306159420289856" />
+        <entry key="..\:/AppProjects/App-UI-Designer/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.21927083333333333" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/UIDesigner/app/src/main/res/layout/activity_main.xml" value="0.2957427536231884" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
