@@ -17,9 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SpinnerAdapter;
 import android.widget.TableRow;
 
 import androidx.annotation.NonNull;
@@ -28,12 +26,11 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.appcompat.widget.AppCompatTextView;
 
-import com.mcal.uidesigner.R;
-import com.mcal.uidesigner.widget.ClickableBorder;
 import com.mcal.uidesigner.common.PositionalXMLReader;
 import com.mcal.uidesigner.common.UndoManager;
 import com.mcal.uidesigner.common.ValueRunnable;
 import com.mcal.uidesigner.utils.Utils;
+import com.mcal.uidesigner.widget.ClickableBorder;
 
 import org.jetbrains.annotations.Contract;
 import org.w3c.dom.Attr;
@@ -620,9 +617,9 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
             public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
                 View view2 = convertView;
                 if (view2 == null) {
-                    view2 = LayoutInflater.from(XmlLayoutlInflater.this.context).inflate(17367046, parent, false);
+                    view2 = LayoutInflater.from(context).inflate(android.R.layout.simple_expandable_list_item_1, parent, false);
                 }
-                ((AppCompatTextView) view2.findViewById(16908308)).setText("Group " + (groupPosition + 1));
+                ((AppCompatTextView) view2.findViewById(android.R.id.text1)).setText("Group " + (groupPosition + 1));
                 return view2;
             }
 
@@ -631,9 +628,9 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
             public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
                 View view2 = convertView;
                 if (view2 == null) {
-                    view2 = LayoutInflater.from(context).inflate(17367047, parent, false);
+                    view2 = LayoutInflater.from(context).inflate(android.R.layout.simple_expandable_list_item_2, parent, false);
                 }
-                ((AppCompatTextView) view2.findViewById(16908308)).setText("Item " + (childPosition + 1));
+                ((AppCompatTextView) view2.findViewById(android.R.id.text1)).setText("Item " + (childPosition + 1));
                 ((AppCompatTextView) view2.findViewById(16908309)).setText("Item " + (childPosition + 1));
                 return view2;
             }
@@ -665,56 +662,57 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
 
     @Nullable
     private View inflateView(Node node, @NonNull String elementName) {
-        if (elementName.contains(".")) {
+        /* {
             return null;
-        }
+        }*/
         if ("View".equals(elementName)) {
             return new View(context);
         }
         if ("View X".equals(elementName)) {
             return new View(context);
         }
-        String baseStyle = this.finder.getBaseStyle(getStyle((Element) node));
-        if (baseStyle != null && baseStyle.startsWith("@android:style/")) {
-            if(!elementName.startsWith("androidx.appcompat.widget")) {
-                try {
-                    return (View) Class.forName("android.widget." + elementName).getConstructor(Context.class, AttributeSet.class, Integer.TYPE).newInstance(this.context, null, Integer.valueOf(((Integer) R.attr.class.getField("Android_" + baseStyle.substring("@android:style/".length()).replace(".", "_")).get(null)).intValue()));
-                } catch (Throwable th) {
-                    th.printStackTrace();
-                }
-            } else {
+        if (elementName.startsWith("androidx")) {
+            String baseStyle = finder.getBaseStyle(getStyle((Element) node));
+            if (baseStyle != null && baseStyle.startsWith("@android:style/")) {
                 try {
                     return (View) Class.forName(elementName).getConstructor(Context.class, AttributeSet.class, Integer.TYPE).newInstance(this.context, null, Integer.valueOf(((Integer) R.attr.class.getField("Android_" + baseStyle.substring("@android:style/".length()).replace(".", "_")).get(null)).intValue()));
                 } catch (Throwable th) {
                     th.printStackTrace();
                 }
             }
-        }
-        if (baseStyle != null && baseStyle.startsWith("?android:attr/")) {
-            if(!elementName.startsWith("androidx.appcompat.widget")) {
-                try {
-                    return (View) Class.forName("android.widget." + elementName).getConstructor(Context.class, AttributeSet.class, Integer.TYPE).newInstance(this.context, null, Integer.valueOf(((Integer) R.attr.class.getField(baseStyle.substring("?android:attr/".length())).get(null)).intValue()));
-                } catch (Throwable th2) {
-                    th2.printStackTrace();
-                }
-            } else {
+            if (baseStyle != null && baseStyle.startsWith("?android:attr/")) {
                 try {
                     return (View) Class.forName(elementName).getConstructor(Context.class, AttributeSet.class, Integer.TYPE).newInstance(this.context, null, Integer.valueOf(((Integer) R.attr.class.getField(baseStyle.substring("?android:attr/".length())).get(null)).intValue()));
                 } catch (Throwable th2) {
                     th2.printStackTrace();
                 }
             }
-        }
-        if(!elementName.startsWith("androidx.appcompat.widget")) {
             try {
-                return (View) Class.forName("android.widget." + elementName).getConstructor(Context.class).newInstance(this.context);
+                return (View) Class.forName(elementName).getConstructor(Context.class).newInstance(this.context);
             } catch (Throwable th3) {
                 th3.printStackTrace();
                 return null;
             }
+        } else if (elementName.contains(".")) {
+            return null;
         } else {
+            String baseStyle = finder.getBaseStyle(getStyle((Element) node));
+            if (baseStyle != null && baseStyle.startsWith("@android:style/")) {
+                try {
+                    return (View) Class.forName("android.widget." + elementName).getConstructor(Context.class, AttributeSet.class, Integer.TYPE).newInstance(this.context, null, Integer.valueOf(((Integer) R.attr.class.getField("Android_" + baseStyle.substring("@android:style/".length()).replace(".", "_")).get(null)).intValue()));
+                } catch (Throwable th) {
+                    th.printStackTrace();
+                }
+            }
+            if (baseStyle != null && baseStyle.startsWith("?android:attr/")) {
+                try {
+                    return (View) Class.forName("android.widget." + elementName).getConstructor(Context.class, AttributeSet.class, Integer.TYPE).newInstance(this.context, null, Integer.valueOf(((Integer) R.attr.class.getField(baseStyle.substring("?android:attr/".length())).get(null)).intValue()));
+                } catch (Throwable th2) {
+                    th2.printStackTrace();
+                }
+            }
             try {
-                return (View) Class.forName(elementName).getConstructor(Context.class).newInstance(this.context);
+                return (View) Class.forName("android.widget." + elementName).getConstructor(Context.class).newInstance(this.context);
             } catch (Throwable th3) {
                 th3.printStackTrace();
                 return null;
@@ -736,7 +734,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
             String baseStyle = this.finder.getBaseStyle(getStyle((Element) node));
             if (baseStyle != null && baseStyle.startsWith("?android:attr/")) {
                 try {
-                    TypedArray array = this.context.getTheme().obtainStyledAttributes(((Integer) R.attr.class.getField(baseStyle.substring("?android:attr/".length())).get(null)).intValue(), new int[]{16842996, 16842997});
+                    TypedArray array = this.context.getTheme().obtainStyledAttributes(((Integer) R.attr.class.getField(baseStyle.substring("?android:attr/".length())).get(null)).intValue(), new int[]{android.R.attr.layout_width, android.R.attr.layout_height});
                     if (array.hasValue(0)) {
                         layoutParams.width = array.getLayoutDimension(0, "layout_width");
                     }

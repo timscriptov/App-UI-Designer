@@ -13,12 +13,12 @@ public class PropertyObject {
         this.obj = obj;
     }
 
-    public void setProperty(XmlLayoutProperties.PropertySpec property, Object value) {
+    /*public void setProperty(XmlLayoutProperties.PropertySpec property, Object value) {
         if (value != null) {
             try {
                 Object setterObj = this.obj;
                 if (property.setterProxyClass != null && (setterObj = this.setterObjects.get(property.setterProxyClass)) == null) {
-                    setterObj = property.setterProxyClass.getConstructor(Object.class).newInstance(this.obj);
+                    setterObj = property.setterProxyClass.getConstructor(new Class[]{Object.class}).newInstance(new Object[]{this.obj});
                     this.setterObjects.put(property.setterProxyClass, setterObj);
                 }
                 if (property.setterName.endsWith("()")) {
@@ -26,7 +26,32 @@ public class PropertyObject {
                     if (valueType == Enum.class) {
                         valueType = property.constantClass;
                     }
-                    setterObj.getClass().getMethod(property.setterName.substring(0, property.setterName.length() - 2), valueType).invoke(setterObj, value);
+                    String methodName = property.setterName.substring(0, property.setterName.length() - 2);
+                    setterObj.getClass().getMethod(methodName, new Class[]{valueType}).invoke(setterObj, new Object[]{value});
+                    return;
+                }
+                setterObj.getClass().getField(property.setterName).set(setterObj, value);
+            } catch (Throwable th) {
+                th.printStackTrace();
+            }
+        }
+    }*/
+
+    public void setProperty(XmlLayoutProperties.PropertySpec property, Object value) {
+        if (value != null) {
+            try {
+                Object setterObj = obj;
+                if (property.setterProxyClass != null && (setterObj = setterObjects.get(property.setterProxyClass)) == null) {
+                    setterObj = property.setterProxyClass.getConstructor(Object.class).newInstance(obj);
+                    setterObjects.put(property.setterProxyClass, setterObj);
+                }
+                if (property.setterName.endsWith("()")) {
+                    Class<?> valueType = property.type.valueType;
+                    if (valueType == Enum.class) {
+                        valueType = property.constantClass;
+                    }
+                    String methodName = property.setterName.substring(0, property.setterName.length() - 2);
+                    setterObj.getClass().getMethod(methodName, valueType).invoke(setterObj, value);
                     return;
                 }
                 setterObj.getClass().getField(property.setterName).set(setterObj, value);
