@@ -8,8 +8,11 @@ import android.graphics.Paint;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 
+import androidx.annotation.NonNull;
+
 public class Backgrounds {
-    public static BitmapDrawable createLinedBackground(Context context, int color) {
+    @NonNull
+    public static BitmapDrawable createLinedBackground(@NonNull Context context, int color) {
         int size = (int) (6.0f * context.getResources().getDisplayMetrics().density);
         Bitmap bm = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(bm);

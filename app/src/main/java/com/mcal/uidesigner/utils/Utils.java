@@ -5,6 +5,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -18,6 +21,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class Utils {
+    @Nullable
     public static String getRealFileNameFromUri(Context context, Uri uri) {
         String path = getRealPathFromUri(context, uri);
         if (path == null) {
@@ -26,6 +30,7 @@ public class Utils {
         return path.substring(path.lastIndexOf("/") + 1, path.length());
     }
 
+    @Nullable
     public static String getRealPathFromUri(Context context, Uri uri) {
         if ("content".equals(uri.getScheme())) {
             Cursor cursor = context.getContentResolver().query(uri, new String[]{"_data"}, null, null, null);
@@ -39,7 +44,7 @@ public class Utils {
         }
     }
 
-    public static long transfer(InputStream in, OutputStream out) throws IOException {
+    public static long transfer(@NonNull InputStream in, OutputStream out) throws IOException {
         long size = 0;
         byte[] buf = new byte[1000];
         while (true) {
@@ -55,6 +60,7 @@ public class Utils {
         }
     }
 
+    @NonNull
     public static String suggestNewLayoutName(String resDirPath) {
         File layoutDir = new File(resDirPath, "layout");
         layoutDir.mkdirs();
@@ -69,6 +75,7 @@ public class Utils {
         }
     }
 
+    @Nullable
     public static String createNewLayoutFile(String resDirPath, String name, String content) {
         try {
             File layoutDir = new File(resDirPath, "layout");
@@ -89,6 +96,7 @@ public class Utils {
         }
     }
 
+    @NonNull
     public static String readFileAsString(String filePath) {
         try {
             StringBuilder fileData = new StringBuilder();
@@ -112,14 +120,17 @@ public class Utils {
         return createNewLayoutFile(resDirPath, name, "");
     }
 
+    @NonNull
     public static String getDefaultResDirPath() {
-        return getSDCardPath() + "/AppProjects/UIDesigns/res";
+        return getSDCardPath() + "/AppProjects/Designs/res";
     }
 
+    @NonNull
     public static String getSDCardPath() {
         return Environment.getExternalStorageDirectory().getPath();
     }
 
+    @NonNull
     public static List<File> findLayoutFiles(String resDirPath) {
         List<File> layoutFiles = new ArrayList<>();
         File[] allFiles = new File(resDirPath, "layout").listFiles();

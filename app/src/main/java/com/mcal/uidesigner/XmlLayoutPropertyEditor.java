@@ -120,7 +120,7 @@ public class XmlLayoutPropertyEditor {
     }
 
     @SuppressLint("WrongConstant")
-    public static void startSelectingOtherView(final Activity activity, final XmlLayoutEditView editView, final AttributeValue attribute) {
+    public static void startSelectingOtherView(final Activity activity, @NonNull final XmlLayoutEditView editView, final AttributeValue attribute) {
         Toast.makeText(activity, "Select another view", 0).show();
         editView.startSelectingOtherView(new ValueRunnable<XmlLayoutEditView>() {
             public void run(XmlLayoutEditView otherView) {
@@ -134,7 +134,7 @@ public class XmlLayoutPropertyEditor {
         });
     }
 
-    private static void queryIntConstantValue(Activity activity, XmlLayoutEditView editView, AttributeValue attribute) {
+    private static void queryIntConstantValue(Activity activity, XmlLayoutEditView editView, @NonNull AttributeValue attribute) {
         if ("android:visibility".equals(attribute.property.attrName)) {
             querySingleValue(activity, editView, attribute, "visible", "invisible", "gone");
         } else if ("android:orientation".equals(attribute.property.attrName)) {
@@ -163,11 +163,11 @@ public class XmlLayoutPropertyEditor {
         }
     }
 
-    private static void queryMultipleValues(Activity activity, XmlLayoutEditView editView, AttributeValue attribute, List<String> values) {
+    private static void queryMultipleValues(Activity activity, XmlLayoutEditView editView, AttributeValue attribute, @NonNull List<String> values) {
         queryMultipleValues(activity, editView, attribute, (String[]) values.toArray(new String[values.size()]));
     }
 
-    private static void queryMultipleValues(Activity activity, final XmlLayoutEditView editView, final AttributeValue attribute, String... values) {
+    private static void queryMultipleValues(Activity activity, final XmlLayoutEditView editView, final AttributeValue attribute, @NonNull String... values) {
         ArrayList<String> displayValues = new ArrayList<>();
         for (String value : values) {
             displayValues.add(AttributeValue.getDisplayValue(value));
@@ -179,7 +179,7 @@ public class XmlLayoutPropertyEditor {
         });
     }
 
-    private static void queryEnumValue(Activity activity, XmlLayoutEditView editView, AttributeValue attribute) {
+    private static void queryEnumValue(Activity activity, XmlLayoutEditView editView, @NonNull AttributeValue attribute) {
         if ("android.widget.ImageView$ScaleType".equals(attribute.property.constantClassName)) {
             querySingleValue(activity, editView, attribute, "matrix", "fitXY", "fitStart", "fitCenter", "fitEnd", "center", "centerCrop", "centerInside");
         } else if ("android.text.TextUtils$TruncateAt".equals(attribute.property.constantClassName)) {
@@ -189,7 +189,7 @@ public class XmlLayoutPropertyEditor {
         }
     }
 
-    private static void querySingleValue(Activity activity, final XmlLayoutEditView editView, final AttributeValue attribute, final String... values) {
+    private static void querySingleValue(Activity activity, final XmlLayoutEditView editView, final AttributeValue attribute, @NonNull final String... values) {
         final ArrayList<String> listValues = new ArrayList<>();
         for (String value : values) {
             listValues.add(AttributeValue.getDisplayValue(value));
@@ -206,7 +206,7 @@ public class XmlLayoutPropertyEditor {
         });
     }
 
-    private static void queryDrawable(final Activity activity, final XmlLayoutEditView editView, final AttributeValue attribute) {
+    private static void queryDrawable(final Activity activity, final XmlLayoutEditView editView, @NonNull final AttributeValue attribute) {
         if (attribute.value == null) {
             MessageBox.queryFromList(activity, attribute.property.getDisplayName(), Arrays.asList("Color...", "Drawable...", "none"), new ValueRunnable<String>() {
                 public void run(String t) {
@@ -227,7 +227,7 @@ public class XmlLayoutPropertyEditor {
     }
 
 
-    public static void queryImageFromPicker(Activity activity, XmlLayoutEditView editView, AttributeValue attribute) {
+    public static void queryImageFromPicker(@NonNull Activity activity, XmlLayoutEditView editView, AttributeValue attribute) {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction("android.intent.action.GET_CONTENT");
@@ -236,7 +236,7 @@ public class XmlLayoutPropertyEditor {
         pickImageAttribute = attribute;
     }
 
-    public static void queryDrawableResource(final Activity activity, final XmlLayoutEditView editView, final AttributeValue attribute) {
+    public static void queryDrawableResource(final Activity activity, @NonNull final XmlLayoutEditView editView, final AttributeValue attribute) {
         final ArrayList<String> values2 = new ArrayList<>(editView.getAllUserDrawables());
         Collections.sort(values2);
         final List<String> listValues = new ArrayList<>();
@@ -292,7 +292,7 @@ public class XmlLayoutPropertyEditor {
     }
 
 
-    public static void queryColor(Activity activity, final XmlLayoutEditView editView, final AttributeValue attribute) {
+    public static void queryColor(Activity activity, final XmlLayoutEditView editView, @NonNull final AttributeValue attribute) {
         MessageBox.showDialog(activity, new ColorPickerDialog(attribute.property.getDisplayName(), attribute.value, new ColorPickerDialog.ColorRunnable() {
             @Override
             public void run(int color, String hexColor) {
@@ -305,7 +305,7 @@ public class XmlLayoutPropertyEditor {
         querySingleValue(activity, editView, attribute, "true", "false");
     }
 
-    private static void queryLayoutSize(final Activity activity, final XmlLayoutEditView editView, final AttributeValue attribute) {
+    private static void queryLayoutSize(final Activity activity, final XmlLayoutEditView editView, @NonNull final AttributeValue attribute) {
         MessageBox.queryFromList(activity, attribute.property.getDisplayName(), Arrays.asList("Wrap Content", "Match Parent", "Fixed size..."), new ValueRunnable<String>() {
             public void run(String t) {
                 if (t.equals("Wrap Content")) {
@@ -345,7 +345,7 @@ public class XmlLayoutPropertyEditor {
     }
 
 
-    public static void queryTextValue(Activity activity, final XmlLayoutEditView editView, final AttributeValue attribute, String defaultValue) {
+    public static void queryTextValue(Activity activity, final XmlLayoutEditView editView, @NonNull final AttributeValue attribute, String defaultValue) {
         String v = attribute.value;
         if (v == null) {
             v = defaultValue;
@@ -365,7 +365,7 @@ public class XmlLayoutPropertyEditor {
         });
     }
 
-    public static void queryStyle(final Activity activity, final XmlLayoutEditView editView) {
+    public static void queryStyle(final Activity activity, @NonNull final XmlLayoutEditView editView) {
         List<String> styles = new ArrayList<>(editView.getAllUserStyles());
         Collections.sort(styles);
         styles.add("other...");
@@ -397,7 +397,7 @@ public class XmlLayoutPropertyEditor {
         });
     }
 
-    public static void queryID(Activity activity, final XmlLayoutEditView editView) {
+    public static void queryID(Activity activity, @NonNull final XmlLayoutEditView editView) {
         String id;
         if (editView.getViewID() != null) {
             id = editView.getViewID();

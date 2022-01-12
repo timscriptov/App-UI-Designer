@@ -3,6 +3,10 @@ package com.mcal.uidesigner.common;
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
 
+import androidx.annotation.NonNull;
+
+import org.jetbrains.annotations.Contract;
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -126,7 +130,8 @@ public class TextToSpeechHelper {
             }
         }
 
-        private String cleanHtml(String html) {
+        @NonNull
+        private String cleanHtml(@NonNull String html) {
             String text = html.replace("&lt;", "<").replace("&gt;", ">").replace("&quot;", "");
             Map<String, String> words = (Map) langOperatorWords.get(this.ttsLanguage);
             if (words != null) {
@@ -137,7 +142,9 @@ public class TextToSpeechHelper {
             return replaceUnderscores(text.replace("<b>a</b>", "A").replace("<b>b</b>", "B").replace("<b>c</b>", "C").replace("<b>i</b>", "I").replace("<b>j</b>", "J").replace("<b>k</b>", "K").replace("<b>android:", "<b>").replace("<i>", "").replace("</i>", "").replace("</b>", "").replace("<b>", ""));
         }
 
-        private String replaceUnderscores(String text) {
+        @NonNull
+        @Contract("_ -> new")
+        private String replaceUnderscores(@NonNull String text) {
             char[] newText = text.toCharArray();
             for (int p = 1; p < newText.length - 1; p++) {
                 if (newText[p] == '_' && Character.isLetterOrDigit(newText[p - 1]) && Character.isLetterOrDigit(newText[p + 1])) {

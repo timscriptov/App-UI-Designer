@@ -7,11 +7,14 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.media.SoundPool;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,7 +40,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.view.accessibility.AccessibilityEventCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.mcal.designer.R;
+import com.mcal.uidesigner.R;
 import com.mcal.uidesigner.common.ActivityStarter;
 import com.mcal.uidesigner.common.AndroidHelper;
 import com.mcal.uidesigner.common.HelpActivityStarter;
@@ -58,11 +62,11 @@ import java.util.List;
 public class XmlLayoutDesignActivity extends AppCompatActivity {
     private static final int DARK = 3;
     private static final int DARK_SMALL = 1;
-    private static final String EXTRA_DEMO = "EXTRA_LICENSED";
-    private static final String EXTRA_FILE = "EXTRA_FILE";
-    private static final String EXTRA_LANGUAGE = "EXTRA_LANGUAGE";
-    private static final String EXTRA_STANDALONE = "EXTRA_STANDALONE";
-    private static final String EXTRA_TRAINER = "EXTRA_TRAINER";
+    public static final String EXTRA_DEMO = "EXTRA_LICENSED";
+    public static final String EXTRA_FILE = "EXTRA_FILE";
+    public static final String EXTRA_LANGUAGE = "EXTRA_LANGUAGE";
+    public static final String EXTRA_STANDALONE = "EXTRA_STANDALONE";
+    public static final String EXTRA_TRAINER = "EXTRA_TRAINER";
     private static final String EXTRA_TRAINER_ACTION = "EXTRA_TRAINER_ACTION";
     private static final String EXTRA_TRAINER_BUTTON = "EXTRA_TRAINER_BUTTON";
     private static final String EXTRA_TRAINER_HEADER = "EXTRA_HEADER";
@@ -120,11 +124,11 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
         parent.startActivityForResult(intent, trainerRequestCode);
     }
 
-    public static boolean resultContinue(Intent data) {
+    public static boolean resultContinue(@NonNull Intent data) {
         return data.getIntExtra(EXTRA_TRAINER_ACTION, 0) == 1;
     }
 
-    public static boolean resultRun(Intent data) {
+    public static boolean resultRun(@NonNull Intent data) {
         return data.getIntExtra(EXTRA_TRAINER_ACTION, 0) == 2;
     }
 
@@ -146,7 +150,7 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         } else {
-            ActivityStarter.navigateTo(this, this.xmlFilePath, sourceLine, sourceColumn);
+            ActivityStarter.navigateTo(this, xmlFilePath, sourceLine, sourceColumn);
         }
     }
 
@@ -179,6 +183,13 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
         AndroidHelper.forceOptionsMenuButton(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.designer);
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Settings.ACTION_MANAGE_OVERLAY_PERMISSION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, Settings.ACTION_MANAGE_OVERLAY_PERMISSION}, 1);
+            }
+        }
+
         AndroidHelper.makeToolbarFocusable(this);
         if (!isTrainer()) {
             AndroidHelper.setAndroidTVPadding(findViewById(R.id.designerFrame));
@@ -217,9 +228,9 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
         if (isTrainer()) {
             final View header = findViewById(R.id.designerHeaderLearnTask);
             header.setVisibility(0);
-            AppCompatTextView textView = (AppCompatTextView) header.findViewById(R.id.designerHeaderLearnTaskText);
-            AppCompatTextView titleView = (AppCompatTextView) header.findViewById(R.id.designerHeaderLearnTaskTitle);
-            final AppCompatTextView button = (AppCompatTextView) header.findViewById(R.id.designerHeaderLearnButton);
+            AppCompatTextView textView = header.findViewById(R.id.designerHeaderLearnTaskText);
+            AppCompatTextView titleView = header.findViewById(R.id.designerHeaderLearnTaskTitle);
+            final AppCompatTextView button = header.findViewById(R.id.designerHeaderLearnButton);
             titleView.setText(getIntent().getStringExtra(EXTRA_TRAINER_TITLE));
             textView.setText(Html.fromHtml(getIntent().getStringExtra(EXTRA_TRAINER_TASK)));
             button.setText(getIntent().getStringExtra(EXTRA_TRAINER_BUTTON));
@@ -249,13 +260,13 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (hasFocus) {
                         ScaleAnimation anim2 = new ScaleAnimation(1.0f, 1.2f, 1.0f, 1.2f, 1, 0.0f, 1, 0.5f);
-                        anim2.setDuration((long) 400);
+                        anim2.setDuration(400);
                         anim2.setFillAfter(true);
                         button.startAnimation(anim2);
                         return;
                     }
                     ScaleAnimation anim3 = new ScaleAnimation(1.2f, 1.0f, 1.2f, 1.0f, 1, 0.0f, 1, 0.5f);
-                    anim3.setDuration((long) 400);
+                    anim3.setDuration(400);
                     anim3.setFillAfter(true);
                     button.startAnimation(anim3);
                 }

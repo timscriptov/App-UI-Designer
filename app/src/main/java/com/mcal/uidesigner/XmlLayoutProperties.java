@@ -2,6 +2,9 @@ package com.mcal.uidesigner;
 
 import android.graphics.drawable.Drawable;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.mcal.uidesigner.common.PositionalXMLReader;
 
 import java.util.Arrays;
@@ -230,7 +233,7 @@ public class XmlLayoutProperties {
             this.setterProxyClass = resolveType(setterProxyClassName);
         }
 
-        public PropertySpec(String className, String name, String setterName, PropertyType type) {
+        public PropertySpec(String className, @NonNull String name, String setterName, PropertyType type) {
             Class<?> resolveType = resolveType(className);
             this.constantClass = resolveType;
             this.targetClass = resolveType;
@@ -241,7 +244,8 @@ public class XmlLayoutProperties {
             createDisplayName();
         }
 
-        private Class<?> resolveType(String className) {
+        @Nullable
+        private Class<?> resolveType(@NonNull String className) {
             Class<?> cls;
             try {
                 if (!className.contains(".")) {

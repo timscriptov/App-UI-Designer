@@ -10,6 +10,7 @@
     <attr name="Android_Widget_ActionButton_CloseMode" format="reference" />
     <attr name="Android_Widget_ActionButton_Overflow" format="reference" />
     <attr name="Android_Widget_AutoCompleteTextView" format="reference" />
+    <attr name="Android_Widget_Appcompat_Button" format="reference" />
     <attr name="Android_Widget_Button" format="reference" />
     <attr name="Android_Widget_Button_Inset" format="reference" />
     <attr name="Android_Widget_Button_Small" format="reference" />

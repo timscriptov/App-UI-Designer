@@ -10,6 +10,7 @@ import android.graphics.drawable.NinePatchDrawable;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.mcal.uidesigner.common.StreamUtilities;
 
@@ -166,14 +167,15 @@ public class XmlLayoutResourceFinder {
         return value;
     }
 
-    public String findStyleAttributeValue(String style, XmlLayoutProperties.PropertySpec property) {
+    public String findStyleAttributeValue(@NonNull String style, XmlLayoutProperties.PropertySpec property) {
         if (style.startsWith("@style/")) {
-            return findStyleAttributeValue(style.substring("@style/".length()), property, new HashSet());
+            return findStyleAttributeValue(style.substring("@style/".length()), property, new HashSet<>());
         }
         return null;
     }
 
-    private String findStyleAttributeValue(String style, XmlLayoutProperties.PropertySpec property, Set<String> visitedStyles) {
+    @Nullable
+    private String findStyleAttributeValue(String style, XmlLayoutProperties.PropertySpec property, @NonNull Set<String> visitedStyles) {
         if (visitedStyles.contains(style)) {
             return null;
         }
@@ -194,58 +196,60 @@ public class XmlLayoutResourceFinder {
     public Drawable findUserDrawable(String resName) {
         if (!(this.resourcesDir == null || resName == null || !resName.startsWith("@drawable/"))) {
             String resName2 = resName.substring("@drawable/".length());
-            Drawable d = loadImageFile(new File(new File(this.resourcesDir, "drawable-" + getDensity()), resName2 + ".png"));
-            if (d != null) {
-                return d;
+
+            Drawable drawablePngDensity = loadImageFile(new File(new File(this.resourcesDir, "drawable-" + getDensity()), resName2 + ".png"));
+            if (drawablePngDensity != null) {
+                return drawablePngDensity;
             }
-            Drawable d2 = loadImageFile(new File(new File(this.resourcesDir, "drawable-" + getDensity()), resName2 + ".jpg"));
-            if (d2 != null) {
-                return d2;
+            Drawable drawableJpgDensity = loadImageFile(new File(new File(this.resourcesDir, "drawable-" + getDensity()), resName2 + ".jpg"));
+            if (drawableJpgDensity != null) {
+                return drawableJpgDensity;
             }
-            Drawable d3 = loadNinePatchFile(new File(new File(this.resourcesDir, "drawable-" + getDensity()), resName2 + ".9.png"));
-            if (d3 != null) {
-                return d3;
+            Drawable drawableNineDensity = loadNinePatchFile(new File(new File(this.resourcesDir, "drawable-" + getDensity()), resName2 + ".9.png"));
+            if (drawableNineDensity != null) {
+                return drawableNineDensity;
             }
-            Drawable d4 = loadImageFile(new File(new File(this.resourcesDir, "drawable"), resName2 + ".png"));
-            if (d4 != null) {
-                return d4;
+            Drawable drawablePng = loadImageFile(new File(new File(this.resourcesDir, "drawable"), resName2 + ".png"));
+            if (drawablePng != null) {
+                return drawablePng;
             }
-            Drawable d5 = loadImageFile(new File(new File(this.resourcesDir, "drawable"), resName2 + ".jpg"));
-            if (d5 != null) {
-                return d5;
+            Drawable drawableJpg = loadImageFile(new File(new File(this.resourcesDir, "drawable"), resName2 + ".jpg"));
+            if (drawableJpg != null) {
+                return drawableJpg;
             }
-            Drawable d6 = loadNinePatchFile(new File(new File(this.resourcesDir, "drawable"), resName2 + ".9.png"));
-            if (d6 != null) {
-                return d6;
+            Drawable drawableNine = loadNinePatchFile(new File(new File(this.resourcesDir, "drawable"), resName2 + ".9.png"));
+            if (drawableNine != null) {
+                return drawableNine;
             }
-            String[] arr$ = {"xxhpdi", "xhdpi", "hdpi", "mdpi", "ldpi"};
-            int len$ = arr$.length;
-            for (int i$ = 0; i$ < len$; i$++) {
-                Drawable d7 = loadImageFile(new File(new File(this.resourcesDir, "drawable-" + arr$[i$]), resName2 + ".png"));
-                if (d7 != null) {
-                    return d7;
+
+            String[] arrDpi = {"xxhpdi", "xhdpi", "hdpi", "mdpi", "ldpi"};
+            int lenDpi = arrDpi.length;
+
+            for (int i = 0; i < lenDpi; i++) {
+                Drawable drawable = loadImageFile(new File(new File(this.resourcesDir, "drawable-" + arrDpi[i]), resName2 + ".png"));
+                if (drawable != null) {
+                    return drawable;
                 }
             }
-            String[] arr$2 = {"xxhpdi", "xhdpi", "hdpi", "mdpi", "ldpi"};
-            int len$2 = arr$2.length;
-            for (int i$2 = 0; i$2 < len$2; i$2++) {
-                Drawable d8 = loadImageFile(new File(new File(this.resourcesDir, "drawable-" + arr$2[i$2]), resName2 + ".jpg"));
-                if (d8 != null) {
-                    return d8;
+
+            for (int i = 0; i < lenDpi; i++) {
+                Drawable drawable = loadImageFile(new File(new File(this.resourcesDir, "drawable-" + arrDpi[i]), resName2 + ".jpg"));
+                if (drawable != null) {
+                    return drawable;
                 }
             }
-            String[] arr$3 = {"xxhpdi", "xhdpi", "hdpi", "mdpi", "ldpi"};
-            int len$3 = arr$3.length;
-            for (int i$3 = 0; i$3 < len$3; i$3++) {
-                Drawable d9 = loadNinePatchFile(new File(new File(this.resourcesDir, "drawable-" + arr$3[i$3]), resName2 + ".9.png"));
-                if (d9 != null) {
-                    return d9;
+
+            for (int i = 0; i < lenDpi; i++) {
+                Drawable drawable = loadNinePatchFile(new File(new File(this.resourcesDir, "drawable-" + arrDpi[i]), resName2 + ".9.png"));
+                if (drawable != null) {
+                    return drawable;
                 }
             }
         }
         return null;
     }
 
+    @NonNull
     private String getDensity() {
         switch (this.context.getResources().getDisplayMetrics().densityDpi) {
             case 120:
@@ -356,7 +360,8 @@ public class XmlLayoutResourceFinder {
         return style.startsWith("@style/") ? getBaseStyle(style.substring("@style/".length()), new HashSet()) : style;
     }
 
-    private String getBaseStyle(String style, Set<String> visitedStyles) {
+    @Nullable
+    private String getBaseStyle(String style, @NonNull Set<String> visitedStyles) {
         if (visitedStyles.contains(style)) {
             return null;
         }
@@ -382,7 +387,7 @@ public class XmlLayoutResourceFinder {
         return "image";
     }
 
-    public void addUserDrawable(String name, Intent data) {
+    public void addUserDrawable(String name, @NonNull Intent data) {
         try {
             File dir = new File(this.resourcesDir, "drawable");
             dir.mkdirs();

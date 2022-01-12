@@ -6,6 +6,7 @@ import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatEditText;
 
 import com.mcal.uidesigner.common.KeyStroke;
@@ -17,7 +18,7 @@ public class KeyStrokeEditText extends AppCompatEditText {
     private final KeyStrokeDetector.KeyStrokeHandler keyStrokeHandler = new KeyStrokeDetector.KeyStrokeHandler() {
         @Override
         public boolean onKeyStroke(KeyStroke keyStroke) {
-            KeyStrokeEditText.this.setKeyStroke(keyStroke);
+            setKeyStroke(keyStroke);
             return true;
         }
     };
@@ -42,7 +43,7 @@ public class KeyStrokeEditText extends AppCompatEditText {
     }
 
     @Override
-    public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
+    public InputConnection onCreateInputConnection(@NonNull EditorInfo outAttrs) {
         outAttrs.imeOptions = 1073741825;
         return this.keyStrokeDetector.createInputConnection(this, this.keyStrokeHandler);
     }
@@ -72,7 +73,7 @@ public class KeyStrokeEditText extends AppCompatEditText {
         return this.stroke;
     }
 
-    public void setKeyStroke(KeyStroke stroke) {
+    public void setKeyStroke(@NonNull KeyStroke stroke) {
         this.stroke = stroke;
         setText(stroke.toString());
     }

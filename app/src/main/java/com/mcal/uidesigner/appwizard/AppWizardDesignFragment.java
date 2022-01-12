@@ -1,12 +1,14 @@
 package com.mcal.uidesigner.appwizard;
 
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mcal.designer.R;
+import com.mcal.uidesigner.R;
 import com.mcal.uidesigner.NewWidget;
 import com.mcal.uidesigner.XmlLayoutEditView;
 import com.mcal.uidesigner.XmlLayoutEditViewMenu;
@@ -26,7 +28,8 @@ public class AppWizardDesignFragment extends Fragment {
     private static final String ARG_SECTION_TITLE = "ARG_SECTION_TITLE";
     private XmlLayoutlInflater inflater;
 
-    public static AppWizardDesignFragment create(AppWizardProject.AppFragment section) {
+    @NonNull
+    public static AppWizardDesignFragment create(@NonNull AppWizardProject.AppFragment section) {
         AppWizardDesignFragment fragment = new AppWizardDesignFragment();
         Bundle args = new Bundle();
         args.putString(ARG_SECTION_TITLE, section.getTitle());
@@ -37,7 +40,7 @@ public class AppWizardDesignFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup content = (ViewGroup) layoutInflater.inflate(R.layout.appwizard_section, container, false);
         ViewGroup layoutContainer = (ViewGroup) content.findViewById(R.id.appwizardSectionContainer);
         content.setClipChildren(false);

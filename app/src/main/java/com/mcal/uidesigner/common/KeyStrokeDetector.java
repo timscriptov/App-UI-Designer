@@ -11,7 +11,12 @@ import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.CorrectionInfo;
 import android.view.inputmethod.InputConnection;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.mcal.uidesigner.ProxyTextView;
+
+import org.jetbrains.annotations.Contract;
 
 public class KeyStrokeDetector {
     private static final boolean DEBUG = false;
@@ -30,14 +35,14 @@ public class KeyStrokeDetector {
     private boolean unknownDown;
 
 
-    public KeyStrokeDetector(Context context) {
+    public KeyStrokeDetector(@NonNull Context context) {
         boolean z = true;
         this.context = context;
         this.isSoftKeyboard = context.getResources().getConfiguration().keyboard != 1 ? false : z;
         d("new KeyStrokeDetector() - isSoftKeyboard: " + this.isSoftKeyboard);
     }
 
-    public void onConfigChange(Context context) {
+    public void onConfigChange(@NonNull Context context) {
         boolean z = true;
         if (context.getResources().getConfiguration().keyboard != 1) {
             z = false;
@@ -134,7 +139,7 @@ public class KeyStrokeDetector {
                 return super.deleteSurroundingText(leftLength, rightLength);
             }
 
-            private void sendAsCharKeyStrokes(CharSequence text, boolean isSoftKeyboard, KeyStrokeHandler keyStrokeHandler2) {
+            private void sendAsCharKeyStrokes(@NonNull CharSequence text, boolean isSoftKeyboard, KeyStrokeHandler keyStrokeHandler2) {
                 for (int j = 0; j < text.length(); j++) {
                     char ch = text.charAt(j);
                     if (!isSoftKeyboard) {
@@ -173,12 +178,14 @@ public class KeyStrokeDetector {
                 }
             }
 
-            private KeyEvent transformEvent(KeyEvent event) {
+            @NonNull
+            @Contract("_ -> new")
+            private KeyEvent transformEvent(@NonNull KeyEvent event) {
                 return new KeyEvent(event.getDownTime(), event.getEventTime(), event.getAction(), event.getKeyCode(), event.getRepeatCount(), event.getMetaState(), event.getDeviceId(), event.getScanCode(), event.getFlags() | 4 | 2);
             }
 
             @Override
-            public boolean sendKeyEvent(KeyEvent event) {
+            public boolean sendKeyEvent(@NonNull KeyEvent event) {
                 d("sendKeyEvent " + event.getKeyCode());
                 lastComposingTextLength = 0;
                 return super.sendKeyEvent(transformEvent(event));
@@ -236,11 +243,11 @@ public class KeyStrokeDetector {
     public void d(String msg) {
     }
 
-    private void debugOnKeyStroke(KeyStroke keyStroke) {
+    private void debugOnKeyStroke(@NonNull KeyStroke keyStroke) {
         d("onKeyStroke " + keyStroke.toString());
     }
 
-    private void debugOnKey(String method, int keyCode, KeyEvent event) {
+    private void debugOnKey(String method, int keyCode, @NonNull KeyEvent event) {
         d(method + " " + keyCode + "  " + event.getFlags() + (event.isAltPressed() ? " alt" : "") + (event.isShiftPressed() ? " shift" : "") + " " + (isCtrl(event.getMetaState()) ? " ctrl" : ""));
     }
 
@@ -267,6 +274,7 @@ public class KeyStrokeDetector {
         return new KeyStroke(-1, ch, Character.isUpperCase(ch) | this.realShiftLeftDown | this.realShiftRightDown, false, false);
     }
 
+    @Nullable
     private KeyStroke makeKeyStroke(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case 0:
@@ -292,11 +300,11 @@ public class KeyStrokeDetector {
         }
     }
 
-    public void onActivityKeyUp(int keyCode, KeyEvent event) {
+    public void onActivityKeyUp(int keyCode, @NonNull KeyEvent event) {
         handleMetaKeysUp(keyCode, (event.getFlags() & 2) != 0);
     }
 
-    public void onActivityKeyDown(int keyCode, KeyEvent event) {
+    public void onActivityKeyDown(int keyCode, @NonNull KeyEvent event) {
         handleMetaKeysDown(keyCode, (event.getFlags() & 2) != 0);
     }
 

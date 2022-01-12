@@ -1,5 +1,7 @@
 package com.mcal.uidesigner.appwizard.runtime;
 
+import androidx.annotation.NonNull;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -18,7 +20,7 @@ public class AppWizardProject {
     protected AppWizardActivity activity;
     protected Document document;
 
-    public AppWizardProject(AppWizardActivity activity) {
+    public AppWizardProject(@NonNull AppWizardActivity activity) {
         this.activity = activity;
         this.document = activity.loadXml();
         if (this.document == null) {
@@ -51,7 +53,7 @@ public class AppWizardProject {
         }
     }
 
-    public String getElementAttribute(Element element, String attr) {
+    public String getElementAttribute(@NonNull Element element, String attr) {
         String value = element.getAttribute(attr);
         if (value == null || value.length() <= 0) {
             return null;
@@ -123,6 +125,7 @@ public class AppWizardProject {
             return Single;
         }
 
+        @NonNull
         public static List<String> getPossibleNames() {
             List<String> names = new ArrayList<>();
             for (NavigationType type : values()) {
@@ -181,6 +184,7 @@ public class AppWizardProject {
             return HoloLightDarkActionBar;
         }
 
+        @NonNull
         public static List<String> getPossibleNames() {
             List<String> names = new ArrayList<>();
             for (Theme theme : values()) {
@@ -225,7 +229,7 @@ public class AppWizardProject {
             return Theme.HoloLightDarkActionBar;
         }
 
-        public void setTheme(Theme theme) {
+        public void setTheme(@NonNull Theme theme) {
             this.element.setAttribute("theme", theme.name());
             AppWizardProject.this.update(1);
         }
@@ -238,7 +242,7 @@ public class AppWizardProject {
             return NavigationType.Tabs;
         }
 
-        public void setNavigationType(NavigationType type) {
+        public void setNavigationType(@NonNull NavigationType type) {
             this.element.setAttribute("type", type.name());
             setShowTitleAttribute(Boolean.valueOf(type.showTitleByDefault()));
             if (type.hasDrawer() && getFragments().size() < 2) {
@@ -326,6 +330,7 @@ public class AppWizardProject {
             return section;
         }
 
+        @NonNull
         private AppFragment addFragmentElement() {
             int size = getFragments().size();
             Element childElement = document.createElement("fragment");

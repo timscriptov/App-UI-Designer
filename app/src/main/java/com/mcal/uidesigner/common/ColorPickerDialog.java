@@ -12,7 +12,7 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.mcal.designer.R;
+import com.mcal.uidesigner.R;
 import com.mcal.uidesigner.view.ColorPickerView;
 
 public class ColorPickerDialog extends MessageBox {

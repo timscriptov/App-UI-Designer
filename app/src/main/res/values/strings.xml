@@ -11,4 +11,22 @@
     <string name="dialog_ok">Ok</string>
     <string name="dialog_yes">Yes</string>
     <string name="trainer_skip_lesson">Skip lesson</string>
+    <string name="ui_design_add">Add...</string>
+    <string name="ui_design_delete_layout">\"Delete Layout \"</string>
+    <string name="ui_design_really_delete_this_layout">Really delete this layout?</string>
+    <string name="ui_design_new_layout">New Layout</string>
+    <string name="ui_design_file_name">File name:</string>
+    <string name="ui_design_new_layout_dot">New layout...</string>
+    <string name="ui_design_light_theme_small">Light Theme Small</string>
+    <string name="ui_design_dark_theme_small">Dark Theme Small</string>
+    <string name="ui_design_light_theme">Light Theme</string>
+    <string name="ui_design_dark_theme">Dark Theme</string>
+    <string name="ui_design_run">Run</string>
+    <string name="ui_design_view">View</string>
+    <string name="editui_design_edit">Edit</string>
+    <string name="ui_design_undo">Undo</string>
+    <string name="ui_design_redo">Redo</string>
+    <string name="ui_design_paste_xml">Paste XML</string>
+    <string name="ui_design_copy_xml">Copy XML</string>
+    <string name="ui_design_share_xml">Share XML</string>
 </resources>

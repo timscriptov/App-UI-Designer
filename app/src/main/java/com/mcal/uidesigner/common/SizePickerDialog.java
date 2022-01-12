@@ -14,12 +14,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatSeekBar;
 import androidx.appcompat.widget.AppCompatTextView;
 
-import com.mcal.designer.R;
+import com.mcal.uidesigner.R;
 
 public class SizePickerDialog extends MessageBox {
     private AlertDialog dialog;
@@ -143,7 +145,7 @@ public class SizePickerDialog extends MessageBox {
         return slider.getProgress() + unit;
     }
 
-    public void updateSlider(AppCompatSeekBar slider, String size) {
+    public void updateSlider(@NonNull AppCompatSeekBar slider, String size) {
         slider.setProgress(Math.max(0, Math.min(100, getValue(size))));
     }
 
@@ -163,7 +165,8 @@ public class SizePickerDialog extends MessageBox {
         return size;
     }
 
-    private String getUnit(String size) {
+    @Nullable
+    private String getUnit(@NonNull String size) {
         if (size.length() == 0 || (!Character.isDigit(size.charAt(0)) && size.charAt(0) != '-')) {
             return null;
         }
@@ -174,7 +177,7 @@ public class SizePickerDialog extends MessageBox {
         return size.substring(p, size.length());
     }
 
-    private int getValue(String size) {
+    private int getValue(@NonNull String size) {
         int p = 0;
         while (p < size.length() && (Character.isDigit(size.charAt(p)) || size.charAt(p) == '-')) {
             p++;

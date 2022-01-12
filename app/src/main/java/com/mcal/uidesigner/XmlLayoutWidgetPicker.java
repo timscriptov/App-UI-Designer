@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,13 +24,26 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatRadioButton;
+import androidx.appcompat.widget.AppCompatSeekBar;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.AppCompatToggleButton;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.widget.ContentLoadingProgressBar;
 
-import com.mcal.designer.R;
+import com.mcal.uidesigner.R;
 import com.mcal.uidesigner.appwizard.AppWizardDesignActivity;
 import com.mcal.uidesigner.common.MessageBox;
 import com.mcal.uidesigner.common.ValueRunnable;
+
+import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,7 +64,7 @@ public class XmlLayoutWidgetPicker {
         selectView(activity, title, false, false, ok);
     }
 
-    public static void setTextAppearance(AppCompatTextView textView, int attrID) {
+    public static void setTextAppearance(@NonNull AppCompatTextView textView, int attrID) {
         Resources.Theme theme = textView.getContext().getTheme();
         TypedValue styleID = new TypedValue();
         if (theme.resolveAttribute(attrID, styleID, true)) {
@@ -98,6 +112,7 @@ public class XmlLayoutWidgetPicker {
         });
     }
 
+    @NonNull
     private static List<List<Widget>> getWidgetsToShow(boolean onlyLayouts, boolean onlyRootViews, boolean onlyAppwizard) {
         List<List<Widget>> widgets = new ArrayList<>();
         String category = "";
@@ -115,6 +130,96 @@ public class XmlLayoutWidgetPicker {
     }
 
     public enum Widget {
+        // Android V: Widget
+        AppCompatButton("AppCompatButton", "Widget X", new WidgetPreview() {
+            @Override
+            public View create(Context context) {
+                androidx.appcompat.widget.AppCompatButton button = new androidx.appcompat.widget.AppCompatButton(context);
+                button.setText("AppCompatButton");
+                button.setFocusable(false);
+                return button;
+            }
+        }, "androidx.appcompat.widget.AppCompatButton", "android:text", "AppCompatButton"),
+        AppCompatImageButton("AppCompatImageButton", "Widget X", new WidgetPreview() {
+            @Override
+            public View create(Context context) {
+                androidx.appcompat.widget.AppCompatImageButton button = new androidx.appcompat.widget.AppCompatImageButton(context);
+                button.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
+                button.setFocusable(false);
+                return button;
+            }
+        }, "androidx.appcompat.widget.AppCompatButton", "style", "?android:attr/buttonBarButtonStyle", "android:src", "@android:drawable/ic_menu_close_clear_cancel"),
+        AppCompatToggleButton("AppCompatToggleButton", "Widget X", new WidgetPreview() {
+            @Override
+            public View create(Context context) {
+                AppCompatToggleButton button = new androidx.appcompat.widget.AppCompatToggleButton(context);
+                button.setFocusable(false);
+                return button;
+            }
+        }, "androidx.appcompat.widget.AppCompatToggleButton", "android:src", "@android:drawable/ic_menu_close_clear_cancel"),
+        AppCompatSwitch("androidx.appcompat.widget.SwitchCompat", "Widget X", new WidgetPreview() {
+            @Override
+            public View create(Context context) {
+                androidx.appcompat.widget.SwitchCompat preview = new androidx.appcompat.widget.SwitchCompat(context);
+                preview.setFocusable(false);
+                return preview;
+            }
+        }),
+        AppCompatCheckBox("androidx.appcompat.widget.AppCompatCheckBox", "Widget X", new WidgetPreview() {
+            @Override
+            public View create(Context context) {
+                androidx.appcompat.widget.AppCompatCheckBox preview = new androidx.appcompat.widget.AppCompatCheckBox(context);
+                preview.setFocusable(false);
+                preview.setText("AppCompatCheckBox");
+                return preview;
+            }
+        }),
+        AppCompatRadioButton("androidx.appcompat.widget.AppCompatRadioButton", "Widget X", new WidgetPreview() {
+            @Override
+            public View create(Context context) {
+                AppCompatRadioButton preview = new AppCompatRadioButton(context);
+                preview.setFocusable(false);
+                preview.setText("AppCompatRadioButton");
+                return preview;
+            }
+        }),
+        AppCompatSeekBar("androidx.appcompat.widget.AppCompatSeekBar", "Widget X", new WidgetPreview() {
+            @Override
+            public View create(Context context) {
+                AppCompatSeekBar bar = new AppCompatSeekBar(context);
+                bar.setFocusable(false);
+                LinearLayout preview = new LinearLayout(context);
+                preview.addView(bar, new LinearLayout.LayoutParams((int) (150.0f * context.getResources().getDisplayMetrics().density), -2));
+                return preview;
+            }
+        }),
+        // Android V: View
+        AppCompatTextView("AppCompatTextView", "View X", new WidgetPreview() {
+            @Override
+            public View create(Context context) {
+                AppCompatTextView textView = new AppCompatTextView(context);
+                textView.setText("AppCompatTextView");
+                return textView;
+            }
+        }, "androidx.appcompat.widget.AppCompatTextView", "android:text", "Text"),
+        AppCompatImageView("AppCompatImageView", "View X", new WidgetPreview() {
+            @SuppressLint("ResourceType")
+            @Override
+            public View create(Context context) {
+                AppCompatImageView preview = new AppCompatImageView(context);
+                preview.setImageResource(android.R.drawable.ic_delete);
+                return preview;
+            }
+        }, "androidx.appcompat.widget.AppCompatImageView", "android:src", "@android:drawable/ic_delete"),
+        ContentLoadingProgressBar("androidx.core.widget.ContentLoadingProgressBar", "View X", new WidgetPreview() {
+            @Override
+            public View create(Context context) {
+                return new ContentLoadingProgressBar(context);
+            }
+        }),
+        // Android X: Text Field
+        AppCompatEditText("androidx.appcompat.widget.AppCompatEditText", "Text Field X", "AppCompatEditText", "android:ems", "10"),
+        // Android SDK: Widget
         Button("Button", "Widget", new WidgetPreview() {
             @Override
             public View create(Context context) {
@@ -127,7 +232,7 @@ public class XmlLayoutWidgetPicker {
         ButtonSmall("Button (small)", "Widget", new WidgetPreview() {
             @Override
             public View create(Context context) {
-                Button button = new Button(context, null, 16842825);
+                Button button = new Button(context, null, android.R.attr.buttonStyleSmall);
                 button.setText("Small Button");
                 button.setFocusable(false);
                 return button;
@@ -138,7 +243,7 @@ public class XmlLayoutWidgetPicker {
             @Override
             public View create(Context context) {
                 ImageButton button = new ImageButton(context);
-                button.setImageResource(17301560);
+                button.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
                 button.setFocusable(false);
                 return button;
             }
@@ -146,7 +251,7 @@ public class XmlLayoutWidgetPicker {
         BarButton("Bar Button", "Widget", new WidgetPreview() {
             @Override
             public View create(Context context) {
-                Button button = new Button(context, null, 16843567);
+                Button button = new Button(context, null, android.R.attr.buttonBarButtonStyle);
                 button.setText("Bar Button");
                 button.setFocusable(false);
                 return button;
@@ -156,8 +261,8 @@ public class XmlLayoutWidgetPicker {
             @SuppressLint("ResourceType")
             @Override
             public View create(Context context) {
-                ImageButton button = new ImageButton(context, null, 16843567);
-                button.setImageResource(17301560);
+                ImageButton button = new ImageButton(context, null, android.R.attr.buttonBarButtonStyle);
+                button.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
                 button.setFocusable(false);
                 return button;
             }
@@ -206,6 +311,7 @@ public class XmlLayoutWidgetPicker {
                 return preview;
             }
         }),
+        // Android SDK: View
         TextView("TextView", "View", new WidgetPreview() {
             @Override
             public View create(Context context) {
@@ -219,7 +325,7 @@ public class XmlLayoutWidgetPicker {
             public View create(Context context) {
                 AppCompatTextView textView = new AppCompatTextView(context);
                 textView.setText("Small Text");
-                XmlLayoutWidgetPicker.setTextAppearance(textView, 16842818);
+                XmlLayoutWidgetPicker.setTextAppearance(textView, android.R.attr.textAppearanceSmall);
                 return textView;
             }
         }, "TextView", "android:textAppearance", "?android:attr/textAppearanceSmall", "android:text", "Small Text"),
@@ -228,7 +334,7 @@ public class XmlLayoutWidgetPicker {
             public View create(Context context) {
                 AppCompatTextView textView = new AppCompatTextView(context);
                 textView.setText("Medium Text");
-                XmlLayoutWidgetPicker.setTextAppearance(textView, 16842817);
+                XmlLayoutWidgetPicker.setTextAppearance(textView, android.R.attr.textAppearanceMedium);
                 return textView;
             }
         }, "TextView", "android:textAppearance", "?android:attr/textAppearanceMedium", "android:text", "Medium Text"),
@@ -237,7 +343,7 @@ public class XmlLayoutWidgetPicker {
             public View create(Context context) {
                 AppCompatTextView textView = new AppCompatTextView(context);
                 textView.setText("Large Text");
-                XmlLayoutWidgetPicker.setTextAppearance(textView, 16842816);
+                XmlLayoutWidgetPicker.setTextAppearance(textView, android.R.attr.textAppearanceLarge);
                 return textView;
             }
         }, "TextView", "android:textAppearance", "?android:attr/textAppearanceLarge", "android:text", "Large Text"),
@@ -250,7 +356,7 @@ public class XmlLayoutWidgetPicker {
                         setMeasuredDimension((int) (30.0f * context.getResources().getDisplayMetrics().density), (int) (1.0f * context.getResources().getDisplayMetrics().density));
                     }
                 };
-                view.setBackgroundDrawable(context.obtainStyledAttributes(new int[]{16843530}).getDrawable(0));
+                view.setBackgroundDrawable(context.obtainStyledAttributes(new int[]{android.R.attr.dividerVertical}).getDrawable(0));
                 return view;
             }
         }, "View", "android:background", "?android:attr/dividerVertical", "android:layout_height", "1dp", "android:layout_width", "match_parent"),
@@ -263,7 +369,7 @@ public class XmlLayoutWidgetPicker {
                         setMeasuredDimension((int) (1.0f * context.getResources().getDisplayMetrics().density), (int) (30.0f * context.getResources().getDisplayMetrics().density));
                     }
                 };
-                view.setBackgroundDrawable(context.obtainStyledAttributes(new int[]{16843564}).getDrawable(0));
+                view.setBackgroundDrawable(context.obtainStyledAttributes(new int[]{android.R.attr.dividerHorizontal}).getDrawable(0));
                 return view;
             }
         }, "View", "android:background", "?android:attr/dividerHorizontal", "android:layout_width", "1dp", "android:layout_height", "match_parent"),
@@ -272,7 +378,7 @@ public class XmlLayoutWidgetPicker {
             @Override
             public View create(Context context) {
                 ImageView preview = new ImageView(context);
-                preview.setImageResource(17301533);
+                preview.setImageResource(android.R.drawable.ic_delete);
                 return preview;
             }
         }, "ImageView", "android:src", "@android:drawable/ic_delete"),
@@ -285,18 +391,19 @@ public class XmlLayoutWidgetPicker {
         ProgressBarLarge("ProgressBar (large)", "View", new WidgetPreview() {
             @Override
             public View create(Context context) {
-                return new ProgressBar(context, null, 16842874);
+                return new ProgressBar(context, null, android.R.attr.progressBarStyleLarge);
             }
         }, "ProgressBar", "style", "?android:attr/progressBarStyleLarge"),
         ProgressBarHorizontal("ProgressBar (horizontal)", "View", new WidgetPreview() {
             @Override
             public View create(Context context) {
-                ProgressBar preview = new ProgressBar(context, null, 16842872);
+                ProgressBar preview = new ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal);
                 preview.setMax(100);
                 preview.setProgress(50);
                 return preview;
             }
         }, "ProgressBar", "style", "?android:attr/progressBarStyleHorizontal"),
+        // Android SDK: Text Field
         EditText("EditText", "Text Field", "EditText", "android:ems", "10"),
         EditTextMultiLine("EditText (multiline)", "Text Field", "EditText", "android:inputType", "textMultiLine", "android:ems", "10"),
         EditTextPassword("EditText (password)", "Text Field", "EditText", "android:inputType", "textPassword", "android:ems", "10"),
@@ -310,18 +417,23 @@ public class XmlLayoutWidgetPicker {
         EditTextNumber("EditText (number)", "Text Field", "EditText", "android:inputType", "number", "android:ems", "10"),
         EditTextNumberSigned("EditText (signed number)", "Text Field", "EditText", "android:inputType", "numberSigned", "android:ems", "10"),
         EditTextDecimal("EditText (decimal)", "Text Field", "EditText", "android:inputType", "numberDecimal", "android:ems", "10"),
+        // Android SDK: Advanced Widget
         DatePicker("DatePicker", "Advanced Widget"),
         TimePicker("TimePicker", "Advanced Widget"),
         NumberPicker("NumberPicker", "Advanced Widget"),
         RatingBar("RatingBar", "Advanced Widget"),
+        // Android SDK: Adapter View
         ListView("List View", "Adapter View", "ListView", new String[0]),
         ExpandableListView("Expandable List View", "Adapter View", "ExpandableListView", new String[0]),
         Spinner("Spinner", "Adapter View"),
+        // Android SDK: Layout
         RelativeLayout("RelativeLayout", "Layout"),
         LinearLayoutH("LinearLayout (horizontal)", "Layout", "LinearLayout", "android:orientation", "horizontal"),
         LinearLayoutV("LinearLayout (vertical)", "Layout", "LinearLayout", "android:orientation", "vertical"),
+        // Android SDK: Scroll View
         ScrollView("ScrollView", "Scroll View"),
         HorizontalScrollView("HorizontalScrollView", "Scroll View"),
+        // Android SDK: Advanced Layout
         ButtonBar("Button Bar", "Advanced Layout", "LinearLayout", "style", "?android:attr/buttonBarStyle", "android:orientation", "horizontal"),
         GridLayout("GridLayout", "Advanced Layout", "GridLayout", "rowCount", "1", "columnCount", "1"),
         FrameLayout("FrameLayout", "Advanced Layout"),
@@ -329,9 +441,9 @@ public class XmlLayoutWidgetPicker {
         TableLayout("TableLayout", "Advanced Layout"),
         TableRow("TableRow", "Advanced Layout"),
         AbsoluteLayout("AbsoluteLayout", "Advanced Layout"),
+        // Android V4: App Layout
         DrawerLayout("Drawer Layout", "App Layout", "android.support.v4.widget.DrawerLayout", new String[0]),
         ViewPager("View Pager", "App Layout", "android.support.v4.widget.ViewPager", new String[0]);
-        //AppCompatButton("AppCompatButton", "App Layout", "android.support.v4.widget.AppCompatButton", new String[0]);
 
         private final Map<String, String> attributes;
         private final String category;
@@ -351,7 +463,7 @@ public class XmlLayoutWidgetPicker {
             this(name, category, null, elementName, attributes);
         }
 
-        Widget(String name, String category, WidgetPreview preview, String elementName, String... attributes) {
+        Widget(String name, String category, WidgetPreview preview, String elementName, @NonNull String... attributes) {
             this.name = name;
             this.elementName = elementName;
             this.category = category;
@@ -390,6 +502,7 @@ public class XmlLayoutWidgetPicker {
             return this.category;
         }
 
+        @Nullable
         public View createPreview(Context context) {
             if (this.preview != null) {
                 try {
@@ -406,6 +519,8 @@ public class XmlLayoutWidgetPicker {
             return null;
         }
 
+        @NonNull
+        @Contract(pure = true)
         public String getHelpUrl() {
             return "android/widget/" + this.elementName + ".html";
         }
@@ -428,7 +543,7 @@ public class XmlLayoutWidgetPicker {
         public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
             View view = convertView;
             if (view == null) {
-                view = LayoutInflater.from(this.context).inflate(R.layout.designer_widgetlist_group, parent, false);
+                view = LayoutInflater.from(context).inflate(R.layout.designer_widgetlist_group, parent, false);
             }
             ((TextView) view.findViewById(R.id.widgetlistGroupName)).setText(((Widget) getChild(groupPosition, 0)).getCategory());
             return view;
@@ -439,14 +554,14 @@ public class XmlLayoutWidgetPicker {
         public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
             View view = convertView;
             if (view == null) {
-                view = LayoutInflater.from(this.context).inflate(R.layout.designer_widgetlist_entry, parent, false);
+                view = LayoutInflater.from(context).inflate(R.layout.designer_widgetlist_entry, parent, false);
             }
             Widget widget = (Widget) getChild(groupPosition, childPosition);
-            View preview = widget.createPreview(this.context);
-            TextView nameView = (TextView) view.findViewById(R.id.widgetlistName);
+            View preview = widget.createPreview(context);
+            TextView nameView = view.findViewById(R.id.widgetlistName);
             nameView.setText(widget.getName());
             nameView.setVisibility(preview == null ? 0 : 8);
-            ViewGroup previewContainer = (ViewGroup) view.findViewById(R.id.widgetlistPreview);
+            ViewGroup previewContainer = view.findViewById(R.id.widgetlistPreview);
             previewContainer.setVisibility(preview != null ? 0 : 8);
             previewContainer.removeAllViews();
             if (preview != null) {
@@ -459,7 +574,7 @@ public class XmlLayoutWidgetPicker {
                 helpView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((XmlLayoutDesignActivity) WidgetListEntryAdapter.this.context).showHelp(helpUrl);
+                        ((XmlLayoutDesignActivity) context).showHelp(helpUrl);
                     }
                 });
             }

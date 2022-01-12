@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -249,8 +250,9 @@ public class AppWizardActivity extends AppCompatActivity {
         }
     }
 
+    @NonNull
     @SuppressLint("ResourceType")
-    private ViewGroup inflateDrawerContent(ViewGroup container) {
+    private ViewGroup inflateDrawerContent(@NonNull ViewGroup container) {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         DrawerLayout drawerLayout = new DrawerLayout(this);
@@ -290,7 +292,7 @@ public class AppWizardActivity extends AppCompatActivity {
         return new ColorDrawable(a.data);
     }
 
-    private void inflateSliderContent(ViewGroup container) {
+    private void inflateSliderContent(@NonNull ViewGroup container) {
         this.viewPager = new ViewPager(this);
         this.viewPager.setId(this.pagerId);
         container.addView(this.viewPager);
@@ -306,7 +308,7 @@ public class AppWizardActivity extends AppCompatActivity {
         this.viewPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
     }
 
-    private void inflateTabContent(ViewGroup container) {
+    private void inflateTabContent(@NonNull ViewGroup container) {
         this.viewPager = new ViewPager(this);
         this.viewPager.setId(this.pagerId);
         container.addView(this.viewPager);

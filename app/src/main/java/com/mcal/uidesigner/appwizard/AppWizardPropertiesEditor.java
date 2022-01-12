@@ -1,6 +1,8 @@
 package com.mcal.uidesigner.appwizard;
 
-import com.mcal.designer.R;
+import androidx.annotation.NonNull;
+
+import com.mcal.uidesigner.R;
 import com.mcal.uidesigner.appwizard.runtime.AppWizardProject;
 import com.mcal.uidesigner.common.MessageBox;
 import com.mcal.uidesigner.common.PropertiesDialog;
@@ -26,7 +28,8 @@ public class AppWizardPropertiesEditor {
         }
     }
 
-    private List<? extends PropertiesDialog.PropertyCommand> getFragmentCommands(final AppWizardProject.AppFragment appFragment) {
+    @NonNull
+    private List<? extends PropertiesDialog.PropertyCommand> getFragmentCommands(@NonNull final AppWizardProject.AppFragment appFragment) {
         List<PropertiesDialog.PropertyCommand> cmds = new ArrayList<>();
         cmds.add(new PropertiesDialog.PropertyCommand() {
             @Override
@@ -118,7 +121,8 @@ public class AppWizardPropertiesEditor {
         return cmds;
     }
 
-    private List<? extends PropertiesDialog.PropertyCommand> getAppActivityCommands(final AppWizardProject.AppActivity appActivity) {
+    @NonNull
+    private List<? extends PropertiesDialog.PropertyCommand> getAppActivityCommands(@NonNull final AppWizardProject.AppActivity appActivity) {
         List<PropertiesDialog.PropertyCommand> cmds = new ArrayList<>();
         for (final AppWizardProject.AppFragment section : appActivity.getFragments()) {
             cmds.add(new PropertiesDialog.PropertyCommand() {
@@ -201,7 +205,7 @@ public class AppWizardPropertiesEditor {
         return cmds;
     }
 
-    private void addNavigationProperty(List<PropertiesDialog.PropertyCommand> cmds, final AppWizardProject.AppActivity app) {
+    private void addNavigationProperty(@NonNull List<PropertiesDialog.PropertyCommand> cmds, final AppWizardProject.AppActivity app) {
         cmds.add(new PropertiesDialog.PropertyCommand() {
             @Override
             public void run() {
@@ -234,7 +238,7 @@ public class AppWizardPropertiesEditor {
         });
     }
 
-    private void addThemeProperty(List<PropertiesDialog.PropertyCommand> cmds, final AppWizardProject.AppActivity app) {
+    private void addThemeProperty(@NonNull List<PropertiesDialog.PropertyCommand> cmds, final AppWizardProject.AppActivity app) {
         cmds.add(new PropertiesDialog.PropertyCommand() {
             @Override
             public void run() {
@@ -267,7 +271,7 @@ public class AppWizardPropertiesEditor {
         });
     }
 
-    private void addStringProperty(List<PropertiesDialog.PropertyCommand> cmds, final String title, final String value, final ValueRunnable<String> ok) {
+    private void addStringProperty(@NonNull List<PropertiesDialog.PropertyCommand> cmds, final String title, final String value, final ValueRunnable<String> ok) {
         cmds.add(new PropertiesDialog.PropertyCommand() {
             @Override
             public void run() {
@@ -300,7 +304,7 @@ public class AppWizardPropertiesEditor {
         });
     }
 
-    private void addBooleanProperty(List<PropertiesDialog.PropertyCommand> cmds, final String title, final Boolean value, final ValueRunnable<Boolean> ok) {
+    private void addBooleanProperty(@NonNull List<PropertiesDialog.PropertyCommand> cmds, final String title, final Boolean value, final ValueRunnable<Boolean> ok) {
         cmds.add(new PropertiesDialog.PropertyCommand() {
             @Override
             public void run() {

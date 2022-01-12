@@ -1,5 +1,7 @@
 package com.mcal.uidesigner;
 
+import androidx.annotation.NonNull;
+
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -37,13 +39,13 @@ public class XmlLayoutDOMSerializer {
         serialize(doc, new FileWriter(file));
     }
 
-    public void serialize(Document doc, Writer writer) throws IOException {
+    public void serialize(@NonNull Document doc, Writer writer) throws IOException {
         doc.normalize();
         serializeNode(doc, writer, 0, "");
         writer.flush();
     }
 
-    private void serializeNode(Node node, Writer writer, int depth, String indentation) throws IOException {
+    private void serializeNode(@NonNull Node node, Writer writer, int depth, String indentation) throws IOException {
         switch (node.getNodeType()) {
             case 1:
                 String name = node.getNodeName();

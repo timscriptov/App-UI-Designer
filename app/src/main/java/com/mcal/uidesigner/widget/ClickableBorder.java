@@ -115,9 +115,9 @@ public class ClickableBorder extends LinearLayout {
                 postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (ClickableBorder.this.down) {
-                            ClickableBorder.this.down = false;
-                            ClickableBorder.this.repaint();
+                        if (down) {
+                            down = false;
+                            repaint();
                         }
                     }
                 }, 1000);

@@ -1,5 +1,7 @@
 package com.mcal.uidesigner;
 
+import androidx.annotation.NonNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +36,7 @@ public class PropertyObject {
         }
     }
 
-    public boolean hasProperty(XmlLayoutProperties.PropertySpec property) {
+    public boolean hasProperty(@NonNull XmlLayoutProperties.PropertySpec property) {
         return property.targetClass != null && property.targetClass.isInstance(this.obj);
     }
 }

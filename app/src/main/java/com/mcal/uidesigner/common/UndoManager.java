@@ -4,6 +4,10 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
+import org.jetbrains.annotations.Contract;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -39,7 +43,7 @@ public class UndoManager {
         }
     }
 
-    public void load(Bundle bundle) {
+    public void load(@NonNull Bundle bundle) {
         this.contents.clear();
         List<Change> undo = bundle.getParcelableArrayList("undo");
         if (undo != null) {
@@ -52,7 +56,7 @@ public class UndoManager {
         }
     }
 
-    public void save(Bundle bundle) {
+    public void save(@NonNull Bundle bundle) {
         bundle.putParcelableArrayList("undo", new ArrayList<>(this.contents));
         bundle.putParcelableArrayList("redo", new ArrayList<>(this.redoContents));
     }
@@ -116,12 +120,16 @@ public class UndoManager {
     public static class Change implements Parcelable {
         public static final Parcelable.Creator<Change> CREATOR = new Parcelable.Creator<Change>() {
 
+            @NonNull
+            @Contract("_ -> new")
             @Override
             public Change createFromParcel(Parcel in) {
                 return new Change(in);
             }
 
 
+            @NonNull
+            @Contract(value = "_ -> new", pure = true)
             @Override
             public Change[] newArray(int size) {
                 return new Change[size];
@@ -137,7 +145,7 @@ public class UndoManager {
             this.change = change;
         }
 
-        public Change(Parcel in) {
+        public Change(@NonNull Parcel in) {
             this(in.readString(), in.readString(), in.readInt());
         }
 
@@ -147,7 +155,7 @@ public class UndoManager {
         }
 
         @Override
-        public void writeToParcel(Parcel dest, int flags) {
+        public void writeToParcel(@NonNull Parcel dest, int flags) {
             dest.writeString(this.filepath);
             dest.writeString(this.content);
             dest.writeInt(this.change);

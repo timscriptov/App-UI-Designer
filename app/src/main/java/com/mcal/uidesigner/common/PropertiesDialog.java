@@ -17,7 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
-import com.mcal.designer.R;
+import com.mcal.uidesigner.R;
 import com.mcal.uidesigner.XmlLayoutDesignActivity;
 
 import java.util.ArrayList;

@@ -5,13 +5,14 @@ import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
-import com.mcal.designer.R;
+import com.mcal.uidesigner.R;
 import com.mcal.uidesigner.appwizard.runtime.AppWizardActivity;
 import com.mcal.uidesigner.appwizard.runtime.AppWizardProject;
 import com.mcal.uidesigner.common.MessageBox;
@@ -52,6 +53,7 @@ public class AppWizardDesignActivity extends AppWizardActivity implements UndoMa
         return getLayoutFilePath(layoutName);
     }
 
+    @NonNull
     private String getProjectFilepath() {
         return getProjectPath() + "/assets/app.xml";
     }
@@ -61,7 +63,7 @@ public class AppWizardDesignActivity extends AppWizardActivity implements UndoMa
     }
 
     @Override
-    public void revertToVersion(String filepath, String content, int change) {
+    public void revertToVersion(@NonNull String filepath, String content, int change) {
         if (filepath.equals(getProjectFilepath())) {
             try {
                 saveXml(content);
@@ -90,7 +92,7 @@ public class AppWizardDesignActivity extends AppWizardActivity implements UndoMa
         }
     }
 
-    private Document parseXml(String xml) throws IOException, SAXException {
+    private Document parseXml(@NonNull String xml) throws IOException, SAXException {
         InputStream in = new ByteArrayInputStream(xml.getBytes());
         Document document = PositionalXMLReader.readXML(in);
         in.close();

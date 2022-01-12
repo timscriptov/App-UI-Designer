@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="ActivityThemeDesignerDark" parent="Theme.AppCompat">
+    <style name="ActivityThemeDesignerDark" parent="Theme.MaterialComponents">
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorOnSecondary">?android:textColorPrimaryInverse</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="background">@color/colorPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondary</item>
+        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="materialAlertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="materialButtonStyle">@style/Widget.App.Button</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">?isLightTheme</item>
+        <item name="android:fontFamily">@font/google_sans</item>
+
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:actionBarStyle">@style/MainActionBar</item>
         <item name="Android_Widget">@android:style/Widget</item>
@@ -685,7 +700,22 @@
         <item name="icon_view">@drawable/round_visibility_24</item>
     </style>
 
-    <style name="ActivityThemeDesignerLight" parent="Theme.AppCompat.Light">
+    <style name="ActivityThemeDesignerLight" parent="Theme.MaterialComponents.Light">
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorOnSecondary">?android:textColorPrimaryInverse</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="background">@color/colorPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondary</item>
+        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="materialAlertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="materialButtonStyle">@style/Widget.App.Button</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">?isLightTheme</item>
+        <item name="android:fontFamily">@font/google_sans</item>
+
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:actionBarStyle">@style/MainActionBar</item>
         <item name="Android_Widget">@android:style/Widget</item>
@@ -704,6 +734,7 @@
         <item name="Android_Widget_AutoCompleteTextView">
             @android:style/Widget.AutoCompleteTextView
         </item>
+        <item name="Android_Widget_Appcompat_Button">@style/Widget.AppCompat.Button</item>
         <item name="Android_Widget_Button">@android:style/Widget.Button</item>
         <item name="Android_Widget_Button_Inset">@android:style/Widget.Button.Inset</item>
         <item name="Android_Widget_Button_Small">@android:style/Widget.Button.Small</item>
@@ -1375,8 +1406,6 @@
 
     <style name="TrainerHeaderOuter" />
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light" />
-
     <style name="BrowserHelpButton">
         <item name="android:gravity">center</item>
         <item name="android:background">?android:selectableItemBackground</item>
@@ -1386,5 +1415,46 @@
         <item name="android:scaleType">centerInside</item>
     </style>
 
-    <style name="MainActionBar" parent="@android:style/Widget.Holo.ActionBar" />
+    <style name="MainActionBar" parent="Theme.MaterialComponents.DayNight.DarkActionBar" />
+
+    <style name="AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/NeutralButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="NeutralButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="Widget.App.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">
+        <item name="iconTint">@color/colorGray</item>
+        <item name="android:textColor">@color/colorGray</item>
+        <item name="strokeColor">@color/colorGray</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.App.SmallComponent</item>
+    </style>
+
+    <style name="Widget.App.Button" parent="Widget.MaterialComponents.Button">
+        <item name="shapeAppearance">@style/ShapeAppearance.App.SmallComponent</item>
+    </style>
+
+    <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">4dp</item>
+    </style>
+
+    <style name="TextInputLayoutTheme" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/colorAccent</item>
+        <item name="hintTextColor">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorGray</item>
+    </style>
+
 </resources>

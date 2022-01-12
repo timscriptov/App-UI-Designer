@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 
+import androidx.annotation.NonNull;
+
 import com.mcal.uidesigner.widget.ClickableBorder;
 import com.mcal.uidesigner.common.PositionalXMLReader;
 import com.mcal.uidesigner.common.ValueRunnable;
@@ -87,7 +89,7 @@ public class XmlLayoutEditView extends ClickableBorder {
         this.inflater.setViewID(this.node, id);
     }
 
-    public void setIDAttribute(AttributeValue attribute, XmlLayoutEditView otherView, String id) {
+    public void setIDAttribute(@NonNull AttributeValue attribute, XmlLayoutEditView otherView, String id) {
         this.inflater.setIDAttribute(this.node, attribute.property, otherView == null ? null : otherView.node, id);
     }
 
@@ -119,7 +121,7 @@ public class XmlLayoutEditView extends ClickableBorder {
         return this.viewObj != null && (this.viewObj.obj instanceof RelativeLayout);
     }
 
-    public void setAttribute(AttributeValue attribute, String value) {
+    public void setAttribute(@NonNull AttributeValue attribute, String value) {
         this.inflater.setAttribute(this.node, attribute.property, value);
     }
 
@@ -183,7 +185,7 @@ public class XmlLayoutEditView extends ClickableBorder {
         this.inflater.deleteView(this.node);
     }
 
-    public void gotoSourceCode(XmlLayoutDesignActivity activity) {
+    public void gotoSourceCode(@NonNull XmlLayoutDesignActivity activity) {
         activity.gotoSourceCode(getSourceLine(), getSourceColumn());
     }
 

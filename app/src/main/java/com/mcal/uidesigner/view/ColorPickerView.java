@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Shader;
+
+import androidx.annotation.NonNull;
 import androidx.core.internal.view.SupportMenu;
 import androidx.core.view.MotionEventCompat;
 import androidx.core.view.ViewCompat;
@@ -58,6 +60,7 @@ public class ColorPickerView extends View {
         init();
     }
 
+    @NonNull
     public static String toHexColor(int c) {
         if (Color.alpha(c) == 255) {
             return String.format("#%06X", Integer.valueOf(16777215 & c));
@@ -269,7 +272,7 @@ public class ColorPickerView extends View {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
         if (event.getAction() == 0 || event.getAction() == 2) {
             float x = (event.getX() / this.scale) - 10.0f;
             if (x < 0.0f) {

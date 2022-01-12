@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-    package="com.mcal.designer"
+    package="com.mcal.uidesigner"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission
         android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -11,10 +11,8 @@
         android:xlargeScreens="true" />
     <application
 		android:requestLegacyExternalStorage="true"
-        android:theme="@style/AppTheme"
         android:label="App UI Designer"
         android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:allowBackup="false">
 		
         <activity

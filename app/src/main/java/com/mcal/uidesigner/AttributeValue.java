@@ -1,5 +1,7 @@
 package com.mcal.uidesigner;
 
+import androidx.annotation.NonNull;
+
 import org.w3c.dom.Attr;
 
 public class AttributeValue {
@@ -13,7 +15,7 @@ public class AttributeValue {
         this.attr = null;
     }
 
-    public AttributeValue(XmlLayoutProperties.PropertySpec property, Attr attr) {
+    public AttributeValue(XmlLayoutProperties.PropertySpec property, @NonNull Attr attr) {
         this.property = property;
         this.value = attr.getValue();
         this.attr = attr;

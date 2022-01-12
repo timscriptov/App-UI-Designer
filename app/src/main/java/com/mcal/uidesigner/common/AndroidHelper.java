@@ -21,13 +21,14 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.PopupMenu;
 
-import com.mcal.designer.R;
+import com.mcal.uidesigner.R;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -85,7 +86,7 @@ public class AndroidHelper {
     }
 
     @TargetApi(21)
-    public static void setAndroidTVPadding(View contentView, boolean bottomPadding) {
+    public static void setAndroidTVPadding(@NonNull View contentView, boolean bottomPadding) {
         int i;
         if (isAndroidTV(contentView.getContext())) {
             AppCompatActivity activity = (AppCompatActivity) contentView.getContext();
@@ -134,7 +135,7 @@ public class AndroidHelper {
         return isAndroidTV.booleanValue();
     }
 
-    public static boolean hasHardwareKeyboard(Context context) {
+    public static boolean hasHardwareKeyboard(@NonNull Context context) {
         return context.getResources().getConfiguration().keyboard == 2;
     }
 
@@ -142,7 +143,7 @@ public class AndroidHelper {
         return !isOuyaEdition() && !isAndroidTV(context);
     }
 
-    public static boolean isMouseButtonEvent(MotionEvent event) {
+    public static boolean isMouseButtonEvent(@NonNull MotionEvent event) {
         if (event.getToolType(0) == 3) {
             return true;
         }
@@ -203,7 +204,8 @@ public class AndroidHelper {
         }, 200);
     }
 
-    public static <T extends View> T findViewOf(View v, Class<T> c) {
+    @Nullable
+    public static <T extends View> T findViewOf(@NonNull View v, Class<T> c) {
         if (v.getClass() == c) {
             return (T) v;
         }
@@ -242,7 +244,7 @@ public class AndroidHelper {
         return Math.max(getScreenHeightDip(context), getScreenWidthDip(context));
     }
 
-    public static int getScreenSizePX(Context context) {
+    public static int getScreenSizePX(@NonNull Context context) {
         @SuppressLint("WrongConstant") WindowManager wm = (WindowManager) context.getSystemService("window");
         return Math.min(wm.getDefaultDisplay().getHeight(), wm.getDefaultDisplay().getWidth());
     }
@@ -260,12 +262,12 @@ public class AndroidHelper {
     }
 
     @SuppressLint("WrongConstant")
-    public static float getScreenHeightDip(Context context) {
+    public static float getScreenHeightDip(@NonNull Context context) {
         return ((float) ((WindowManager) context.getSystemService("window")).getDefaultDisplay().getHeight()) / context.getResources().getDisplayMetrics().density;
     }
 
     @SuppressLint("WrongConstant")
-    public static float getScreenWidthDip(Context context) {
+    public static float getScreenWidthDip(@NonNull Context context) {
         return ((float) ((WindowManager) context.getSystemService("window")).getDefaultDisplay().getWidth()) / context.getResources().getDisplayMetrics().density;
     }
 
@@ -340,20 +342,21 @@ public class AndroidHelper {
         return 10.0f;
     }
 
-    public static int obtainImageResourceId(Context context, int attr) {
+    public static int obtainImageResourceId(@NonNull Context context, int attr) {
         TypedArray ta = context.obtainStyledAttributes(new int[]{attr});
         int iconId = ta.getResourceId(0, 0);
         ta.recycle();
         return iconId;
     }
 
-    public static Drawable obtainTintedDrawable(Context context, int attr, int colorAttr) {
+    @NonNull
+    public static Drawable obtainTintedDrawable(@NonNull Context context, int attr, int colorAttr) {
         Drawable dr = context.getResources().getDrawable(obtainImageResourceId(context, attr));
         dr.setColorFilter(obtainColor(context, colorAttr), PorterDuff.Mode.SRC_IN);
         return dr;
     }
 
-    public static int obtainColor(Context context, int attr) {
+    public static int obtainColor(@NonNull Context context, int attr) {
         TypedArray a = context.obtainStyledAttributes(new int[]{attr});
         int color = a.getColor(0, -1);
         a.recycle();

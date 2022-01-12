@@ -10,10 +10,12 @@ import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatEditText;
 
-import com.mcal.designer.R;
+import com.mcal.uidesigner.R;
 import com.mcal.uidesigner.ProxyTextView;
 import com.mcal.uidesigner.widget.KeyStrokeEditText;
 
@@ -45,7 +47,7 @@ public abstract class MessageBox {
         return shownDialog != null && shownDialog.isShowing();
     }
 
-    public static void showError(Activity activity, String title, Throwable e) {
+    public static void showError(Activity activity, String title, @NonNull Throwable e) {
         showError(activity, title, e.getMessage());
     }
 
@@ -141,7 +143,7 @@ public abstract class MessageBox {
         });
     }
 
-    public static void queryYesNo(Activity activity, int title, int message, List<String> list, Runnable yes, Runnable no) {
+    public static void queryYesNo(Activity activity, int title, int message, @NonNull List<String> list, Runnable yes, Runnable no) {
         String listText = "\n";
         Iterator<String> i = list.iterator();
         while (i.hasNext()) {
@@ -619,6 +621,7 @@ public abstract class MessageBox {
         });
     }
 
+    @Nullable
     public static Dialog onCreateDialog(Activity activity, int id) {
         if (shownBox == null || id != ID) {
             return null;
@@ -628,7 +631,7 @@ public abstract class MessageBox {
         return shownDialog;
     }
 
-    public static void queryMultipleValues(Activity activity, String title, final List<String> values, List<String> displayValues, String value, final ValueRunnable<String> ok) {
+    public static void queryMultipleValues(Activity activity, String title, @NonNull final List<String> values, List<String> displayValues, String value, final ValueRunnable<String> ok) {
         List<Boolean> isSelected = new ArrayList<>();
         List<String> selectedValues = value == null ? new ArrayList<>() : Arrays.asList(value.split("\\|"));
         for (String v : values) {

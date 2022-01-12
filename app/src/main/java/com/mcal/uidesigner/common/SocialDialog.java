@@ -20,8 +20,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
-import com.mcal.designer.BuildConfig;
-import com.mcal.designer.R;
+import com.mcal.uidesigner.BuildConfig;
+import com.mcal.uidesigner.R;
 
 import org.jetbrains.annotations.Contract;
 
@@ -106,7 +106,7 @@ public class SocialDialog extends MessageBox {
             entries2.add(new SocialListEntry(R.drawable.round_shop_24, activity.getResources().getString(R.string.dialog_community_rate), new Runnable() {
                 @Override
                 public void run() {
-                    Social.openPlayPage(activity, BuildConfig.APPLICATION_ID, "community");
+                    Social.openPlayPage(activity, activity.getPackageName(), "community");
                 }
             }));
         }
@@ -122,7 +122,7 @@ public class SocialDialog extends MessageBox {
         }
     }
 
-    public static void showTrainerQuestionDialog(final Activity activity, String title, String message, Runnable skip) {
+    public static void showTrainerQuestionDialog(@NonNull final Activity activity, String title, String message, Runnable skip) {
         List<SocialListEntry> entries = new ArrayList<>();
         entries.add(new SocialListEntry(R.drawable.round_email_24, activity.getResources().getString(R.string.dialog_community_ask), new Runnable() {
             @Override

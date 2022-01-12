@@ -1,6 +1,9 @@
 package com.mcal.uidesigner.common;
 
 import android.annotation.SuppressLint;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.util.TimeUtils;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
@@ -30,7 +33,8 @@ public class KeyStroke {
         this.alt = alt;
     }
 
-    public static KeyStroke load(String value) {
+    @Nullable
+    public static KeyStroke load(@NonNull String value) {
         String[] split = value.split(",");
         if (split.length != 5) {
             return null;
@@ -62,7 +66,7 @@ public class KeyStroke {
         return this.alt;
     }
 
-    public boolean matches(KeyStroke pressedKeyStroke) {
+    public boolean matches(@NonNull KeyStroke pressedKeyStroke) {
         if (this.alt != pressedKeyStroke.alt || this.ctrl != pressedKeyStroke.ctrl || this.shift != pressedKeyStroke.shift) {
             return false;
         }
@@ -86,6 +90,7 @@ public class KeyStroke {
         return str + getDisplayLabel();
     }
 
+    @NonNull
     @SuppressLint("RestrictedApi")
     private String getDisplayLabel() {
         switch (this.keyCode) {
