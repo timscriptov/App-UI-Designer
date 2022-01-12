@@ -218,7 +218,7 @@ public class XmlLayoutWidgetPicker {
             }
         }),
         // Android X: Text Field
-        AppCompatEditText("androidx.appcompat.widget.AppCompatEditText", "Text Field X", "AppCompatEditText", "android:ems", "10"),
+        AppCompatEditText("AppCompatEditText", "Text Field X", "androidx.appcompat.widget.AppCompatEditText", "android:ems", "10"),
         // Android SDK: Widget
         Button("Button", "Widget", new WidgetPreview() {
             @Override
