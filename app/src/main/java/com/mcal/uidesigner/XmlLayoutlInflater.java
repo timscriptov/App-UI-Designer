@@ -76,7 +76,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         this.context = parent.getContext();
         this.parentView = parent;
         this.xmlFilePath = xmlFilePath;
-        this.finder = new XmlLayoutResourceFinder(this.context, resDirPath);
+        this.finder = new XmlLayoutResourceFinder(context, resDirPath);
     }
 
     protected abstract void onEmptyLayoutClicked();
@@ -468,7 +468,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
                 String id = getViewID(node);
                 if (id != null && !this.id2Int.containsKey(id)) {
                     this.id2Node.put(id, node);
-                    this.id2Int.put(id, Integer.valueOf(id2Int.size() + 100));
+                    this.id2Int.put(id, id2Int.size() + 100);
                 }
                 collectIDs(node.getChildNodes());
             }
@@ -536,7 +536,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
                 }
                 String id = getViewID(node);
                 if (id != null) {
-                    actualView.setId(id2Int.get(id).intValue());
+                    actualView.setId(id2Int.get(id));
                 }
                 if (parent != null) {
                     parent.addView(actualView, (ViewGroup.LayoutParams) layoutParamsObj.obj);
@@ -662,38 +662,13 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
 
     @Nullable
     private View inflateView(Node node, @NonNull String elementName) {
-        /* {
-            return null;
-        }*/
         if ("View".equals(elementName)) {
             return new View(context);
         }
         if ("View X".equals(elementName)) {
             return new View(context);
         }
-        if (elementName.startsWith("androidx")) {
-            String baseStyle = finder.getBaseStyle(getStyle((Element) node));
-            if (baseStyle != null && baseStyle.startsWith("@android:style/")) {
-                try {
-                    return (View) Class.forName(elementName).getConstructor(Context.class, AttributeSet.class, Integer.TYPE).newInstance(this.context, null, Integer.valueOf(((Integer) R.attr.class.getField("Android_" + baseStyle.substring("@android:style/".length()).replace(".", "_")).get(null)).intValue()));
-                } catch (Throwable th) {
-                    th.printStackTrace();
-                }
-            }
-            if (baseStyle != null && baseStyle.startsWith("?android:attr/")) {
-                try {
-                    return (View) Class.forName(elementName).getConstructor(Context.class, AttributeSet.class, Integer.TYPE).newInstance(this.context, null, Integer.valueOf(((Integer) R.attr.class.getField(baseStyle.substring("?android:attr/".length())).get(null)).intValue()));
-                } catch (Throwable th2) {
-                    th2.printStackTrace();
-                }
-            }
-            try {
-                return (View) Class.forName(elementName).getConstructor(Context.class).newInstance(this.context);
-            } catch (Throwable th3) {
-                th3.printStackTrace();
-                return null;
-            }
-        } else if (elementName.contains(".")) {
+        if (elementName.contains(".")) {
             return null;
         } else {
             String baseStyle = finder.getBaseStyle(getStyle((Element) node));
@@ -707,14 +682,14 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
             if (baseStyle != null && baseStyle.startsWith("?android:attr/")) {
                 try {
                     return (View) Class.forName("android.widget." + elementName).getConstructor(Context.class, AttributeSet.class, Integer.TYPE).newInstance(this.context, null, Integer.valueOf(((Integer) R.attr.class.getField(baseStyle.substring("?android:attr/".length())).get(null)).intValue()));
-                } catch (Throwable th2) {
-                    th2.printStackTrace();
+                } catch (Throwable th) {
+                    th.printStackTrace();
                 }
             }
             try {
                 return (View) Class.forName("android.widget." + elementName).getConstructor(Context.class).newInstance(this.context);
-            } catch (Throwable th3) {
-                th3.printStackTrace();
+            } catch (Throwable th) {
+                th.printStackTrace();
                 return null;
             }
         }
@@ -734,7 +709,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
             String baseStyle = this.finder.getBaseStyle(getStyle((Element) node));
             if (baseStyle != null && baseStyle.startsWith("?android:attr/")) {
                 try {
-                    TypedArray array = this.context.getTheme().obtainStyledAttributes(((Integer) R.attr.class.getField(baseStyle.substring("?android:attr/".length())).get(null)).intValue(), new int[]{android.R.attr.layout_width, android.R.attr.layout_height});
+                    TypedArray array = this.context.getTheme().obtainStyledAttributes((Integer) R.attr.class.getField(baseStyle.substring("?android:attr/".length())).get(null), new int[]{android.R.attr.layout_width, android.R.attr.layout_height});
                     if (array.hasValue(0)) {
                         layoutParams.width = array.getLayoutDimension(0, "layout_width");
                     }
@@ -759,7 +734,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
             if (obj.hasProperty(property)) {
                 Object value = getPropertyAttributeValue(node, property);
                 if (this.editMode && (value instanceof Integer) && ((property == XmlLayoutProperties.LAYOUT_WIDTH || property == XmlLayoutProperties.LAYOUT_HEIGHT) && ((Integer) value).intValue() >= 0 && ((Integer) value).intValue() < (min = (int) (10.0f * this.context.getResources().getDisplayMetrics().density)))) {
-                    value = Integer.valueOf(min);
+                    value = min;
                 }
                 obj.setProperty(property, value);
             }
@@ -776,7 +751,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         try {
             String stringValue = getPropertyValue(node, property).value;
             if (stringValue != null && stringValue.startsWith("?android:attr/")) {
-                int attrID = ((Integer) R.attr.class.getField(stringValue.substring("?android:attr/".length())).get(null)).intValue();
+                int attrID = (Integer) R.attr.class.getField(stringValue.substring("?android:attr/".length())).get(null);
                 switch (property.type) {
                     case Size:
                     case TextSize:
@@ -784,7 +759,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
                     case FloatSize:
                         TypedValue value = new TypedValue();
                         if (this.context.getTheme().resolveAttribute(attrID, value, true)) {
-                            return Integer.valueOf((int) TypedValue.complexToDimension(value.data, this.context.getResources().getDisplayMetrics()));
+                            return (int) TypedValue.complexToDimension(value.data, this.context.getResources().getDisplayMetrics());
                         }
                         break;
                     default:
@@ -792,21 +767,21 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
                         if (a.hasValue(0)) {
                             switch (property.type) {
                                 case Bool:
-                                    Boolean valueOf = Boolean.valueOf(a.getBoolean(0, false));
+                                    Boolean valueOf = a.getBoolean(0, false);
                                     a.recycle();
                                     return valueOf;
                                 case ID:
                                 case Int:
                                 case IntConstant:
-                                    Integer valueOf2 = Integer.valueOf(a.getInt(0, 0));
+                                    Integer valueOf2 = a.getInt(0, 0);
                                     a.recycle();
                                     return valueOf2;
                                 case Float:
-                                    Float valueOf3 = Float.valueOf(a.getFloat(0, 0.0f));
+                                    Float valueOf3 = a.getFloat(0, 0.0f);
                                     a.recycle();
                                     return valueOf3;
                                 case Color:
-                                    Integer valueOf4 = Integer.valueOf(a.getColor(0, 0));
+                                    Integer valueOf4 = a.getColor(0, 0);
                                     a.recycle();
                                     return valueOf4;
                                 case DrawableResource:
@@ -850,7 +825,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
             case Drawable:
                 Integer value = getColorAttributeValue(node, property);
                 if (value != null) {
-                    return new ColorDrawable(value.intValue());
+                    return new ColorDrawable(value);
                 }
                 return getDrawableAttributeValue(node, property);
             case Text:
@@ -868,15 +843,11 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
                 if (value2 != null) {
                     return value2;
                 }
-                Integer value22 = getIntConstantAttributeValue(node, property);
-                if (value22 != null) {
-                    return value22;
-                }
-                return null;
+                return getIntConstantAttributeValue(node, property);
             case FloatSize:
                 Integer value3 = getSizeAttributeValue(node, property);
                 if (value3 != null) {
-                    return new Float((float) value3.intValue());
+                    return (float) value3;
                 }
                 return null;
             default:
@@ -890,9 +861,10 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         if (value == null) {
             return null;
         }
-        return Boolean.valueOf("true".equals(value));
+        return "true".equals(value);
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Nullable
     private Object getDrawableAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
         String value = getResourcePropertyValue(node, property);
@@ -902,7 +874,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         }
         if (value != null && value.startsWith("@android:drawable/")) {
             try {
-                return this.context.getResources().getDrawable(((Integer) R.drawable.class.getDeclaredField(value.substring("@android:drawable/".length())).get(null)).intValue());
+                return this.context.getResources().getDrawable((Integer) R.drawable.class.getDeclaredField(value.substring("@android:drawable/".length())).get(null));
             } catch (Throwable th) {
                 th.printStackTrace();
             }
@@ -939,20 +911,18 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         for (String val : value.split("\\|")) {
             Integer c = getIntConstantAttributeValue(val, property);
             if (c != null) {
-                result |= c.intValue();
+                result |= c;
             }
         }
-        return Integer.valueOf(result);
+        return result;
     }
 
     @Nullable
     private Integer getIntConstantAttributeValue(String value, @NonNull XmlLayoutProperties.PropertySpec property) {
         if (property.constantFieldPrefix == null) {
             try {
-                return Integer.valueOf(((Integer) property.constantClass.getField(value.toUpperCase()).get(null)).intValue());
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (NoSuchFieldException e) {
+                return (Integer) property.constantClass.getField(value.toUpperCase()).get(null);
+            } catch (IllegalAccessException | NoSuchFieldException e) {
                 e.printStackTrace();
             }
         }
@@ -961,7 +931,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
             String fieldName = field.getName();
             if ((field.getModifiers() & 8) != 0 && fieldName.startsWith(property.constantFieldPrefix) && fieldName.substring(property.constantFieldPrefix.length()).replace("_", "").toUpperCase().equals(value.toUpperCase())) {
                 try {
-                    return Integer.valueOf(((Integer) field.get(null)).intValue());
+                    return (Integer) field.get(null);
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
@@ -984,9 +954,9 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
                     if (value.length() == 7) {
                         color |= -16777216;
                     }
-                    return Integer.valueOf((int) color);
+                    return (int) color;
                 } else if (value.startsWith("@android:color/")) {
-                    return Integer.valueOf(this.context.getResources().getColor(((Integer) R.color.class.getDeclaredField(value.substring("@android:color/".length())).get(null)).intValue()));
+                    return this.context.getResources().getColor((Integer) R.color.class.getDeclaredField(value.substring("@android:color/".length())).get(null));
                 }
             } catch (Throwable th) {
                 th.printStackTrace();
@@ -999,7 +969,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
     private Float getTextSizeAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
         Integer size = getSizeAttributeValue(node, property);
         if (size != null) {
-            return Float.valueOf(((float) size.intValue()) / this.context.getResources().getDisplayMetrics().scaledDensity);
+            return ((float) size) / this.context.getResources().getDisplayMetrics().scaledDensity;
         }
         return null;
     }
@@ -1010,16 +980,16 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         if (value != null) {
             try {
                 if (value.endsWith("px")) {
-                    return Integer.valueOf((int) Float.parseFloat(value.substring(0, value.length() - 2)));
+                    return (int) Float.parseFloat(value.substring(0, value.length() - 2));
                 }
                 if (value.endsWith("dp")) {
-                    return Integer.valueOf((int) (this.context.getResources().getDisplayMetrics().density * Float.parseFloat(value.substring(0, value.length() - 2))));
+                    return (int) (this.context.getResources().getDisplayMetrics().density * Float.parseFloat(value.substring(0, value.length() - 2)));
                 } else if (value.endsWith("dip")) {
-                    return Integer.valueOf((int) (this.context.getResources().getDisplayMetrics().density * Float.parseFloat(value.substring(0, value.length() - 3))));
+                    return (int) (this.context.getResources().getDisplayMetrics().density * Float.parseFloat(value.substring(0, value.length() - 3)));
                 } else if (value.endsWith("sp")) {
-                    return Integer.valueOf((int) (this.context.getResources().getDisplayMetrics().scaledDensity * Float.parseFloat(value.substring(0, value.length() - 2))));
+                    return (int) (this.context.getResources().getDisplayMetrics().scaledDensity * Float.parseFloat(value.substring(0, value.length() - 2)));
                 } else if (value.startsWith("@android:dimen/")) {
-                    return Integer.valueOf(this.context.getResources().getDimensionPixelSize(((Integer) R.dimen.class.getDeclaredField(value.substring("@android:dimen/".length())).get(null)).intValue()));
+                    return this.context.getResources().getDimensionPixelSize((Integer) R.dimen.class.getDeclaredField(value.substring("@android:dimen/".length())).get(null));
                 }
             } catch (Throwable th) {
                 th.printStackTrace();
@@ -1033,7 +1003,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         String value = getResourcePropertyValue(node, property);
         if (value != null) {
             try {
-                return Integer.valueOf(Integer.parseInt(value));
+                return Integer.parseInt(value);
             } catch (Throwable th) {
                 th.printStackTrace();
             }
@@ -1046,7 +1016,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         String value = getResourcePropertyValue(node, property);
         if (value != null) {
             try {
-                return Float.valueOf(Float.parseFloat(value));
+                return Float.parseFloat(value);
             } catch (Throwable th) {
                 th.printStackTrace();
             }

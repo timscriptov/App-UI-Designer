@@ -170,12 +170,12 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
         this.initialized = false;
         AndroidHelper.switchLanguage(this, getIntent().getStringExtra(EXTRA_LANGUAGE));
         switch (getViewType()) {
-            case 0:
-            case 2:
+            case LIGHT_SMALL:
+            case LIGHT:
                 setTheme(R.style.ActivityThemeDesignerLight);
                 break;
-            case 1:
-            case 3:
+            case DARK_SMALL:
+            case DARK:
                 setTheme(R.style.ActivityThemeDesignerDark);
                 break;
         }
