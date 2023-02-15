@@ -1,0 +1,60 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'maven-publish'
+}
+
+group = 'com.mcal'
+version = project.artifactVersion
+
+android {
+    compileSdk project.compileSDK.toInteger()
+
+    defaultConfig {
+        minSdkVersion project.minSDK.toInteger()
+        targetSdkVersion project.targetSDK.toInteger()
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    namespace 'com.mcal.uidesigner'
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':vectormaster')
+
+    implementation misc.annotations
+
+    implementation jetpack.preference
+
+    implementation jetpack.appcompat
+    implementation jetpack.material
+    implementation jetpack.cardview
+    implementation jetpack.constraint
+
+    implementation jetpack.core
+    implementation project(path: ':webview')
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.mcal'
+                artifactId = 'uidesigner'
+                version = project.artifactVersion
+            }
+        }
+    }
+}

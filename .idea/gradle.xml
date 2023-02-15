@@ -12,6 +12,9 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/ui-designer" />
+            <option value="$PROJECT_DIR$/vectormaster" />
+            <option value="$PROJECT_DIR$/webview" />
           </set>
         </option>
       </GradleProjectSettings>
