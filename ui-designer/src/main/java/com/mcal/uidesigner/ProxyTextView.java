@@ -3,8 +3,7 @@ package com.mcal.uidesigner;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.util.TypedValue;
-
-import androidx.appcompat.widget.AppCompatTextView;
+import android.widget.TextView;
 
 import com.mcal.uidesigner.utils.Utils;
 
@@ -48,7 +47,7 @@ public class ProxyTextView {
     public static final int TYPEFACE_NORMAL = 0;
     public static final int TYPEFACE_SANS = 1;
     public static final int TYPEFACE_SERIF = 2;
-    private final AppCompatTextView textView;
+    private final TextView textView;
     private int shadowColor;
     private float shadowDx;
     private float shadowDy;
@@ -58,7 +57,7 @@ public class ProxyTextView {
     private String fontFamily = null;
 
     public ProxyTextView(Object obj) {
-        this.textView = (AppCompatTextView) obj;
+        this.textView = (TextView) obj;
     }
 
     public void setInputType(int type) {
