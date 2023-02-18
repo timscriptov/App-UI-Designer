@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.ClipboardManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -1013,19 +1014,35 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         String value = getResourcePropertyValue(node, property);
         if (value != null) {
             try {
+                float v = 0f;
+                if (!(value.startsWith("@") || value.startsWith("?") || value.startsWith("wrap") || value.startsWith("match") || value.startsWith("fill"))) {
+                    v = Float.parseFloat(value.substring(0, value.length() - 2));
+                }
                 if (value.endsWith("px")) {
-                    return (int) Float.parseFloat(value.substring(0, value.length() - 2));
+                    return (int) v;
                 }
                 if (value.endsWith("dp")) {
-                    return (int) (context.getResources().getDisplayMetrics().density * Float.parseFloat(value.substring(0, value.length() - 2)));
+                    return (int) (context.getResources().getDisplayMetrics().density * v);
                 } else if (value.endsWith("dip")) {
                     return (int) (context.getResources().getDisplayMetrics().density * Float.parseFloat(value.substring(0, value.length() - 3)));
                 } else if (value.endsWith("sp")) {
-                    return (int) (context.getResources().getDisplayMetrics().scaledDensity * Float.parseFloat(value.substring(0, value.length() - 2)));
+                    return (int) (context.getResources().getDisplayMetrics().scaledDensity * v);
                 } else if (value.startsWith("@android:dimen/")) {
-                    return context.getResources().getDimensionPixelSize((Integer) android.R.dimen.class.getDeclaredField(value.substring("@android:dimen/".length())).get(null));
+                    return context.getResources().getDimensionPixelSize(Utils.getAndroidResourceID(android.R.dimen.class.getName(), "@android:dimen/"));
+                } else if (value.startsWith("@dimen/")) {
+                    value = finder.findUserResourceValue(value);
+                    if (value != null) {
+                        v = Float.parseFloat(value.substring(0, value.length() - 2));
+                        return (int) v;
+                    }
                 }
             } catch (Throwable th) {
+                Log.e(getClass().getCanonicalName(), "\n" +
+                        "Line Number: " + node.getUserData(PositionalXMLReader.LINE) + "\n" +
+                        "Column Number: " + node.getUserData(PositionalXMLReader.COLUMN) + "\n" +
+                        node.getNodeName() + "\n" +
+                        property.attrName + " = " + value + "\n"
+                );
                 th.printStackTrace();
             }
         }
@@ -1069,9 +1086,15 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
                 }
             }
             if (val.startsWith("@id/")) {
-                String id2 = val.substring("@id/".length());
-                if (id2Int.containsKey(id2)) {
-                    return id2Int.get(id2);
+                String id = val.substring("@id/".length());
+                if (id2Int.containsKey(id)) {
+                    return id2Int.get(id);
+                }
+            }
+            if (val.startsWith("@android:id/")) {
+                String id = val.substring("@android:id/".length());
+                if (id2Int.containsKey(id)) {
+                    return id2Int.get(id);
                 }
             }
         }
