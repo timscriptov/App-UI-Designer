@@ -6,6 +6,8 @@ import android.util.TypedValue;
 
 import androidx.appcompat.widget.AppCompatTextView;
 
+import com.mcal.uidesigner.utils.Utils;
+
 public class ProxyTextView {
     public static final int INPUTTYPE_date = 20;
     public static final int INPUTTYPE_datetime = 4;
@@ -66,14 +68,14 @@ public class ProxyTextView {
     public void setTextAppearance(String value) {
         try {
             if (value.startsWith("?android:attr/")) {
-                int attrID = (Integer) android.R.attr.class.getField(value.substring("?android:attr/".length())).get(null);
+                int attrID = Utils.getAndroidResourceID(android.R.attr.class.getName(), value);
                 Resources.Theme theme = this.textView.getContext().getTheme();
                 TypedValue styleID = new TypedValue();
                 if (theme.resolveAttribute(attrID, styleID, true)) {
                     this.textView.setTextAppearance(this.textView.getContext(), styleID.data);
                 }
             } else if (value.startsWith("@android:style/")) {
-                this.textView.setTextAppearance(this.textView.getContext(), (Integer) R.style.class.getField(value.substring("@android:style/".length()).replace(".", "_")).get(null));
+                textView.setTextAppearance(textView.getContext(), Utils.getAndroidResourceID(android.R.style.class.getName(), "@android:style/"));
             }
         } catch (Throwable th) {
             th.printStackTrace();

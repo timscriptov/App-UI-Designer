@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.mcal.uidesigner.common.PositionalXMLReader;
 import com.mcal.uidesigner.common.UndoManager;
@@ -51,6 +53,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -782,7 +785,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         try {
             String stringValue = getPropertyValue(node, property).value;
             if (stringValue != null && stringValue.startsWith("?android:attr/")) {
-                int attrID = (Integer) R.attr.class.getField(stringValue.substring("?android:attr/".length())).get(null);
+                int attrID = Utils.getAndroidResourceID(android.R.attr.class.getName(), stringValue);
                 switch (property.type) {
                     case Size:
                     case TextSize:
@@ -900,7 +903,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         }
         if (value != null && value.startsWith("@android:drawable/")) {
             try {
-                return context.getResources().getDrawable((Integer) R.drawable.class.getDeclaredField(value.substring("@android:drawable/".length())).get(null));
+                return ResourcesCompat.getDrawable(context.getResources(), Utils.getAndroidResourceID(android.R.drawable.class.getName(), "@android:drawable/"), context.getTheme());
             } catch (Throwable th) {
                 th.printStackTrace();
             }
@@ -975,14 +978,19 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         String value = getResourcePropertyValue(node, property);
         if (value != null) {
             try {
-                if (value.charAt(0) == '#') {
-                    long color = Long.parseLong(value.substring(1), 16);
-                    if (value.length() == 7) {
-                        color |= -16777216;
+                if (value.startsWith("@color/")) {
+                    String color = value;
+                    while (Objects.requireNonNull(color).startsWith("@color/")) {
+                        color = finder.findUserResourceValue(color);
+                        if (color != null && color.startsWith("@android:color/")) {
+                            color = Utils.toHexColor(ResourcesCompat.getColor(context.getResources(), Utils.getAndroidResourceID(android.R.color.class.getName(), color), context.getTheme()));
+                        }
                     }
-                    return (int) color;
+                    return Color.parseColor(color);
+                } else if (value.startsWith("#")) {
+                    return Color.parseColor(value);
                 } else if (value.startsWith("@android:color/")) {
-                    return context.getResources().getColor((Integer) R.color.class.getDeclaredField(value.substring("@android:color/".length())).get(null));
+                    return ResourcesCompat.getColor(context.getResources(), Utils.getAndroidResourceID(android.R.color.class.getName(), value), context.getTheme());
                 }
             } catch (Throwable th) {
                 th.printStackTrace();

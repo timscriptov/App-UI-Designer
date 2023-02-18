@@ -111,7 +111,7 @@ class XmlLayoutResourceFinder(private val context: Context, resDirPath: String?)
         return findUserResourceValue(findUserAttributeValue(value))
     }
 
-    private fun findUserResourceValue(rawValue: String?): String? {
+    fun findUserResourceValue(rawValue: String?): String? {
         if (rawValue != null && rawValue.startsWith("@")) {
             for (sdk in Build.VERSION.SDK_INT downTo 0) {
                 val value = resourceValues?.get(sdk)?.get(rawValue)

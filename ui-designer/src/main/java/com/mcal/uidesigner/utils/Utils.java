@@ -2,6 +2,7 @@ package com.mcal.uidesigner.utils;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 
@@ -15,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -154,5 +156,26 @@ public class Utils {
             }
         }
         return createNewLayoutFile(resDirPath, suggestNewLayoutName(resDirPath));
+    }
+
+    @NonNull
+    public static String toHexColor(int color) {
+        if (Color.alpha(color) == 255) {
+            return String.format("#%06X", (0xFFFFFF & color));
+        }
+        return String.format("#%08X", color);
+    }
+
+    public static int getAndroidResourceID(String clazz, String resName) {
+        Field declaredField;
+        resName = resName.substring(resName.lastIndexOf("/") + 1);
+        try {
+            declaredField = Class.forName(clazz).getField(resName);
+            declaredField.setAccessible(true);
+            return declaredField.getInt(null);
+        } catch (NoSuchFieldException | ClassNotFoundException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }
