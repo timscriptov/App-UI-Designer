@@ -31,6 +31,7 @@ import com.mcal.uidesigner.common.PositionalXMLReader;
 import com.mcal.uidesigner.common.UndoManager;
 import com.mcal.uidesigner.common.ValueRunnable;
 import com.mcal.uidesigner.utils.Utils;
+import com.mcal.uidesigner.view.IncludeLayout;
 import com.mcal.uidesigner.widget.ClickableBorder;
 
 import org.jetbrains.annotations.Contract;
@@ -665,8 +666,11 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
 
     @Nullable
     private View inflateView(Node node, @NonNull String elementName) {
-        if ("View".equals(elementName)) {
+        if ("View".equals(elementName) || "view".equals(elementName)) {
             return new View(context);
+        }
+        if (elementName.equals("include") || elementName.equals("merge")) {
+            return new IncludeLayout(context);
         }
         String baseStyle = finder.getBaseStyle(getStyle((Element) node));
         if (elementName.contains(".")) {

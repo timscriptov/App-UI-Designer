@@ -166,7 +166,8 @@ public class XmlLayoutProperties {
             new PropertySpec("android.widget.DatePicker", "calendarViewShown", "setCalendarViewShown()", PropertyType.Bool),
             new PropertySpec("android.widget.DatePicker", "spinnersShown", "setSpinnersShown()", PropertyType.Bool),
             new PropertySpec("android.widget.ListView", "divider", "setDivider()", PropertyType.Drawable),
-            new PropertySpec("android.widget.ListView", "dividerHeight", "setDividerHeight()", PropertyType.Size)};
+            new PropertySpec("android.widget.ListView", "dividerHeight", "setDividerHeight()", PropertyType.Size),
+            new PropertySpec("com.mcal.uidesigner.view.IncludeLayout", "layout", "setLayout()", PropertyType.Text)};
 
     static {
         SORTED_PROPERTIES = new PropertySpec[LAYOUT_PROPERTIES.length + VIEW_PROPERTIES.length];
