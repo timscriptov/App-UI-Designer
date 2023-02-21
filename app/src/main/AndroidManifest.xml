@@ -4,12 +4,19 @@
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="App UI Designer"
-        android:requestLegacyExternalStorage="true">
+        android:requestLegacyExternalStorage="true"
+        android:theme="@style/Theme.Material3.Light.NoActionBar">
 
-        <activity android:name="com.mcal.example.MainActivity">
+        <activity
+            android:name="com.mcal.example.MainActivity"
+            android:exported="true">
+
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
 
         </activity>
-
 
     </application>
 

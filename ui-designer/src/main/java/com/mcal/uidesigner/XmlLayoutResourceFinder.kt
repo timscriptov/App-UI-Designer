@@ -22,21 +22,19 @@ class XmlLayoutResourceFinder(private val context: Context, resDirPath: String?)
     private var styleParents: MutableMap<Int, MutableMap<String?, String>>? = null
     private var styles: MutableMap<Int, SortedMap<String?, Map<String, String>>>? = null
 
-    private val TARGET_SDK = Build.VERSION.SDK_INT
-
     fun reload() {
         resourceValues = HashMap()
         styles = HashMap()
         styleParents = HashMap()
-        for (sdk in 0..TARGET_SDK) {
+        for (sdk in 0..Build.VERSION.SDK_INT) {
             (styles as HashMap<Int, SortedMap<String?, Map<String, String>>>)[sdk] = TreeMap()
             (styleParents as HashMap<Int, MutableMap<String?, String>>)[sdk] = HashMap()
             (resourceValues as HashMap<Int, MutableMap<String, String>>)[sdk] = HashMap()
         }
         if (resourcesDir != null) {
             loadResources(0, File(resourcesDir, "values"))
-            for (sdk2 in 1..TARGET_SDK) {
-                loadResources(sdk2, File(resourcesDir, "values-v$sdk2"))
+            for (sdk in 1..Build.VERSION.SDK_INT) {
+                loadResources(sdk, File(resourcesDir, "values-v$sdk"))
             }
         }
     }

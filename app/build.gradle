@@ -1,16 +1,18 @@
 plugins {
     id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
     compileSdk project.compileSDK.toInteger()
 
     defaultConfig {
-        applicationId "com.mcal.uidesigner"
+        applicationId "com.mcal.example"
         minSdk project.minSDK.toInteger()
         targetSdk project.targetSDK.toInteger()
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -23,6 +25,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+    buildFeatures {
+        viewBinding true
+    }
     namespace 'com.mcal.example'
 }
 
@@ -31,6 +39,9 @@ dependencies {
     implementation jetpack.core
     implementation jetpack.appcompat
     implementation jetpack.material
+
+    implementation ui.fastadapter
+    implementation ui.fastadapter_binding
 
     implementation misc.annotations
 }

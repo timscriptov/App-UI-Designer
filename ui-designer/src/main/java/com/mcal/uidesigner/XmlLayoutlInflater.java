@@ -54,7 +54,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -974,24 +973,43 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         return getResourcePropertyValue(node, property);
     }
 
+//    @Nullable
+//    private Integer getColorAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
+//        String value = getResourcePropertyValue(node, property);
+//        if (value != null) {
+//            try {
+//                if (value.startsWith("@color/")) {
+//                    String color = value;
+//                    while (Objects.requireNonNull(color).startsWith("@color/")) {
+//                        color = finder.findUserResourceValue(color);
+//                        if (color != null && color.startsWith("@android:color/")) {
+//                            color = Utils.toHexColor(ResourcesCompat.getColor(context.getResources(), Utils.getAndroidResourceID(android.R.color.class.getName(), color), context.getTheme()));
+//                        }
+//                    }
+//                    return Color.parseColor(color);
+//                } else if (value.startsWith("#")) {
+//                    return Color.parseColor(value);
+//                } else if (value.startsWith("@android:color/")) {
+//                    return ResourcesCompat.getColor(context.getResources(), Utils.getAndroidResourceID(android.R.color.class.getName(), value), context.getTheme());
+//                }
+//            } catch (Throwable th) {
+//                th.printStackTrace();
+//            }
+//        }
+//        return null;
+//    }
+
     @Nullable
     private Integer getColorAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
         String value = getResourcePropertyValue(node, property);
         if (value != null) {
             try {
-                if (value.startsWith("@color/")) {
-                    String color = value;
-                    while (Objects.requireNonNull(color).startsWith("@color/")) {
-                        color = finder.findUserResourceValue(color);
-                        if (color != null && color.startsWith("@android:color/")) {
-                            color = Utils.toHexColor(ResourcesCompat.getColor(context.getResources(), Utils.getAndroidResourceID(android.R.color.class.getName(), color), context.getTheme()));
-                        }
-                    }
-                    return Color.parseColor(color);
-                } else if (value.startsWith("#")) {
+                if (value.charAt(0) == '#') {
                     return Color.parseColor(value);
                 } else if (value.startsWith("@android:color/")) {
                     return ResourcesCompat.getColor(context.getResources(), Utils.getAndroidResourceID(android.R.color.class.getName(), value), context.getTheme());
+                } else if (value.startsWith("@color/")) {
+                    return Color.parseColor(finder.findUserResourceValue(value));
                 }
             } catch (Throwable th) {
                 th.printStackTrace();
