@@ -4,4 +4,3 @@
 | ![Main](/ART/Screenshot_1.png) | ![Preview](/ART/Screenshot_2.png) |
 |--|--|
 | ![Tree View](/ART/Screenshot_3.png) | ![Editor](/ART/Screenshot_4.png) |
-|--|--|
