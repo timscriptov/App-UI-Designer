@@ -2,6 +2,7 @@ package com.mcal.webview
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -145,10 +146,16 @@ class WebViewActivity : BaseActivity() {
         refresh.isRefreshing = false
     }
 
-    private class ChromeClient(val activity: BaseActivity) : WebChromeClient() {
+    private class ChromeClient(val activity: WebViewActivity) : WebChromeClient() {
         override fun onReceivedTitle(view: WebView?, title: String?) {
             super.onReceivedTitle(view, title)
             title?.let { activity.setupToolbar(R.id.toolbar, it, back = true) }
+        }
+
+        override fun onProgressChanged(view: WebView?, newProgress: Int) {
+            super.onProgressChanged(view, newProgress)
+            activity.binding.progressBar.visibility = if(newProgress < 100) View.VISIBLE else View.GONE
+            activity.binding.progressBar.progress = newProgress
         }
     }
 

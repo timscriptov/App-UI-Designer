@@ -170,7 +170,7 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         if (isTrainer()) {
-            TrainerLogo.set(getSupportActionBar(), R.mipmap.ic_launcher, getIntent().getStringArrayExtra(EXTRA_TRAINER_HEADER));
+            TrainerLogo.set(getSupportActionBar(), R.drawable.ic_android, getIntent().getStringArrayExtra(EXTRA_TRAINER_HEADER));
         } else {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
             getSupportActionBar().setNavigationMode(1);
@@ -183,7 +183,7 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
                         return true;
                     });
             getSupportActionBar().setSelectedNavigationItem(getViewType());
-            DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.designerDrawer);
+            DrawerLayout drawerLayout = findViewById(R.id.designerDrawer);
             this.drawerToggle = new ActionBarDrawerToggle(
                     this,
                     drawerLayout,
@@ -366,11 +366,7 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         this.isDemo = extras != null && extras.getBoolean(EXTRA_DEMO, false);
-        if (extras == null || extras.getBoolean(EXTRA_STANDALONE, true)) {
-            z = true;
-        } else {
-            z = false;
-        }
+        z = extras == null || extras.getBoolean(EXTRA_STANDALONE, true);
         this.isStandalone = z;
         if (!this.isStandalone) {
             this.xmlFilePath = extras.getString(EXTRA_FILE);
@@ -472,10 +468,10 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
         for (XmlLayoutEditView view : this.inflater.getEditViews()) {
             entries.add(new ViewHierachyEntry(view));
         }
-        ListView viewList = (ListView) findViewById(R.id.designerViewList);
+        ListView viewList = findViewById(R.id.designerViewList);
         ViewHierachyEntryAdapter adapter = (ViewHierachyEntryAdapter) viewList.getAdapter();
         if (adapter == null) {
-            viewList.setAdapter((ListAdapter) new ViewHierachyEntryAdapter(this, entries));
+            viewList.setAdapter(new ViewHierachyEntryAdapter(this, entries));
             return;
         }
         adapter.clear();
@@ -572,7 +568,7 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
                 return;
             }
             updateHierachy();
-        }, (Runnable) null);
+        }, null);
     }
 
     public void createNewLayout() {
@@ -673,14 +669,14 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
                 view = LayoutInflater.from(getContext()).inflate(R.layout.designer_viewlist_entry, parent, false);
             }
             final ViewHierachyEntry entry = getItem(position);
-            LinearLayout viewLayout = (LinearLayout) view.findViewById(R.id.designerViewlistentryViewLayout);
-            LinearLayout fileLayout = (LinearLayout) view.findViewById(R.id.designerViewlistentryFileLayout);
+            LinearLayout viewLayout = view.findViewById(R.id.designerViewlistentryViewLayout);
+            LinearLayout fileLayout = view.findViewById(R.id.designerViewlistentryFileLayout);
             if (entry.view != null) {
                 viewLayout.setVisibility(View.VISIBLE);
                 fileLayout.setVisibility(8);
                 viewLayout.setPadding((int) (((float) ((entry.view.getDepth() * 20) + 5)) * getContext().getResources().getDisplayMetrics().density), 0, 0, 0);
                 ((TextView) view.findViewById(R.id.designerViewlistEntryName)).setText(entry.view.getNodeName());
-                ImageView imageView = (ImageView) view.findViewById(R.id.designerViewlistEntryImage);
+                ImageView imageView = view.findViewById(R.id.designerViewlistEntryImage);
                 if (entry.view.canAddInside()) {
                     i = R.drawable.ic_category;
                 } else {
@@ -691,12 +687,12 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
                 viewLayout.setVisibility(View.GONE);
                 fileLayout.setVisibility(View.VISIBLE);
                 fileLayout.setPadding(0, 0, 0, 0);
-                RadioButton fileRadioButton = (RadioButton) view.findViewById(R.id.designerViewlistentryFileRadioButton);
+                RadioButton fileRadioButton = view.findViewById(R.id.designerViewlistentryFileRadioButton);
                 fileRadioButton.setFocusable(false);
                 fileRadioButton.setFocusableInTouchMode(false);
                 fileRadioButton.setChecked(xmlFilePath.equals(entry.file.getPath()));
                 fileRadioButton.setVisibility(isStandalone ? View.VISIBLE : View.GONE);
-                TextView fileNameView = (TextView) view.findViewById(R.id.designerViewlistentryFileName);
+                TextView fileNameView = view.findViewById(R.id.designerViewlistentryFileName);
                 fileNameView.setText(entry.file.getName());
                 if (xmlFilePath.equals(entry.file.getPath())) {
                     fileNameView.setTypeface(Typeface.DEFAULT_BOLD);
@@ -704,22 +700,22 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
                     fileNameView.setTypeface(Typeface.DEFAULT);
                 }
                 ((ImageView) view.findViewById(R.id.designerViewlistFileImage)).setImageResource(R.drawable.ic_file);
-                ImageView deleteButton = (ImageView) view.findViewById(R.id.designerViewlistentryDelete);
+                ImageView deleteButton = view.findViewById(R.id.designerViewlistentryDelete);
                 deleteButton.setVisibility(isStandalone ? View.VISIBLE : View.GONE);
                 deleteButton.setOnClickListener(v -> deleteLayout(entry.file.getPath()));
             } else {
                 viewLayout.setVisibility(View.GONE);
                 fileLayout.setVisibility(View.VISIBLE);
                 fileLayout.setPadding(0, 0, 0, (int) (10.0f * getContext().getResources().getDisplayMetrics().density));
-                RadioButton fileRadioButton2 = (RadioButton) view.findViewById(R.id.designerViewlistentryFileRadioButton);
+                RadioButton fileRadioButton2 = view.findViewById(R.id.designerViewlistentryFileRadioButton);
                 fileRadioButton2.setFocusable(false);
                 fileRadioButton2.setFocusableInTouchMode(false);
                 fileRadioButton2.setVisibility(View.INVISIBLE);
-                TextView fileNameView2 = (TextView) view.findViewById(R.id.designerViewlistentryFileName);
+                TextView fileNameView2 = view.findViewById(R.id.designerViewlistentryFileName);
                 fileNameView2.setText(R.string.new_layout_);
                 fileNameView2.setTypeface(Typeface.DEFAULT);
                 ((ImageView) view.findViewById(R.id.designerViewlistFileImage)).setImageResource(AndroidHelper.obtainImageResourceId(getContext(), R.attr.icon_add));
-                ((ImageView) view.findViewById(R.id.designerViewlistentryDelete)).setVisibility(8);
+                view.findViewById(R.id.designerViewlistentryDelete).setVisibility(8);
             }
             return view;
         }

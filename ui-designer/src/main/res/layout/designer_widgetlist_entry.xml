@@ -6,7 +6,7 @@
     android:orientation="horizontal">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1.0"
         android:gravity="center_vertical"
@@ -30,13 +30,13 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical" />
+
     </LinearLayout>
 
     <ImageView
         android:id="@+id/widgetlistHelp"
         style="@style/BrowserHelpButton"
         android:layout_marginEnd="4.0dip"
-        android:layout_marginRight="4.0dip"
         android:src="@drawable/ic_info" />
 
 </LinearLayout>

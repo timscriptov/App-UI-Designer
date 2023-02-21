@@ -675,36 +675,10 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         if (elementName.equals("include") || elementName.equals("merge")) {
             return new IncludeLayout(context);
         }
-        String baseStyle = finder.getBaseStyle(getStyle((Element) node));
-        if (elementName.contains(".")) {
-            return inflateCustomView(baseStyle, elementName);
-        } else {
-            if (baseStyle != null && baseStyle.startsWith("@android:style/")) {
-                try {
-                    return (View) Class.forName("android.widget." + elementName).getConstructor(Context.class, AttributeSet.class, Integer.TYPE).newInstance(context, null, Integer.valueOf(((Integer) R.attr.class.getField("Android_" + baseStyle.substring("@android:style/".length()).replace(".", "_")).get(null)).intValue()));
-                } catch (Throwable th) {
-                    th.printStackTrace();
-                }
-            }
-
-            if (baseStyle != null && baseStyle.startsWith("?android:attr/")) {
-                try {
-                    return (View) Class.forName("android.widget." + elementName).getConstructor(Context.class, AttributeSet.class, Integer.TYPE).newInstance(context, null, R.attr.class.getField(baseStyle.substring("?android:attr/".length())).get(null));
-                } catch (Throwable th) {
-                    th.printStackTrace();
-                }
-            }
-
-            try {
-                return (View) Class.forName("android.widget." + elementName).getConstructor(Context.class).newInstance(context);
-            } catch (Throwable th) {
-                th.printStackTrace();
-                return null;
-            }
+        if (!elementName.contains(".")) {
+            elementName = "android.widget." + elementName;
         }
-    }
-
-    public View inflateCustomView(String baseStyle, String elementName) {
+        final String baseStyle = finder.getBaseStyle(getStyle((Element) node));
         if (baseStyle != null && baseStyle.startsWith("@android:style/")) {
             try {
                 return (View) Class.forName(elementName).getConstructor(Context.class, AttributeSet.class, Integer.TYPE).newInstance(context, null, Integer.valueOf(((Integer) R.attr.class.getField("Android_" + baseStyle.substring("@android:style/".length()).replace(".", "_")).get(null)).intValue()));
@@ -972,32 +946,6 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
     private String getStringAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
         return getResourcePropertyValue(node, property);
     }
-
-//    @Nullable
-//    private Integer getColorAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
-//        String value = getResourcePropertyValue(node, property);
-//        if (value != null) {
-//            try {
-//                if (value.startsWith("@color/")) {
-//                    String color = value;
-//                    while (Objects.requireNonNull(color).startsWith("@color/")) {
-//                        color = finder.findUserResourceValue(color);
-//                        if (color != null && color.startsWith("@android:color/")) {
-//                            color = Utils.toHexColor(ResourcesCompat.getColor(context.getResources(), Utils.getAndroidResourceID(android.R.color.class.getName(), color), context.getTheme()));
-//                        }
-//                    }
-//                    return Color.parseColor(color);
-//                } else if (value.startsWith("#")) {
-//                    return Color.parseColor(value);
-//                } else if (value.startsWith("@android:color/")) {
-//                    return ResourcesCompat.getColor(context.getResources(), Utils.getAndroidResourceID(android.R.color.class.getName(), value), context.getTheme());
-//                }
-//            } catch (Throwable th) {
-//                th.printStackTrace();
-//            }
-//        }
-//        return null;
-//    }
 
     @Nullable
     private Integer getColorAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
