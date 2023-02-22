@@ -77,9 +77,8 @@ public class XmlLayoutWidgetPicker {
 
                 listView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
                     alertDialog.dismiss();
-                    Widget widget = (Widget) ((List) widgets.get(groupPosition)).get(childPosition);
-                    Map<String, String> attributes = new HashMap<>();
-                    attributes.putAll(widget.getAttributes());
+                    Widget widget = (Widget) ((List<?>) widgets.get(groupPosition)).get(childPosition);
+                    Map<String, String> attributes = new HashMap<>(widget.getAttributes());
                     if (onlyRootViews) {
                         if (!attributes.containsKey("android:layout_width")) {
                             attributes.put("android:layout_width", "match_parent");

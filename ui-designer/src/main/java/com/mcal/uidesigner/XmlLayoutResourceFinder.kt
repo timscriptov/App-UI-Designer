@@ -43,7 +43,7 @@ class XmlLayoutResourceFinder(private val context: Context, resDirPath: String?)
         try {
             dir.listFiles()?.forEach { xmlFile ->
                 if (xmlFile.name.lowercase(Locale.getDefault()).endsWith(".xml")) {
-                    val xml: InputStream = FileInputStream(xmlFile)
+                    val xml = FileInputStream(xmlFile)
                     val doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xml)
                     xml.close()
                     loadStyles(doc, sdk)

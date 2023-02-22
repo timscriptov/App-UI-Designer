@@ -1,5 +1,7 @@
 package com.mcal.uidesigner.appwizard;
 
+import static com.mcal.uidesigner.utils.StorageHelper.getResDirPath;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,10 +42,10 @@ public class AppWizardDesignFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup content = (ViewGroup) layoutInflater.inflate(R.layout.appwizard_section, container, false);
-        ViewGroup layoutContainer = (ViewGroup) content.findViewById(R.id.appwizardSectionContainer);
+        ViewGroup layoutContainer = content.findViewById(R.id.appwizardSectionContainer);
         content.setClipChildren(false);
         final int sectionId = getArguments().getInt(ARG_SECTION_ID);
-        String resDirPath = getDesignActivity().getResDirPath();
+        String resDirPath = getResDirPath();
         String xmlFilePath = getDesignActivity().getLayoutFilePath(getArguments().getString(ARG_SECTION_LAYOUT));
         if (!(getUndoManager() == null || this.inflater == null)) {
             getUndoManager().removeListener(this.inflater);

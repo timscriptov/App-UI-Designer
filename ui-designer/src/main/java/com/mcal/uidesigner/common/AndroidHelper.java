@@ -163,7 +163,7 @@ public class AndroidHelper {
         new Handler().postDelayed(() -> {
             try {
                 final ActionBar actionBar = activity.getSupportActionBar();
-                final Spinner spinner = (Spinner) AndroidHelper.findViewOf(activity.findViewById(activity.getResources().getIdentifier("action_bar_container", "id", "android")), Spinner.class);
+                final Spinner spinner = AndroidHelper.findViewOf(activity.findViewById(activity.getResources().getIdentifier("action_bar_container", "id", "android")), Spinner.class);
                 if (spinner != null) {
                     View.OnClickListener onClickListener = v -> {
                         PopupMenu popup = new PopupMenu(activity, spinner);
@@ -177,9 +177,9 @@ public class AndroidHelper {
                         });
                         popup.show();
                     };
-                    Method method_GetListenerInfo = View.class.getDeclaredMethod("getListenerInfo", new Class[0]);
+                    Method method_GetListenerInfo = View.class.getDeclaredMethod("getListenerInfo");
                     method_GetListenerInfo.setAccessible(true);
-                    Class.forName("android.view.View$ListenerInfo").getDeclaredField("mOnClickListener").set(method_GetListenerInfo.invoke(spinner, new Object[0]), onClickListener);
+                    Class.forName("android.view.View$ListenerInfo").getDeclaredField("mOnClickListener").set(method_GetListenerInfo.invoke(spinner), onClickListener);
                 }
             } catch (Throwable t) {
                 t.printStackTrace();
@@ -195,7 +195,7 @@ public class AndroidHelper {
         if (v instanceof ViewGroup) {
             ViewGroup viewGroup = (ViewGroup) v;
             for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                T t = (T) findViewOf(viewGroup.getChildAt(i), c);
+                T t = findViewOf(viewGroup.getChildAt(i), c);
                 if (t != null) {
                     return t;
                 }
@@ -209,7 +209,7 @@ public class AndroidHelper {
         if (getScreenSizeDip(activity) >= 540.0f) {
             try {
                 ViewConfiguration config = ViewConfiguration.get(activity);
-                Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
+                @SuppressLint("SoonBlockedPrivateApi") Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
                 if (menuKeyField != null) {
                     menuKeyField.setAccessible(true);
                     menuKeyField.setBoolean(config, false);

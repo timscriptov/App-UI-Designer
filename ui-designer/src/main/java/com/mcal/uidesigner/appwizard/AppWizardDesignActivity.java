@@ -1,5 +1,10 @@
 package com.mcal.uidesigner.appwizard;
 
+import static com.mcal.uidesigner.utils.FileHelper.readFile;
+import static com.mcal.uidesigner.utils.FileHelper.writeText;
+import static com.mcal.uidesigner.utils.StorageHelper.getProjectFilepath;
+import static com.mcal.uidesigner.utils.StorageHelper.getResDirPath;
+
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.SharedPreferences;
@@ -17,14 +22,12 @@ import com.mcal.uidesigner.appwizard.runtime.AppWizardProject;
 import com.mcal.uidesigner.common.MessageBox;
 import com.mcal.uidesigner.common.PositionalXMLReader;
 import com.mcal.uidesigner.common.UndoManager;
-import com.mcal.uidesigner.utils.Utils;
 
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -34,10 +37,6 @@ public class AppWizardDesignActivity extends AppWizardActivity implements UndoMa
     private final AppWizardPropertiesEditor editor = new AppWizardPropertiesEditor(this);
     private boolean isInitialized;
     private UndoManager undoManager;
-
-    public String getResDirPath() {
-        return getProjectPath() + "/res";
-    }
 
     public String getLayoutFilePath(String layoutName) {
         if (layoutName != null) {
@@ -52,20 +51,12 @@ public class AppWizardDesignActivity extends AppWizardActivity implements UndoMa
         return getLayoutFilePath(layoutName);
     }
 
-    @NonNull
-    private String getProjectFilepath() {
-        return getProjectPath() + "/assets/app.xml";
-    }
-
-    public String getProjectPath() {
-        return Utils.getSDCardPath() + "/AppProjects/AppWizard";
-    }
-
     @Override
     public void revertToVersion(@NonNull String filepath, String content, int change) {
-        if (filepath.equals(getProjectFilepath())) {
+        final String projectFilePath = getProjectFilepath();
+        if (filepath.equals(projectFilePath)) {
             try {
-                saveXml(content);
+                writeText(projectFilePath, content);
                 getProject().revertToVersion(parseXml(content), change);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -83,7 +74,7 @@ public class AppWizardDesignActivity extends AppWizardActivity implements UndoMa
     @Override
     public Document loadXml() {
         try {
-            String xml = Utils.readFileAsString(getProjectFilepath());
+            String xml = readFile(getProjectFilepath());
             this.undoManager.addBaseVersion(getProjectFilepath(), xml, 0);
             return parseXml(xml);
         } catch (Exception e) {
@@ -102,18 +93,13 @@ public class AppWizardDesignActivity extends AppWizardActivity implements UndoMa
     public void saveXml(Document document, int change) {
         try {
             String xml = new AppWizardXmlDOMSerializer().serialize(document);
-            this.undoManager.addVersion(getProjectFilepath(), xml, change);
-            new File(getProjectFilepath()).getParentFile().mkdirs();
-            saveXml(xml);
+            final String projectFilePath = getProjectFilepath();
+            this.undoManager.addVersion(projectFilePath, xml, change);
+            new File(projectFilePath).getParentFile().mkdirs();
+            writeText(projectFilePath, xml);
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void saveXml(String xml) throws IOException {
-        FileWriter writer = new FileWriter(getProjectFilepath());
-        writer.write(xml);
-        writer.close();
     }
 
     @Override

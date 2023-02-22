@@ -1,5 +1,7 @@
 package com.mcal.uidesigner;
 
+import static com.mcal.uidesigner.utils.FileHelper.readFile;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -103,7 +105,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
     }
 
     public void init() {
-        xmlContent = Utils.readFileAsString(xmlFilePath);
+        xmlContent = readFile(xmlFilePath);
         undoManager.addBaseVersion(getXmlFilePath(), xmlContent, 0);
         inflate();
     }
@@ -135,7 +137,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
     }
 
     public void share() {
-        final Uri logUri = FileProvider.getUriForFile(context, "com.mcal.apkeditor.pro", new File(xmlFilePath));
+        final Uri logUri = FileProvider.getUriForFile(context, context.getPackageName(), new File(xmlFilePath));
 
         final Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);

@@ -1,5 +1,11 @@
 package com.mcal.uidesigner;
 
+import static com.mcal.uidesigner.utils.FileHelper.chooseLayoutOrCreateNew;
+import static com.mcal.uidesigner.utils.FileHelper.createNewLayoutFile;
+import static com.mcal.uidesigner.utils.FileHelper.getRealFileNameFromUri;
+import static com.mcal.uidesigner.utils.FileHelper.suggestNewLayoutName;
+import static com.mcal.uidesigner.utils.StorageHelper.getDefaultResDirPath;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
@@ -23,7 +29,6 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -374,9 +379,9 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
             this.isDefaultProject = false;
         } else if (extras != null && "android.intent.action.SEND".equals(intent.getAction()) && (extras.get("android.intent.extra.STREAM") instanceof Uri)) {
             Uri uri = (Uri) extras.get("android.intent.extra.STREAM");
-            this.resDirPath = Utils.getDefaultResDirPath();
+            this.resDirPath = getDefaultResDirPath();
             this.isDefaultProject = true;
-            this.xmlFilePath = Utils.createNewLayoutFile(this.resDirPath, Utils.getRealFileNameFromUri(this, uri));
+            this.xmlFilePath = createNewLayoutFile(this.resDirPath, getRealFileNameFromUri(this, uri));
             setLastFilepath(this.xmlFilePath);
             try {
                 Utils.transfer(getContentResolver().openInputStream(uri), new FileOutputStream(this.xmlFilePath));
@@ -384,16 +389,16 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         } else if (extras != null && "android.intent.action.SEND".equals(intent.getAction()) && extras.getString("android.intent.extra.TEXT") != null) {
-            this.resDirPath = Utils.getDefaultResDirPath();
+            this.resDirPath = getDefaultResDirPath();
             this.isDefaultProject = true;
-            this.xmlFilePath = Utils.createNewLayoutFile(this.resDirPath, Utils.suggestNewLayoutName(this.resDirPath), extras.getString("android.intent.extra.TEXT"));
+            this.xmlFilePath = createNewLayoutFile(this.resDirPath, suggestNewLayoutName(this.resDirPath), extras.getString("android.intent.extra.TEXT"));
             setLastFilepath(this.xmlFilePath);
         } else if (intent.getData() == null || intent.getData().getPath() == null) {
-            this.resDirPath = Utils.getDefaultResDirPath();
+            this.resDirPath = getDefaultResDirPath();
             this.isDefaultProject = true;
             this.xmlFilePath = getLastFilepath();
             if (this.xmlFilePath == null || !new File(this.xmlFilePath).exists()) {
-                this.xmlFilePath = Utils.chooseLayoutOrCreateNew(this.resDirPath);
+                this.xmlFilePath = chooseLayoutOrCreateNew(this.resDirPath);
                 setLastFilepath(this.xmlFilePath);
             }
         } else {
@@ -560,7 +565,7 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
         MessageBox.queryYesNo(this, getString(R.string.delete_layout) + new File(filepath).getName(), getString(R.string.really_delete_this_layout), () -> {
             new File(filepath).delete();
             if (xmlFilePath.equals(filepath)) {
-                xmlFilePath = Utils.chooseLayoutOrCreateNew(resDirPath);
+                xmlFilePath = chooseLayoutOrCreateNew(resDirPath);
                 if (isDefaultProject) {
                     setLastFilepath(xmlFilePath);
                 }
@@ -572,9 +577,9 @@ public class XmlLayoutDesignActivity extends AppCompatActivity {
     }
 
     public void createNewLayout() {
-        MessageBox.queryText(this, getString(R.string.new_layout), getString(R.string.file_name_), Utils.suggestNewLayoutName(this.resDirPath), name -> {
+        MessageBox.queryText(this, getString(R.string.new_layout), getString(R.string.file_name_), suggestNewLayoutName(this.resDirPath), name -> {
             setEditMode(true);
-            xmlFilePath = Utils.createNewLayoutFile(resDirPath, name);
+            xmlFilePath = createNewLayoutFile(resDirPath, name);
             if (isDefaultProject) {
                 setLastFilepath(xmlFilePath);
             }

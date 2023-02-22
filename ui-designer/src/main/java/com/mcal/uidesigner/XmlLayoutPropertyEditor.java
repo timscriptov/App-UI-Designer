@@ -152,7 +152,7 @@ public class XmlLayoutPropertyEditor {
     }
 
     private static void queryMultipleValues(Activity activity, XmlLayoutEditView editView, AttributeValue attribute, @NonNull List<String> values) {
-        queryMultipleValues(activity, editView, attribute, (String[]) values.toArray(new String[values.size()]));
+        queryMultipleValues(activity, editView, attribute, values.toArray(new String[values.size()]));
     }
 
     private static void queryMultipleValues(Activity activity, final XmlLayoutEditView editView, final AttributeValue attribute, @NonNull String... values) {
@@ -180,7 +180,7 @@ public class XmlLayoutPropertyEditor {
         }
         listValues.add("none");
         MessageBox.queryIndexFromList(activity, attribute.property.getDisplayName(), listValues, i -> {
-            if (((String) listValues.get(i)).equals("none")) {
+            if (listValues.get(i).equals("none")) {
                 editView.setAttribute(attribute, null);
             } else {
                 editView.setAttribute(attribute, values[i]);
@@ -227,7 +227,7 @@ public class XmlLayoutPropertyEditor {
         listValues.add(activity.getString(R.string.add__));
         listValues.add("none");
         MessageBox.queryIndexFromList(activity, attribute.property.getDisplayName(), listValues, i -> {
-            String t = (String) listValues.get(i);
+            String t = listValues.get(i);
             if (t.equals("none")) {
                 editView.setAttribute(attribute, null);
             } else if (t.equals(activity.getString(R.string.other_))) {
@@ -235,7 +235,7 @@ public class XmlLayoutPropertyEditor {
             } else if (t.equals(activity.getString(R.string.add__))) {
                 XmlLayoutPropertyEditor.queryImageFromPicker(activity, editView, attribute);
             } else {
-                editView.setAttribute(attribute, (String) values2.get(i));
+                editView.setAttribute(attribute, values2.get(i));
             }
         });
     }
@@ -254,13 +254,13 @@ public class XmlLayoutPropertyEditor {
         listValues.add(activity.getString(R.string.other_));
         listValues.add("none");
         MessageBox.queryIndexFromList(activity, attribute.property.getDisplayName(), listValues, i1 -> {
-            String t = (String) listValues.get(i1);
+            String t = listValues.get(i1);
             if (t.equals("none")) {
                 editView.setAttribute(attribute, null);
             } else if (t.equals(activity.getString(R.string.other_))) {
                 XmlLayoutPropertyEditor.queryTextValue(activity, editView, attribute, defaultValue);
             } else {
-                editView.setAttribute(attribute, (String) values2.get(i1));
+                editView.setAttribute(attribute, values2.get(i1));
             }
         });
     }
@@ -318,7 +318,7 @@ public class XmlLayoutPropertyEditor {
         }, () -> editView.setAttribute(attribute, null));
     }
 
-    public static void queryStyle(final Activity activity, @NonNull final XmlLayoutEditView editView) {
+    public static void queryStyle(@NonNull final Activity activity, @NonNull final XmlLayoutEditView editView) {
         List<String> styles = new ArrayList<>(editView.getAllUserStyles());
         Collections.sort(styles);
         styles.add(activity.getString(R.string.other_));
