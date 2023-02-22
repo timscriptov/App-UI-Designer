@@ -13,18 +13,18 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AppWizardPropertiesEditor {
-    private final AppWizardDesignActivity activity;
+    private final AppWizardDesignActivity mActivity;
     private AppWizardProject.AppFragment currentFragment;
 
     public AppWizardPropertiesEditor(AppWizardDesignActivity activity) {
-        this.activity = activity;
+        mActivity = activity;
     }
 
     public void showProperties() {
-        if (this.currentFragment != null) {
-            MessageBox.showDialog(this.activity, new PropertiesDialog("Activity \"" + this.activity.getProject().getMainActivity().getTitle() + "\" > Fragment \"" + this.currentFragment.getTitle() + "\"", getFragmentCommands(this.currentFragment)));
+        if (currentFragment != null) {
+            MessageBox.showDialog(mActivity, new PropertiesDialog("Activity \"" + mActivity.getProject().getMainActivity().getTitle() + "\" > Fragment \"" + currentFragment.getTitle() + "\"", getFragmentCommands(currentFragment)));
         } else {
-            MessageBox.showDialog(this.activity, new PropertiesDialog("Activity \"" + this.activity.getProject().getMainActivity().getTitle() + "\"", getAppActivityCommands(this.activity.getProject().getMainActivity())));
+            MessageBox.showDialog(mActivity, new PropertiesDialog("Activity \"" + mActivity.getProject().getMainActivity().getTitle() + "\"", getAppActivityCommands(mActivity.getProject().getMainActivity())));
         }
     }
 
@@ -189,7 +189,7 @@ public class AppWizardPropertiesEditor {
         cmds.add(new PropertiesDialog.PropertyCommand() {
             @Override
             public void run() {
-                MessageBox.queryFromList(activity, "Navigation", AppWizardProject.NavigationType.getPossibleNames(), t -> {
+                MessageBox.queryFromList(mActivity, "Navigation", AppWizardProject.NavigationType.getPossibleNames(), t -> {
                     app.setNavigationType(AppWizardProject.NavigationType.forName(t));
                 });
             }
@@ -220,7 +220,7 @@ public class AppWizardPropertiesEditor {
         cmds.add(new PropertiesDialog.PropertyCommand() {
             @Override
             public void run() {
-                MessageBox.queryFromList(activity, "Theme", AppWizardProject.Theme.getPossibleNames(), t -> {
+                MessageBox.queryFromList(mActivity, "Theme", AppWizardProject.Theme.getPossibleNames(), t -> {
                     app.setTheme(AppWizardProject.Theme.forName(t));
                 });
             }
@@ -251,7 +251,7 @@ public class AppWizardPropertiesEditor {
         cmds.add(new PropertiesDialog.PropertyCommand() {
             @Override
             public void run() {
-                MessageBox.queryText(activity, title, (String) null, value, t -> ok.run(t));
+                MessageBox.queryText(mActivity, title, null, value, ok);
             }
 
             @Override
@@ -280,7 +280,7 @@ public class AppWizardPropertiesEditor {
         cmds.add(new PropertiesDialog.PropertyCommand() {
             @Override
             public void run() {
-                MessageBox.queryFromList(activity, title, Arrays.asList("true", "false", "none"), t -> ((ValueRunnable<String>) t2 -> {
+                MessageBox.queryFromList(mActivity, title, Arrays.asList("true", "false", "none"), t -> ((ValueRunnable<String>) t2 -> {
                     if ("none".equals(t2)) {
                         ok.run(null);
                     } else if ("true".equals(t2)) {
@@ -293,7 +293,7 @@ public class AppWizardPropertiesEditor {
 
             @Override
             public String getName() {
-                return AppWizardPropertiesEditor.this.getPropertyTitle(title, value == null ? null : Boolean.toString(value));
+                return getPropertyTitle(title, value == null ? null : Boolean.toString(value));
             }
 
             @Override

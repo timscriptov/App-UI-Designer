@@ -1,5 +1,7 @@
 package com.mcal.uidesigner.appwizard;
 
+import static com.mcal.uidesigner.utils.FileHelper.writeText;
+import static com.mcal.uidesigner.utils.StorageHelper.getLayoutFilePath;
 import static com.mcal.uidesigner.utils.StorageHelper.getResDirPath;
 
 import android.os.Bundle;
@@ -17,10 +19,6 @@ import com.mcal.uidesigner.XmlLayoutWidgetPicker;
 import com.mcal.uidesigner.XmlLayoutlInflater;
 import com.mcal.uidesigner.appwizard.runtime.AppWizardProject;
 import com.mcal.uidesigner.common.UndoManager;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class AppWizardDesignFragment extends Fragment {
     private static final String ARG_SECTION_ID = "ARG_SECTION_ID";
@@ -46,11 +44,11 @@ public class AppWizardDesignFragment extends Fragment {
         content.setClipChildren(false);
         final int sectionId = getArguments().getInt(ARG_SECTION_ID);
         String resDirPath = getResDirPath();
-        String xmlFilePath = getDesignActivity().getLayoutFilePath(getArguments().getString(ARG_SECTION_LAYOUT));
-        if (!(getUndoManager() == null || this.inflater == null)) {
-            getUndoManager().removeListener(this.inflater);
+        String xmlFilePath = getLayoutFilePath(getArguments().getString(ARG_SECTION_LAYOUT));
+        if (!(getUndoManager() == null || inflater == null)) {
+            getUndoManager().removeListener(inflater);
         }
-        this.inflater = new XmlLayoutlInflater(layoutContainer, xmlFilePath, resDirPath, getUndoManager()) {
+        inflater = new XmlLayoutlInflater(layoutContainer, xmlFilePath, resDirPath, getUndoManager()) {
             @Override
             protected void onEmptyLayoutClicked() {
                 XmlLayoutWidgetPicker.selectRootView(getActivity(), "Add...", widget -> inflater.addView(widget));
@@ -66,15 +64,15 @@ public class AppWizardDesignFragment extends Fragment {
                 if (inflater.getXmlFilePath() == null) {
                     inflater.setXmlFilePath(getDesignActivity().createFragmentLayout(sectionId));
                 }
-                saveXml(inflater.getXmlFilePath());
+                writeText(inflater.getXmlFilePath(), inflater.getXml());
             }
 
             @Override
             protected void onInflated() {
             }
         };
-        this.inflater.init();
-        this.inflater.setShowBorder(false);
+        inflater.init();
+        inflater.setShowBorder(false);
         refreshEditMode();
         return content;
     }
@@ -82,19 +80,8 @@ public class AppWizardDesignFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (getUndoManager() != null && this.inflater != null) {
-            getUndoManager().removeListener(this.inflater);
-        }
-    }
-
-    public void saveXml(String xmlFilePath) {
-        try {
-            new File(xmlFilePath).getParentFile().mkdirs();
-            FileWriter writer = new FileWriter(xmlFilePath);
-            writer.write(this.inflater.getXml());
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (getUndoManager() != null && inflater != null) {
+            getUndoManager().removeListener(inflater);
         }
     }
 
@@ -107,6 +94,6 @@ public class AppWizardDesignFragment extends Fragment {
     }
 
     public void refreshEditMode() {
-        this.inflater.setEditMode(getDesignActivity().isEditMode());
+        inflater.setEditMode(getDesignActivity().isEditMode());
     }
 }

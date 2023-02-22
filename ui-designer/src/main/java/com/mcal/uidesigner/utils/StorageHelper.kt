@@ -4,6 +4,13 @@ import android.os.Environment
 
 object StorageHelper {
     @JvmStatic
+    fun getLayoutFilePath(layoutName: String?): String? {
+        return if (layoutName != null) {
+            getResDirPath() + "/layout/" + layoutName + ".xml"
+        } else null
+    }
+
+    @JvmStatic
     fun getResDirPath(): String {
         return getProjectPath() + "/res"
     }

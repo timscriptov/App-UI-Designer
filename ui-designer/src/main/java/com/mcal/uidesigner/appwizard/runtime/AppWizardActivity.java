@@ -62,7 +62,7 @@ public class AppWizardActivity extends AppCompatActivity {
             @Override
             public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
                 if (section.getLayout() != null) {
-                    return inflater.inflate(AppWizardActivity.this.getResId("layout", section.getLayout()), container, false);
+                    return inflater.inflate(getResId("layout", section.getLayout()), container, false);
                 }
                 return new LinearLayout(AppWizardActivity.this);
             }
@@ -78,7 +78,7 @@ public class AppWizardActivity extends AppCompatActivity {
     }
 
     public AppWizardProject getProject() {
-        return this.project;
+        return project;
     }
 
     public AppWizardProject.AppActivity getAppActivity() {
@@ -87,7 +87,7 @@ public class AppWizardActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle bundle) {
-        this.project = new AppWizardProject(this);
+        project = new AppWizardProject(this);
         setTheme(getThemeId());
         super.onCreate(bundle);
         getWindow().setSoftInputMode(2);
@@ -125,36 +125,33 @@ public class AppWizardActivity extends AppCompatActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        if (this.drawerToggle != null) {
-            this.drawerToggle.syncState();
+        if (drawerToggle != null) {
+            drawerToggle.syncState();
         }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (this.drawerToggle != null) {
-            this.drawerToggle.onConfigurationChanged(newConfig);
+        if (drawerToggle != null) {
+            drawerToggle.onConfigurationChanged(newConfig);
         }
     }
 
     @Override
     public boolean onOptionsItemSelected(/*int featureId, */MenuItem item) {
-        if (this.drawerToggle == null || !this.drawerToggle.onOptionsItemSelected(item)) {
-            return false;//super.onMenuItemSelected(/*featureId, */item);
-        }
-        return true;
+        return this.drawerToggle != null && this.drawerToggle.onOptionsItemSelected(item);//super.onMenuItemSelected(/*featureId, */item);
     }
 
     @SuppressLint({"WrongConstant", "ResourceType"})
     public void refreshContent() {
-        this.drawerToggle = null;
-        this.viewPager = null;
-        this.pagerId = 1001;
-        this.drawerMenuId = 1002;
-        this.drawerContentId = 1003;
-        this.containerId = inflateContentView();
-        ViewGroup container = (ViewGroup) findViewById(this.containerId);
+        drawerToggle = null;
+        viewPager = null;
+        pagerId = 1001;
+        drawerMenuId = 1002;
+        drawerContentId = 1003;
+        containerId = inflateContentView();
+        ViewGroup container = findViewById(containerId);
         getSupportActionBar().setDisplayShowTitleEnabled(getAppActivity().showTitle());
         setTitle(getAppActivity().getTitle());
         if (getAppActivity().showActionBar()) {
@@ -266,7 +263,7 @@ public class AppWizardActivity extends AppCompatActivity {
         drawerLayout.openDrawer(3);
         List<AppWizardProject.AppFragment> sections = getAppActivity().getFragments();
         if (sections.size() > 0) {
-            getSupportFragmentManager().beginTransaction().replace(this.drawerMenuId, createSectionFragment(sections.get(sections.size() - 1))).commit();
+            getSupportFragmentManager().beginTransaction().replace(drawerMenuId, createSectionFragment(sections.get(sections.size() - 1))).commit();
         }
         return drawerLayout;
     }
@@ -337,6 +334,7 @@ public class AppWizardActivity extends AppCompatActivity {
             super(fm);
         }
 
+        @NonNull
         @Override
         public Fragment getItem(int position) {
             return createSectionFragment(getAppActivity().getFragments().get(position));
@@ -344,7 +342,7 @@ public class AppWizardActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            if (AppWizardActivity.this.getAppActivity().getType().hasDrawer()) {
+            if (getAppActivity().getType().hasDrawer()) {
                 return getAppActivity().getFragments().size() - 1;
             }
             return getAppActivity().getFragments().size();

@@ -50,12 +50,12 @@ public class AppWizardXmlDOMSerializer {
             case 1:
                 String name = node.getNodeName();
                 writer.write(indentation + "<" + name);
-                String attributeSeperator = this.lineSeparator + indentation + this.indent;
+                String attributeSeparator = lineSeparator + indentation + indent;
                 NamedNodeMap attributes = node.getAttributes();
                 for (int i = 0; i < attributes.getLength(); i++) {
                     Attr current = (Attr) attributes.item(i);
                     if (!"xmlns:android".equals(current.getName())) {
-                        writer.write(attributeSeperator);
+                        writer.write(attributeSeparator);
                         writer.write(current.getNodeName());
                         writer.write("=\"");
                         print(writer, current.getNodeValue());
@@ -67,35 +67,34 @@ public class AppWizardXmlDOMSerializer {
                     writer.write("/>");
                 } else {
                     writer.write(">");
-                    writer.write(this.lineSeparator);
-                    writer.write(this.lineSeparator);
+                    writer.write(lineSeparator);
+                    writer.write(lineSeparator);
                     for (int i2 = 0; i2 < children.getLength(); i2++) {
                         if (children.item(i2).getNodeType() == 1) {
-                            serializeNode(children.item(i2), writer, depth + 1, indentation + this.indent);
+                            serializeNode(children.item(i2), writer, depth + 1, indentation + indent);
                         }
                     }
                     writer.write(indentation);
                     writer.write("</" + name + ">");
                 }
-                writer.write(this.lineSeparator);
-                writer.write(this.lineSeparator);
+                writer.write(lineSeparator);
+                writer.write(lineSeparator);
                 return;
             case 9:
                 writer.write("<?xml version=\"");
                 writer.write(((Document) node).getXmlVersion());
                 writer.write("\" encoding=\"utf-8\"");
                 writer.write("?>");
-                writer.write(this.lineSeparator);
+                writer.write(lineSeparator);
                 NodeList nodes = node.getChildNodes();
                 if (nodes != null) {
-                    for (int i3 = 0; i3 < nodes.getLength(); i3++) {
-                        serializeNode(nodes.item(i3), writer, 0, "");
+                    for (int i = 0; i < nodes.getLength(); i++) {
+                        serializeNode(nodes.item(i), writer, 0, "");
                     }
                     return;
                 }
                 return;
             default:
-                return;
         }
     }
 

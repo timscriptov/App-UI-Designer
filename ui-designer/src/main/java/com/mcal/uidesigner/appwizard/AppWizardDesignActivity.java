@@ -2,8 +2,8 @@ package com.mcal.uidesigner.appwizard;
 
 import static com.mcal.uidesigner.utils.FileHelper.readFile;
 import static com.mcal.uidesigner.utils.FileHelper.writeText;
+import static com.mcal.uidesigner.utils.StorageHelper.getLayoutFilePath;
 import static com.mcal.uidesigner.utils.StorageHelper.getProjectFilepath;
-import static com.mcal.uidesigner.utils.StorageHelper.getResDirPath;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -38,13 +38,6 @@ public class AppWizardDesignActivity extends AppWizardActivity implements UndoMa
     private boolean isInitialized;
     private UndoManager undoManager;
 
-    public String getLayoutFilePath(String layoutName) {
-        if (layoutName != null) {
-            return getResDirPath() + "/layout/" + layoutName + ".xml";
-        }
-        return null;
-    }
-
     public String createFragmentLayout(int id) {
         String layoutName = "fragment" + (id + 1);
         getAppActivity().getFragment(id).setLayoutNoRefresh(layoutName);
@@ -66,7 +59,7 @@ public class AppWizardDesignActivity extends AppWizardActivity implements UndoMa
 
     @Override
     public void undoRedoStateChanged() {
-        if (this.isInitialized) {
+        if (isInitialized) {
             refreshButtons();
         }
     }
@@ -75,7 +68,7 @@ public class AppWizardDesignActivity extends AppWizardActivity implements UndoMa
     public Document loadXml() {
         try {
             String xml = readFile(getProjectFilepath());
-            this.undoManager.addBaseVersion(getProjectFilepath(), xml, 0);
+            undoManager.addBaseVersion(getProjectFilepath(), xml, 0);
             return parseXml(xml);
         } catch (Exception e) {
             return null;
@@ -94,7 +87,7 @@ public class AppWizardDesignActivity extends AppWizardActivity implements UndoMa
         try {
             String xml = new AppWizardXmlDOMSerializer().serialize(document);
             final String projectFilePath = getProjectFilepath();
-            this.undoManager.addVersion(projectFilePath, xml, change);
+            undoManager.addVersion(projectFilePath, xml, change);
             new File(projectFilePath).getParentFile().mkdirs();
             writeText(projectFilePath, xml);
         } catch (Exception e) {
@@ -116,18 +109,18 @@ public class AppWizardDesignActivity extends AppWizardActivity implements UndoMa
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (this.undoManager != null) {
-            this.undoManager.removeListener(this);
+        if (undoManager != null) {
+            undoManager.removeListener(this);
         }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d(getPackageName(), "onCreate()");
-        this.undoManager = new UndoManager();
-        this.undoManager.addListener(this);
+        undoManager = new UndoManager();
+        undoManager.addListener(this);
         if (savedInstanceState != null) {
-            this.undoManager.load(savedInstanceState);
+            undoManager.load(savedInstanceState);
         }
         super.onCreate(savedInstanceState);
     }
@@ -135,8 +128,8 @@ public class AppWizardDesignActivity extends AppWizardActivity implements UndoMa
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (this.undoManager != null) {
-            this.undoManager.save(outState);
+        if (undoManager != null) {
+            undoManager.save(outState);
         }
     }
 
@@ -166,15 +159,15 @@ public class AppWizardDesignActivity extends AppWizardActivity implements UndoMa
 
     @SuppressLint("WrongConstant")
     private void refreshButtons() {
-        ImageView modeButton = (ImageView) findViewById(R.id.appwizardModeButton);
+        ImageView modeButton = findViewById(R.id.appwizardModeButton);
         if (isEditMode()) {
             modeButton.setImageResource(R.drawable.ic_edit);
         } else {
             modeButton.setImageResource(R.drawable.ic_image);
         }
         findViewById(R.id.appwizardEditButtonLayout).setVisibility(isEditMode() ? 0 : 8);
-        findViewById(R.id.appwizardUndoButton).setEnabled(this.undoManager.canUndo());
-        findViewById(R.id.appwizardRedoButton).setEnabled(this.undoManager.canRedo());
+        findViewById(R.id.appwizardUndoButton).setEnabled(undoManager.canUndo());
+        findViewById(R.id.appwizardRedoButton).setEnabled(undoManager.canRedo());
     }
 
     @Override
@@ -190,11 +183,11 @@ public class AppWizardDesignActivity extends AppWizardActivity implements UndoMa
     @Override
     public void refreshContent() {
         super.refreshContent();
-        this.isInitialized = true;
+        isInitialized = true;
         setEditListeners();
     }
 
     public UndoManager getUndoManager() {
-        return this.undoManager;
+        return undoManager;
     }
 }
