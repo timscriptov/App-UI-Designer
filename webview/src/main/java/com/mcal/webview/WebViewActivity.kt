@@ -2,7 +2,6 @@ package com.mcal.webview
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -22,8 +21,7 @@ import com.mcal.webview.utils.NetworkHelper.isNetworkAvailable
 import kotlinx.coroutines.*
 
 class WebViewActivity : BaseActivity() {
-    private var _binding: ActivityWebviewBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: ActivityWebviewBinding
 
     private var mHtmlUrl: String? = null
     private var isNightMode = false
@@ -31,7 +29,7 @@ class WebViewActivity : BaseActivity() {
     @SuppressLint("SetJavaScriptEnabled")
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityWebviewBinding.inflate(layoutInflater)
+        binding = ActivityWebviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar(id = R.id.toolbar, title = "Documentation", back = true)
         val webView = binding.webView.apply {
@@ -133,12 +131,6 @@ class WebViewActivity : BaseActivity() {
         dialog.create()
         dialog.show()
     }
-
-    override fun onDestroy() {
-        _binding = null
-        super.onDestroy()
-    }
-
     fun refresh() {
         val refresh = binding.refresh
         refresh.isRefreshing = true
@@ -154,7 +146,8 @@ class WebViewActivity : BaseActivity() {
 
         override fun onProgressChanged(view: WebView?, newProgress: Int) {
             super.onProgressChanged(view, newProgress)
-            activity.binding.progressBar.visibility = if(newProgress < 100) View.VISIBLE else View.GONE
+            activity.binding.progressBar.visibility =
+                if (newProgress < 100) View.VISIBLE else View.GONE
             activity.binding.progressBar.progress = newProgress
         }
     }

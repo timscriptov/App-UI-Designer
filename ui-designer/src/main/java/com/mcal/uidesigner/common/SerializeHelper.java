@@ -31,7 +31,7 @@ public class SerializeHelper {
             ObjectOutputStream os = new ObjectOutputStream(bos);
             os.writeObject(obj);
             os.close();
-            return new String(Base64.encodeToString(bos.toByteArray(), Base64.DEFAULT));
+            return Base64.encodeToString(bos.toByteArray(), Base64.DEFAULT);
         } catch (Exception e) {
             return null;
         }

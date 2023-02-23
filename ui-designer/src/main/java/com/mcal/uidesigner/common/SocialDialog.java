@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -182,9 +181,10 @@ public class SocialDialog extends MessageBox {
             super(context, R.layout.share_dialog_entry, entries);
         }
 
+        @NonNull
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            int i = 0;
+            int i = View.GONE;
             View view = convertView;
             if (view == null) {
                 view = LayoutInflater.from(getContext()).inflate(R.layout.share_dialog_entry, parent, false);
@@ -192,11 +192,11 @@ public class SocialDialog extends MessageBox {
             SocialListEntry entry = getItem(position);
             ((TextView) view.findViewById(R.id.shareDialogEntryText)).setText(entry.label);
             ImageView imageView = view.findViewById(R.id.shareDialogEntryImage);
-            if (entry.icon != 0) {
+            if (entry.icon != View.GONE) {
                 imageView.setImageResource(entry.icon);
             }
-            if (entry.icon == 0) {
-                i = 4;
+            if (entry.icon == View.GONE) {
+                i = View.INVISIBLE;
             }
             imageView.setVisibility(i);
             return view;

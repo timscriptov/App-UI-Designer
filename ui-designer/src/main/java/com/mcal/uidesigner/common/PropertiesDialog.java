@@ -9,13 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.uidesigner.R;
 import com.mcal.uidesigner.XmlLayoutDesignActivity;
 
@@ -30,26 +30,28 @@ public class PropertiesDialog extends MessageBox {
         this.title = title;
         for (PropertyCommand command : commands) {
             if (command.canRun()) {
-                this.enabledCommands.add(command);
+                enabledCommands.add(command);
             }
         }
     }
 
     @Override
     protected Dialog buildDialog(Activity activity) {
-        ListView listView = new ListView(activity);
-        listView.setAdapter((ListAdapter) new PropertyCommandEntryAdapter(activity, this.enabledCommands));
-        final AlertDialog dialog = new AlertDialog.Builder(activity)
-                .setCancelable(true)
-                .setView(listView)
-                .setTitle(this.title)
-                .create();
-        dialog.setCanceledOnTouchOutside(true);
+        final ListView listView = new ListView(activity);
+        listView.setAdapter(new PropertyCommandEntryAdapter(activity, enabledCommands));
+
+        final MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(activity);
+        dialog.setCancelable(true);
+        dialog.setView(listView);
+        dialog.setTitle(title);
+
+        final AlertDialog alertDialog = dialog.create();
+        alertDialog.setCanceledOnTouchOutside(true);
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            dialog.dismiss();
-            ((PropertyCommand) enabledCommands.get(position)).run();
+            alertDialog.dismiss();
+            enabledCommands.get(position).run();
         });
-        return dialog;
+        return alertDialog;
     }
 
     public interface PropertyCommand {

@@ -19,18 +19,18 @@ public class ProgressDialogHandler {
 
     public void openDialogDelayed() {
         closeDialog();
-        this.showProgressAction = () -> ProgressDialogHandler.this.showDialog();
-        this.handler.postDelayed(this.showProgressAction, (long) this.delay);
+        showProgressAction = ProgressDialogHandler.this::showDialog;
+        handler.postDelayed(showProgressAction, delay);
     }
 
     public void closeDialog() {
-        if (this.showProgressAction != null) {
-            this.handler.removeCallbacks(this.showProgressAction);
-            this.showProgressAction = null;
+        if (showProgressAction != null) {
+            handler.removeCallbacks(showProgressAction);
+            showProgressAction = null;
         }
-        if (this.progressDialog != null) {
-            this.progressDialog.dismiss();
-            this.progressDialog = null;
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+            progressDialog = null;
         }
     }
 
@@ -44,10 +44,10 @@ public class ProgressDialogHandler {
 
 
     public void showDialog() {
-        this.progressDialog = new ProgressDialog(this.activity);
-        this.progressDialog.setMessage(this.message);
-        this.progressDialog.setOnCancelListener(dialog -> ProgressDialogHandler.this.onCancel());
-        this.progressDialog.getWindow().clearFlags(2);
-        this.progressDialog.show();
+        progressDialog = new ProgressDialog(activity);
+        progressDialog.setMessage(message);
+        progressDialog.setOnCancelListener(dialog -> onCancel());
+        progressDialog.getWindow().clearFlags(2);
+        progressDialog.show();
     }
 }

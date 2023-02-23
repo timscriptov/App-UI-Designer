@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatEditText;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.uidesigner.ProxyTextView;
 import com.mcal.uidesigner.R;
 import com.mcal.uidesigner.widget.KeyStrokeEditText;
@@ -58,9 +59,10 @@ public abstract class MessageBox {
         showDialog(activity, new MessageBox() {
             @Override
             public Dialog buildDialog(Activity activity2) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity2);
-                builder.setMessage(message).setCancelable(true).setPositiveButton(activity2.getResources().getString(R.string.dialog_ok), (dialog, id) -> {
-                });
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity2);
+                builder.setMessage(message);
+                builder.setCancelable(true);
+                builder.setPositiveButton(activity2.getResources().getString(R.string.dialog_ok), null);
                 if (negativeButton != null) {
                     builder = builder.setNegativeButton(negativeButton, (dialog, which) -> {
                         dialog.dismiss();
@@ -93,7 +95,7 @@ public abstract class MessageBox {
         showDialog(activity, new MessageBox() {
             @Override
             public Dialog buildDialog(Activity activity2) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity2);
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity2);
                 builder.setMessage(message).setCancelable(cancelable);
                 builder.setPositiveButton(okText, (dialog, id) -> {
                     dialog.dismiss();
@@ -128,9 +130,9 @@ public abstract class MessageBox {
     }
 
     public static void queryYesNo(Activity activity, int title, int message, @NonNull List<String> list, Runnable yes, Runnable no) {
-        String listText = "\n";
+        StringBuilder listText = new StringBuilder("\n");
         for (String s : list) {
-            listText = (listText + "\n") + s;
+            listText = new StringBuilder((listText + "\n") + s);
         }
         queryYesNo(activity, activity.getResources().getString(title), activity.getResources().getString(message) + listText, activity.getResources().getString(R.string.dialog_no), no, activity.getResources().getString(R.string.dialog_yes), yes, null);
     }
@@ -140,7 +142,7 @@ public abstract class MessageBox {
     }
 
     public static void queryYesNo(Activity activity, String title, String message, Runnable yes, Runnable no) {
-        queryYesNo(activity, title, message, yes, no, (Runnable) null);
+        queryYesNo(activity, title, message, yes, no, null);
     }
 
     public static void queryYesNo(Activity activity, String title, String message, Runnable yes, Runnable no, Runnable cancelled) {
@@ -151,7 +153,7 @@ public abstract class MessageBox {
         showDialog(activity, new MessageBox() {
             @Override
             public Dialog buildDialog(Activity activity2) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity2);
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity2);
                 builder.setMessage(message);
                 builder.setCancelable(true);
                 builder.setPositiveButton(yesText, (dialog, id) -> {
@@ -194,7 +196,7 @@ public abstract class MessageBox {
                     }
                     return false;
                 });
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity2);
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity2);
                 builder.setView(input);
                 builder.setMessage(message);
                 builder.setCancelable(true);
@@ -232,9 +234,9 @@ public abstract class MessageBox {
         showDialog(activity, new MessageBox() {
             @Override
             public Dialog buildDialog(Activity activity2) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity2);
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity2);
                 builder.setCancelable(cancelable);
-                builder.setItems((CharSequence[]) values.toArray(new CharSequence[0]), (dialog, which) -> {
+                builder.setItems(values.toArray(new CharSequence[0]), (dialog, which) -> {
                     dialog.dismiss();
                     ok.run(values.get(which));
                 });
@@ -252,10 +254,9 @@ public abstract class MessageBox {
         showDialog(activity, new MessageBox() {
             @Override
             public Dialog buildDialog(Activity activity2) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity2);
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity2);
                 builder.setCancelable(true);
-                builder.setSingleChoiceItems((CharSequence[]) values.toArray(new CharSequence[0]), values.indexOf(selectedValue), (p1, p2) -> {
-                });
+                builder.setSingleChoiceItems(values.toArray(new CharSequence[0]), values.indexOf(selectedValue), null);
                 builder.setPositiveButton(activity2.getResources().getString(R.string.dialog_ok), (dialog, which) -> {
                     dialog.dismiss();
                     SparseBooleanArray items = ((AlertDialog) dialog).getListView().getCheckedItemPositions();
@@ -281,14 +282,13 @@ public abstract class MessageBox {
         showDialog(activity, new MessageBox() {
             @Override
             public Dialog buildDialog(Activity activity2) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity2);
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity2);
                 boolean[] checkedItems = new boolean[selectedValues.size()];
                 for (int i = 0; i < checkedItems.length; i++) {
-                    checkedItems[i] = (Boolean) selectedValues.get(i);
+                    checkedItems[i] = selectedValues.get(i);
                 }
                 builder.setCancelable(true);
-                builder.setMultiChoiceItems((CharSequence[]) values.toArray(new CharSequence[0]), checkedItems, (dialog, which, isChecked) -> {
-                });
+                builder.setMultiChoiceItems(values.toArray(new CharSequence[0]), checkedItems, null);
                 builder.setPositiveButton(activity2.getResources().getString(R.string.dialog_ok), (dialog, which) -> {
                     dialog.dismiss();
                     ArrayList<Integer> arrayList = new ArrayList<>();
@@ -316,9 +316,9 @@ public abstract class MessageBox {
         showDialog(activity, new MessageBox() {
             @Override
             public Dialog buildDialog(Activity activity2) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity2);
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity2);
                 builder.setCancelable(true);
-                builder.setItems((CharSequence[]) values.toArray(new CharSequence[0]), (dialog, which) -> {
+                builder.setItems(values.toArray(new CharSequence[0]), (dialog, which) -> {
                     dialog.dismiss();
                     ok.run(which);
                 });
@@ -336,9 +336,9 @@ public abstract class MessageBox {
         showDialog(activity, new MessageBox() {
             @Override
             public Dialog buildDialog(Activity activity2) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity2);
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity2);
                 builder.setCancelable(true);
-                builder.setItems((CharSequence[]) values.toArray(new CharSequence[0]), (dialog, which) -> {
+                builder.setItems(values.toArray(new CharSequence[0]), (dialog, which) -> {
                     dialog.dismiss();
                     click.run(which);
                 });
@@ -386,7 +386,7 @@ public abstract class MessageBox {
                         return true;
                     }
                 };
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity2);
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity2);
                 builder.setView(input);
                 builder.setMessage(message);
                 builder.setCancelable(true);
@@ -482,7 +482,7 @@ public abstract class MessageBox {
                         return true;
                     }
                 };
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity2);
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity2);
                 builder.setView(input);
                 builder.setMessage(message);
                 builder.setCancelable(true);
@@ -563,7 +563,7 @@ public abstract class MessageBox {
                 if (newValue.length() > 0) {
                     newValue.append("|");
                 }
-                newValue.append((String) values.get(i));
+                newValue.append(values.get(i));
             }
             ok.run(newValue.toString());
         });

@@ -38,25 +38,25 @@ public class PositionalXMLReader {
                 }
 
                 @Override
-                public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+                public void startElement(String uri, String localName, String qName, Attributes attributes) {
                     addTextIfNeeded();
                     Element el = doc.createElement(qName);
                     for (int i = 0; i < attributes.getLength(); i++) {
                         el.setAttribute(attributes.getQName(i), attributes.getValue(i));
                     }
-                    el.setUserData(PositionalXMLReader.LINE, String.valueOf(this.locator.getLineNumber()), null);
-                    el.setUserData(PositionalXMLReader.COLUMN, String.valueOf(this.locator.getColumnNumber() + 1), null);
+                    el.setUserData(PositionalXMLReader.LINE, String.valueOf(locator.getLineNumber()), null);
+                    el.setUserData(PositionalXMLReader.COLUMN, String.valueOf(locator.getColumnNumber() + 1), null);
                     elementStack.push(el);
                 }
 
                 @Override
                 public void endElement(String uri, String localName, String qName) {
                     addTextIfNeeded();
-                    Element closedEl = (Element) elementStack.pop();
+                    Element closedEl = elementStack.pop();
                     if (elementStack.isEmpty()) {
                         doc.appendChild(closedEl);
                     } else {
-                        ((Element) elementStack.peek()).appendChild(closedEl);
+                        elementStack.peek().appendChild(closedEl);
                     }
                 }
 
@@ -67,7 +67,7 @@ public class PositionalXMLReader {
 
                 private void addTextIfNeeded() {
                     if (textBuffer.length() > 0) {
-                        ((Element) elementStack.peek()).appendChild(doc.createTextNode(textBuffer.toString()));
+                        elementStack.peek().appendChild(doc.createTextNode(textBuffer.toString()));
                         textBuffer.delete(0, textBuffer.length());
                     }
                 }

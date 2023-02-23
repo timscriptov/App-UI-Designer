@@ -1,5 +1,7 @@
 package com.mcal.uidesigner.view;
 
+import static com.mcal.uidesigner.utils.Utils.toHexColor;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -32,40 +34,32 @@ public class ColorPickerView extends View {
 
     public ColorPickerView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.currentHue = 0.0f;
-        this.currentX = 0;
-        this.currentY = 0;
-        this.hueBarColors = new int[258];
-        this.derivedColors = new int[65536];
+        currentHue = 0.0f;
+        currentX = 0;
+        currentY = 0;
+        hueBarColors = new int[258];
+        derivedColors = new int[65536];
         init();
     }
 
     public ColorPickerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.currentHue = 0.0f;
-        this.currentX = 0;
-        this.currentY = 0;
-        this.hueBarColors = new int[258];
-        this.derivedColors = new int[65536];
+        currentHue = 0.0f;
+        currentX = 0;
+        currentY = 0;
+        hueBarColors = new int[258];
+        derivedColors = new int[65536];
         init();
     }
 
     public ColorPickerView(Context c) {
         super(c);
-        this.currentHue = 0.0f;
-        this.currentX = 0;
-        this.currentY = 0;
-        this.hueBarColors = new int[258];
-        this.derivedColors = new int[65536];
+        currentHue = 0.0f;
+        currentX = 0;
+        currentY = 0;
+        hueBarColors = new int[258];
+        derivedColors = new int[65536];
         init();
-    }
-
-    @NonNull
-    public static String toHexColor(int c) {
-        if (Color.alpha(c) == 255) {
-            return String.format("#%06X", 16777215 & c);
-        }
-        return String.format("#%08X", c & -1);
     }
 
     public static int parseColor(String hexColor) {
@@ -81,55 +75,55 @@ public class ColorPickerView extends View {
     private void init() {
         updateMainColors();
         Context c = getContext();
-        this.scale = c.getResources().getDisplayMetrics().density * (Math.min(300.0f, AndroidHelper.getScreenSizeDip(c) - 150.0f) / 256.0f);
-        this.paint = new Paint(1);
-        this.paint.setTextAlign(Paint.Align.CENTER);
-        this.paint.setTextSize(12.0f);
+        scale = c.getResources().getDisplayMetrics().density * (Math.min(300.0f, AndroidHelper.getScreenSizeDip(c) - 150.0f) / 256.0f);
+        paint = new Paint(1);
+        paint.setTextAlign(Paint.Align.CENTER);
+        paint.setTextSize(12.0f);
     }
 
     public void setCurrentColor(String hexColor) {
-        this.currentColor = parseColor(hexColor);
+        currentColor = parseColor(hexColor);
         float[] hsv = new float[3];
-        Color.colorToHSV(this.currentColor | ViewCompat.MEASURED_STATE_MASK, hsv);
-        this.currentHue = hsv[0];
+        Color.colorToHSV(currentColor | ViewCompat.MEASURED_STATE_MASK, hsv);
+        currentHue = hsv[0];
         updateDerivedColors();
         getCurrentXY();
         invalidate();
-        this.listener.colorChanged(this.currentColor, toHexColor(this.currentColor));
+        listener.colorChanged(currentColor, toHexColor(currentColor));
     }
 
     public void setInitialColor(String hexColor) {
-        this.initialColor = parseColor(hexColor);
+        initialColor = parseColor(hexColor);
     }
 
     public void setOnColorChangedListener(OnColorChangedListener l) {
-        this.listener = l;
+        listener = l;
     }
 
     private void updateMainColors() {
         int index = 0;
         for (float i = 0.0f; i < 256.0f; i += 6.0f) {
-            this.hueBarColors[index] = Color.rgb((int) MotionEventCompat.ACTION_MASK, 0, (int) i);
+            hueBarColors[index] = Color.rgb(MotionEventCompat.ACTION_MASK, 0, (int) i);
             index++;
         }
-        for (float i2 = 0.0f; i2 < 256.0f; i2 += 6.0f) {
-            this.hueBarColors[index] = Color.rgb(255 - ((int) i2), 0, (int) MotionEventCompat.ACTION_MASK);
+        for (float i = 0.0f; i < 256.0f; i += 6.0f) {
+            hueBarColors[index] = Color.rgb(255 - ((int) i), 0, MotionEventCompat.ACTION_MASK);
             index++;
         }
-        for (float i3 = 0.0f; i3 < 256.0f; i3 += 6.0f) {
-            this.hueBarColors[index] = Color.rgb(0, (int) i3, (int) MotionEventCompat.ACTION_MASK);
+        for (float i = 0.0f; i < 256.0f; i += 6.0f) {
+            hueBarColors[index] = Color.rgb(0, (int) i, MotionEventCompat.ACTION_MASK);
             index++;
         }
-        for (float i4 = 0.0f; i4 < 256.0f; i4 += 6.0f) {
-            this.hueBarColors[index] = Color.rgb(0, (int) MotionEventCompat.ACTION_MASK, 255 - ((int) i4));
+        for (float i = 0.0f; i < 256.0f; i += 6.0f) {
+            hueBarColors[index] = Color.rgb(0, MotionEventCompat.ACTION_MASK, 255 - ((int) i));
             index++;
         }
-        for (float i5 = 0.0f; i5 < 256.0f; i5 += 6.0f) {
-            this.hueBarColors[index] = Color.rgb((int) i5, (int) MotionEventCompat.ACTION_MASK, 0);
+        for (float i = 0.0f; i < 256.0f; i += 6.0f) {
+            hueBarColors[index] = Color.rgb((int) i, MotionEventCompat.ACTION_MASK, 0);
             index++;
         }
-        for (float i6 = 0.0f; i6 < 256.0f; i6 += 6.0f) {
-            this.hueBarColors[index] = Color.rgb((int) MotionEventCompat.ACTION_MASK, 255 - ((int) i6), 0);
+        for (float i = 0.0f; i < 256.0f; i += 6.0f) {
+            hueBarColors[index] = Color.rgb(MotionEventCompat.ACTION_MASK, 255 - ((int) i), 0);
             index++;
         }
     }
@@ -138,15 +132,15 @@ public class ColorPickerView extends View {
         int minDist = 1000;
         for (int x = 0; x < 256; x++) {
             for (int y = 0; y < 256; y++) {
-                int dist = getColorDist(getDerivedColorForXY(x, y), this.currentColor | ViewCompat.MEASURED_STATE_MASK);
+                int dist = getColorDist(getDerivedColorForXY(x, y), currentColor | ViewCompat.MEASURED_STATE_MASK);
                 if (dist == 0) {
-                    this.currentX = x;
-                    this.currentY = y;
+                    currentX = x;
+                    currentY = y;
                     return;
                 }
                 if (dist < minDist) {
-                    this.currentX = x;
-                    this.currentY = y;
+                    currentX = x;
+                    currentY = y;
                     minDist = dist;
                 }
             }
@@ -157,42 +151,43 @@ public class ColorPickerView extends View {
         return Math.abs(Color.red(c1) - Color.red(c2)) + Math.abs(Color.green(c1) - Color.green(c2)) + Math.abs(Color.blue(c1) - Color.blue(c2));
     }
 
+    @SuppressLint("RestrictedApi")
     private int getCurrentMainColor() {
-        int translatedHue = 255 - ((int) ((this.currentHue * 255.0f) / 360.0f));
+        int translatedHue = 255 - ((int) ((currentHue * 255.0f) / 360.0f));
         int index = 0;
         for (float i = 0.0f; i < 256.0f; i += 6.0f) {
             if (index == translatedHue) {
-                return Color.rgb((int) MotionEventCompat.ACTION_MASK, 0, (int) i);
+                return Color.rgb(MotionEventCompat.ACTION_MASK, 0, (int) i);
             }
             index++;
         }
-        for (float i2 = 0.0f; i2 < 256.0f; i2 += 6.0f) {
+        for (float i = 0.0f; i < 256.0f; i += 6.0f) {
             if (index == translatedHue) {
-                return Color.rgb(255 - ((int) i2), 0, (int) MotionEventCompat.ACTION_MASK);
+                return Color.rgb(255 - ((int) i), 0, MotionEventCompat.ACTION_MASK);
             }
             index++;
         }
-        for (float i3 = 0.0f; i3 < 256.0f; i3 += 6.0f) {
+        for (float i = 0.0f; i < 256.0f; i += 6.0f) {
             if (index == translatedHue) {
-                return Color.rgb(0, (int) i3, (int) MotionEventCompat.ACTION_MASK);
+                return Color.rgb(0, (int) i, MotionEventCompat.ACTION_MASK);
             }
             index++;
         }
-        for (float i4 = 0.0f; i4 < 256.0f; i4 += 6.0f) {
+        for (float i = 0.0f; i < 256.0f; i += 6.0f) {
             if (index == translatedHue) {
-                return Color.rgb(0, (int) MotionEventCompat.ACTION_MASK, 255 - ((int) i4));
+                return Color.rgb(0, MotionEventCompat.ACTION_MASK, 255 - ((int) i));
             }
             index++;
         }
-        for (float i5 = 0.0f; i5 < 256.0f; i5 += 6.0f) {
+        for (float i = 0.0f; i < 256.0f; i += 6.0f) {
             if (index == translatedHue) {
-                return Color.rgb((int) i5, (int) MotionEventCompat.ACTION_MASK, 0);
+                return Color.rgb((int) i, MotionEventCompat.ACTION_MASK, 0);
             }
             index++;
         }
         for (float i6 = 0.0f; i6 < 256.0f; i6 += 6.0f) {
             if (index == translatedHue) {
-                return Color.rgb((int) MotionEventCompat.ACTION_MASK, 255 - ((int) i6), 0);
+                return Color.rgb(MotionEventCompat.ACTION_MASK, 255 - ((int) i6), 0);
             }
             index++;
         }
@@ -206,10 +201,10 @@ public class ColorPickerView extends View {
         for (int y = 0; y < 256; y++) {
             for (int x = 0; x < 256; x++) {
                 if (y == 0) {
-                    this.derivedColors[index] = Color.rgb(255 - (((255 - Color.red(mainColor)) * x) / MotionEventCompat.ACTION_MASK), 255 - (((255 - Color.green(mainColor)) * x) / MotionEventCompat.ACTION_MASK), 255 - (((255 - Color.blue(mainColor)) * x) / MotionEventCompat.ACTION_MASK));
-                    topColors[x] = this.derivedColors[index];
+                    derivedColors[index] = Color.rgb(255 - (((255 - Color.red(mainColor)) * x) / MotionEventCompat.ACTION_MASK), 255 - (((255 - Color.green(mainColor)) * x) / MotionEventCompat.ACTION_MASK), 255 - (((255 - Color.blue(mainColor)) * x) / MotionEventCompat.ACTION_MASK));
+                    topColors[x] = derivedColors[index];
                 } else {
-                    this.derivedColors[index] = Color.rgb(((255 - y) * Color.red(topColors[x])) / MotionEventCompat.ACTION_MASK, ((255 - y) * Color.green(topColors[x])) / MotionEventCompat.ACTION_MASK, ((255 - y) * Color.blue(topColors[x])) / MotionEventCompat.ACTION_MASK);
+                    derivedColors[index] = Color.rgb(((255 - y) * Color.red(topColors[x])) / MotionEventCompat.ACTION_MASK, ((255 - y) * Color.green(topColors[x])) / MotionEventCompat.ACTION_MASK, ((255 - y) * Color.blue(topColors[x])) / MotionEventCompat.ACTION_MASK);
                 }
                 index++;
             }
@@ -218,87 +213,87 @@ public class ColorPickerView extends View {
 
     private int getDerivedColorForXY(int x, int y) {
         int index = (y * 256) + x;
-        if (index < 0 || index >= this.derivedColors.length) {
+        if (index < 0 || index >= derivedColors.length) {
             return 0;
         }
-        return this.derivedColors[index];
+        return derivedColors[index];
     }
 
     @SuppressLint("DrawAllocation")
     @Override
     protected void onDraw(Canvas canvas) {
-        int translatedHue = 255 - ((int) ((this.currentHue * 255.0f) / 360.0f));
+        int translatedHue = 255 - ((int) ((currentHue * 255.0f) / 360.0f));
         for (int i = 0; i < 256; i++) {
-            this.paint.setStrokeWidth(2.0f * this.scale);
-            this.paint.setColor(this.hueBarColors[i]);
-            canvas.drawLine(((float) (i + 10)) * this.scale, 0.0f, ((float) (i + 10)) * this.scale, 40.0f * this.scale, this.paint);
+            paint.setStrokeWidth(2.0f * scale);
+            paint.setColor(hueBarColors[i]);
+            canvas.drawLine(((float) (i + 10)) * scale, 0.0f, ((float) (i + 10)) * scale, 40.0f * scale, paint);
         }
-        this.paint.setStrokeWidth(3.0f * this.scale);
-        this.paint.setColor(ViewCompat.MEASURED_STATE_MASK);
-        canvas.drawLine(((float) (translatedHue + 10)) * this.scale, 0.0f, ((float) (translatedHue + 10)) * this.scale, 40.0f * this.scale, this.paint);
-        this.paint.setStyle(Paint.Style.STROKE);
-        this.paint.setColor(ViewCompat.MEASURED_STATE_MASK);
-        this.paint.setStrokeWidth(1.0f);
-        canvas.drawRect(9.5f * this.scale, 0.0f * this.scale, 266.5f * this.scale, 40.0f * this.scale, this.paint);
+        paint.setStrokeWidth(3.0f * scale);
+        paint.setColor(ViewCompat.MEASURED_STATE_MASK);
+        canvas.drawLine(((float) (translatedHue + 10)) * scale, 0.0f, ((float) (translatedHue + 10)) * scale, 40.0f * scale, paint);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(ViewCompat.MEASURED_STATE_MASK);
+        paint.setStrokeWidth(1.0f);
+        canvas.drawRect(9.5f * scale, 0.0f * scale, 266.5f * scale, 40.0f * scale, paint);
         for (int i2 = 0; i2 < 256; i2++) {
-            this.paint.setShader(new LinearGradient(0.0f, 50.0f * this.scale, 0.0f, 306.0f * this.scale, new int[]{this.derivedColors[i2], ViewCompat.MEASURED_STATE_MASK}, (float[]) null, Shader.TileMode.REPEAT));
-            this.paint.setStrokeWidth(2.0f * this.scale);
-            canvas.drawLine(((float) (i2 + 10)) * this.scale, 50.0f * this.scale, ((float) (i2 + 10)) * this.scale, 306.0f * this.scale, this.paint);
+            paint.setShader(new LinearGradient(0.0f, 50.0f * scale, 0.0f, 306.0f * scale, new int[]{derivedColors[i2], ViewCompat.MEASURED_STATE_MASK}, null, Shader.TileMode.REPEAT));
+            paint.setStrokeWidth(2.0f * scale);
+            canvas.drawLine(((float) (i2 + 10)) * scale, 50.0f * scale, ((float) (i2 + 10)) * scale, 306.0f * scale, paint);
         }
-        this.paint.setShader(null);
-        this.paint.setStyle(Paint.Style.STROKE);
-        this.paint.setColor(ViewCompat.MEASURED_STATE_MASK);
-        this.paint.setStrokeWidth(2.0f * this.scale);
-        canvas.drawCircle(((float) (this.currentX + 10)) * this.scale, ((float) (this.currentY + 50)) * this.scale, 6.0f * this.scale, this.paint);
-        this.paint.setStyle(Paint.Style.STROKE);
-        this.paint.setColor(ViewCompat.MEASURED_STATE_MASK);
-        this.paint.setStrokeWidth(1.0f);
-        canvas.drawRect(9.5f * this.scale, 50.0f * this.scale, 266.5f * this.scale, 306.0f * this.scale, this.paint);
-        this.paint.setStyle(Paint.Style.FILL);
-        this.paint.setColor(this.currentColor | ViewCompat.MEASURED_STATE_MASK);
-        canvas.drawRect(9.5f * this.scale, 316.0f * this.scale, 139.0f * this.scale, 356.0f * this.scale, this.paint);
-        this.paint.setStyle(Paint.Style.FILL);
-        this.paint.setColor(this.initialColor | ViewCompat.MEASURED_STATE_MASK);
-        canvas.drawRect(138.0f * this.scale, 316.0f * this.scale, 266.5f * this.scale, 356.0f * this.scale, this.paint);
-        this.paint.setStyle(Paint.Style.STROKE);
-        this.paint.setColor(ViewCompat.MEASURED_STATE_MASK);
-        this.paint.setStrokeWidth(1.0f);
-        canvas.drawRect(9.5f * this.scale, 316.0f * this.scale, 266.5f * this.scale, 356.0f * this.scale, this.paint);
+        paint.setShader(null);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(ViewCompat.MEASURED_STATE_MASK);
+        paint.setStrokeWidth(2.0f * scale);
+        canvas.drawCircle(((float) (currentX + 10)) * scale, ((float) (currentY + 50)) * scale, 6.0f * scale, paint);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(ViewCompat.MEASURED_STATE_MASK);
+        paint.setStrokeWidth(1.0f);
+        canvas.drawRect(9.5f * scale, 50.0f * scale, 266.5f * scale, 306.0f * scale, paint);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(currentColor | ViewCompat.MEASURED_STATE_MASK);
+        canvas.drawRect(9.5f * scale, 316.0f * scale, 139.0f * scale, 356.0f * scale, paint);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(initialColor | ViewCompat.MEASURED_STATE_MASK);
+        canvas.drawRect(138.0f * scale, 316.0f * scale, 266.5f * scale, 356.0f * scale, paint);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(ViewCompat.MEASURED_STATE_MASK);
+        paint.setStrokeWidth(1.0f);
+        canvas.drawRect(9.5f * scale, 316.0f * scale, 266.5f * scale, 356.0f * scale, paint);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension((int) (276.0f * this.scale), (int) (366.0f * this.scale));
+        setMeasuredDimension((int) (276.0f * scale), (int) (366.0f * scale));
     }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         if (event.getAction() == 0 || event.getAction() == 2) {
-            float x = (event.getX() / this.scale) - 10.0f;
+            float x = (event.getX() / scale) - 10.0f;
             if (x < 0.0f) {
                 x = 0.0f;
             }
             if (x > 255.0f) {
                 x = 255.0f;
             }
-            float y = event.getY() / this.scale;
+            float y = event.getY() / scale;
             if (y < 40.0f) {
-                this.currentHue = ((255.0f - x) * 360.0f) / 255.0f;
+                currentHue = ((255.0f - x) * 360.0f) / 255.0f;
                 updateDerivedColors();
             } else {
-                this.currentX = (int) x;
-                this.currentY = ((int) y) - 50;
-                if (this.currentY < 0) {
-                    this.currentY = 0;
+                currentX = (int) x;
+                currentY = ((int) y) - 50;
+                if (currentY < 0) {
+                    currentY = 0;
                 }
-                if (this.currentY > 255) {
-                    this.currentY = MotionEventCompat.ACTION_MASK;
+                if (currentY > 255) {
+                    currentY = MotionEventCompat.ACTION_MASK;
                 }
             }
-            int color = getDerivedColorForXY(this.currentX, this.currentY);
-            this.currentColor = Color.argb(Color.alpha(this.currentColor), Color.red(color), Color.green(color), Color.blue(color));
-            this.listener.colorChanged(this.currentColor, toHexColor(this.currentColor));
+            int color = getDerivedColorForXY(currentX, currentY);
+            currentColor = Color.argb(Color.alpha(currentColor), Color.red(color), Color.green(color), Color.blue(color));
+            listener.colorChanged(currentColor, toHexColor(currentColor));
             invalidate();
         }
         return true;

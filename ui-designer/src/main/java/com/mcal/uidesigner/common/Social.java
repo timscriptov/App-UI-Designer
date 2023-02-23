@@ -9,6 +9,8 @@ import android.os.Handler;
 import android.text.ClipboardManager;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 public class Social {
@@ -33,7 +35,7 @@ public class Social {
         Intent tweetIntent = new Intent("android.intent.action.VIEW");
         tweetIntent.setData(Uri.parse("http://www.twitter.com/intent/tweet?url=" + link + "&text=" + text));
         searchActivity(context, "com.twitter.android", tweetIntent);
-        startActivity(context, tweetIntent);
+        context.startActivity(tweetIntent);
     }
 
     public static void shareWithGooglePlus(Context context, String text, String link) {
@@ -43,7 +45,7 @@ public class Social {
         if (!searchActivity(context, "com.google.android.apps.plus", plusIntent)) {
             plusIntent = new Intent("android.intent.action.VIEW", Uri.parse("https://plus.google.com/share?url=" + link + "&text=" + text));
         }
-        startActivity(context, plusIntent);
+        context.startActivity(plusIntent);
     }
 
     @SuppressLint("WrongConstant")
@@ -57,12 +59,10 @@ public class Social {
         } else {
             ((ClipboardManager) context.getSystemService("clipboard")).setText(text);
             new Handler().postDelayed(() -> {
-                Toast toast = Toast.makeText(context, "Long press to paste: \"" + text + "\"", 1);
-                toast.setGravity(49, 0, 20);
-                toast.show();
+                Toast.makeText(context, "Long press to paste: \"" + text + "\"", Toast.LENGTH_LONG).show();
             }, 1000);
         }
-        startActivity(context, facebookIntent);
+        context.startActivity(facebookIntent);
     }
 
     @SuppressLint("WrongConstant")
@@ -72,7 +72,7 @@ public class Social {
             facebookIntent = new Intent("android.intent.action.VIEW", Uri.parse("https://www.facebook.com/" + pageId));
         }
         facebookIntent.setFlags(1074266112);
-        startActivity(context, facebookIntent);
+        context.startActivity(facebookIntent);
     }
 
     @SuppressLint("WrongConstant")
@@ -81,7 +81,7 @@ public class Social {
         intent.setData(Uri.parse("https://twitter.com/#!/" + twitterId));
         intent.setFlags(1074266112);
         searchActivity(context, "com.twitter.android", intent);
-        startActivity(context, intent);
+        context.startActivity(intent);
     }
 
     @SuppressLint("WrongConstant")
@@ -90,7 +90,7 @@ public class Social {
         intent.setData(Uri.parse("https://plus.google.com/" + gplusId + "/posts"));
         intent.setFlags(1074266112);
         searchActivity(context, "com.google.android.apps.plus", intent);
-        startActivity(context, intent);
+        context.startActivity(intent);
     }
 
     @SuppressLint("WrongConstant")
@@ -100,39 +100,31 @@ public class Social {
         intent.setFlags(1074266112);
         if (!searchActivity(context, "com.google.android.apps.plus", intent)) {
         }
-        startActivity(context, intent);
+        context.startActivity(intent);
     }
 
     @SuppressLint("WrongConstant")
-    public static void openGoogleGroup(Context context, String groupId) {
+    public static void openGoogleGroup(@NonNull Context context, String groupId) {
         Intent intent = new Intent("android.intent.action.VIEW");
         intent.setData(Uri.parse("https://groups.google.com/group/" + groupId));
         intent.setFlags(1074266112);
-        startActivity(context, intent);
+        context.startActivity(intent);
     }
 
     @SuppressLint("WrongConstant")
-    public static void openPlayPage(Context context, String packageName, String linkId) {
+    public static void openPlayPage(@NonNull Context context, String packageName, String linkId) {
         Intent intent = new Intent("android.intent.action.VIEW");
         intent.setData(Uri.parse("market://details?id=" + packageName + "&referrer=utm_source%3D" + packageName + "%26utm_medium%3Dinapplink%26utm_campaign%3D" + linkId));
         intent.setFlags(1074266112);
-        startActivity(context, intent);
+        context.startActivity(intent);
     }
 
-    public static void sendEmail(Context context, String receipient, String subject, String message) {
+    public static void sendEmail(@NonNull Context context, String receipient, String subject, String message) {
         Intent intent = new Intent("android.intent.action.SEND");
         intent.setType("message/rfc822");
         intent.putExtra("android.intent.extra.EMAIL", new String[]{receipient});
         intent.putExtra("android.intent.extra.SUBJECT", "App UI Designer Feedback");
         intent.putExtra("android.intent.extra.TEXT", message);
-        startActivity(context, intent);
-    }
-
-    private static void startActivity(Context context, Intent intent) {
-        try {
-            context.startActivity(intent);
-        } catch (Throwable th) {
-            th.printStackTrace();
-        }
+        context.startActivity(intent);
     }
 }

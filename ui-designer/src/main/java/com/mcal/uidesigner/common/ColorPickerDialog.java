@@ -1,5 +1,7 @@
 package com.mcal.uidesigner.common;
 
+import static com.mcal.uidesigner.utils.Utils.toHexColor;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.text.Editable;
@@ -10,6 +12,7 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.uidesigner.R;
 import com.mcal.uidesigner.view.ColorPickerView;
 
@@ -37,7 +40,7 @@ public class ColorPickerDialog extends MessageBox {
     }
 
     public ColorPickerDialog(String title, int color, ColorRunnable ok) {
-        oldHexColor = ColorPickerView.toHexColor(color);
+        oldHexColor = toHexColor(color);
         newHexColor = oldHexColor;
         newColor = color;
         this.ok = ok;
@@ -79,11 +82,14 @@ public class ColorPickerDialog extends MessageBox {
             public void afterTextChanged(Editable p1) {
             }
         });
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setView(layout).setCancelable(true).setPositiveButton(android.R.string.ok, (dialog, id) -> {
+        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity);
+        builder.setView(layout);
+        builder.setCancelable(true);
+        builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
             dialog.dismiss();
             ok.run(newColor, newHexColor);
-        }).setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.cancel());
+        });
+        builder.setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.cancel());
         if (allowsNone) {
             builder.setNeutralButton("None", (dialog, which) -> ok.run(0, null));
         }
