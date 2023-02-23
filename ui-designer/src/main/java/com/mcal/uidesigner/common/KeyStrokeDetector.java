@@ -1,7 +1,6 @@
 package com.mcal.uidesigner.common;
 
 import android.content.Context;
-import android.os.Build;
 import android.provider.Settings;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
@@ -36,28 +35,23 @@ public class KeyStrokeDetector {
 
 
     public KeyStrokeDetector(@NonNull Context context) {
-        boolean z = true;
         this.context = context;
-        this.isSoftKeyboard = context.getResources().getConfiguration().keyboard != 1 ? false : z;
-        d("new KeyStrokeDetector() - isSoftKeyboard: " + this.isSoftKeyboard);
+        isSoftKeyboard = context.getResources().getConfiguration().keyboard == 1;
+        d("new KeyStrokeDetector() - isSoftKeyboard: " + isSoftKeyboard);
     }
 
     public void onConfigChange(@NonNull Context context) {
-        boolean z = true;
-        if (context.getResources().getConfiguration().keyboard != 1) {
-            z = false;
-        }
-        this.isSoftKeyboard = z;
-        d("KeyStrokeDetector.onConfigChange() - isSoftKeyboard: " + this.isSoftKeyboard);
-        this.keyCharacterMap = null;
+        isSoftKeyboard = context.getResources().getConfiguration().keyboard == 1;
+        d("KeyStrokeDetector.onConfigChange() - isSoftKeyboard: " + isSoftKeyboard);
+        keyCharacterMap = null;
     }
 
     public void newWordStarted() {
-        this.lastComposingTextLength = 0;
+        lastComposingTextLength = 0;
     }
 
     public boolean isCtrlKeyDown() {
-        return this.ctrlLeftDown || this.ctrlRightDown;
+        return ctrlLeftDown || ctrlRightDown;
     }
 
     public InputConnection createInputConnection(final View view, final KeyStrokeHandler keyStrokeHandler) {
@@ -70,7 +64,7 @@ public class KeyStrokeDetector {
 
             @Override
             public boolean setComposingText(CharSequence text, int newCursorPosition) {
-                KeyStrokeDetector.this.d("setComposingText '" + ((Object) text) + "'");
+                d("setComposingText '" + text + "'");
                 for (int i = 0; i < lastComposingTextLength; i++) {
                     keyStrokeHandler.onKeyStroke(new KeyStroke(67, false, false, false));
                 }
@@ -111,14 +105,9 @@ public class KeyStrokeDetector {
 
             @Override
             public boolean commitText(CharSequence text, int newCursorPosition) {
-                d("commitText '" + ((Object) text) + "'");
-                if (Build.VERSION.SDK_INT >= 17) {
-                    for (int i = 0; i < lastComposingTextLength; i++) {
-                        keyStrokeHandler.onKeyStroke(new KeyStroke(67, false, false, false));
-                    }
-                } else if (lastComposingTextLength > 0 && text.length() == 1 && text.charAt(0) == ' ') {
-                    lastComposingTextLength = 0;
-                    return true;
+                d("commitText '" + text + "'");
+                for (int i = 0; i < lastComposingTextLength; i++) {
+                    keyStrokeHandler.onKeyStroke(new KeyStroke(67, false, false, false));
                 }
                 lastComposingTextLength = 0;
                 if ("\n".equals(text.toString())) {
@@ -151,12 +140,12 @@ public class KeyStrokeDetector {
                     }
 
                     if (keyStrokeHandler2 != null) {
-                        keyStrokeHandler2.onKeyStroke(KeyStrokeDetector.this.makeKeyStroke(ch));
+                        keyStrokeHandler2.onKeyStroke(makeKeyStroke(ch));
                     }
                 }
             }
 
-            private void sendAsKeyEvents(CharSequence text, boolean isSoftKeyboard, View view2) {
+            private void sendAsKeyEvents(CharSequence text, boolean isSoftKeyboard, View view) {
                 if (keyCharacterMap == null) {
                     keyCharacterMap = KeyCharacterMap.load(0);
                 }
@@ -181,7 +170,16 @@ public class KeyStrokeDetector {
             @NonNull
             @Contract("_ -> new")
             private KeyEvent transformEvent(@NonNull KeyEvent event) {
-                return new KeyEvent(event.getDownTime(), event.getEventTime(), event.getAction(), event.getKeyCode(), event.getRepeatCount(), event.getMetaState(), event.getDeviceId(), event.getScanCode(), event.getFlags() | 4 | 2);
+                return new KeyEvent(
+                        event.getDownTime(),
+                        event.getEventTime(),
+                        event.getAction(),
+                        event.getKeyCode(),
+                        event.getRepeatCount(),
+                        event.getMetaState(),
+                        event.getDeviceId(),
+                        event.getScanCode(),
+                        event.getFlags() | 4 | 2);
             }
 
             @Override
@@ -212,10 +210,7 @@ public class KeyStrokeDetector {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                if (defaultInputMethodName == null || !defaultInputMethodName.startsWith("com.sonyericsson.")) {
-                    return false;
-                }
-                return true;
+                return defaultInputMethodName != null && defaultInputMethodName.startsWith("com.sonyericsson.");
             }
         };
     }
@@ -226,11 +221,7 @@ public class KeyStrokeDetector {
         if (keyCode == 84) {
             keyCode = 57;
         }
-        if ((event.getFlags() & 2) != 0) {
-            z = true;
-        } else {
-            z = false;
-        }
+        z = (event.getFlags() & 2) != 0;
         handleMetaKeysDown(keyCode, z);
         KeyStroke keyStroke = makeKeyStroke(keyCode, event);
         if (keyStroke == null || !keyStrokeHandler.onKeyStroke(keyStroke)) {
@@ -244,7 +235,7 @@ public class KeyStrokeDetector {
     }
 
     private void debugOnKeyStroke(@NonNull KeyStroke keyStroke) {
-        d("onKeyStroke " + keyStroke.toString());
+        d("onKeyStroke " + keyStroke);
     }
 
     private void debugOnKey(String method, int keyCode, @NonNull KeyEvent event) {
@@ -261,17 +252,13 @@ public class KeyStrokeDetector {
         if (keyCode == 84) {
             keyCode = 57;
         }
-        if ((event.getFlags() & 2) != 0) {
-            z = true;
-        } else {
-            z = false;
-        }
+        z = (event.getFlags() & 2) != 0;
         handleMetaKeysUp(keyCode, z);
         return keyCode == 84;
     }
 
     public KeyStroke makeKeyStroke(char ch) {
-        return new KeyStroke(-1, ch, Character.isUpperCase(ch) | this.realShiftLeftDown | this.realShiftRightDown, false, false);
+        return new KeyStroke(-1, ch, Character.isUpperCase(ch) | realShiftLeftDown | realShiftRightDown, false, false);
     }
 
     @Nullable
@@ -288,9 +275,9 @@ public class KeyStrokeDetector {
             case 114:
                 return null;
             default:
-                boolean shift = this.shiftLeftDown | this.shiftRightDown | event.isShiftPressed();
-                boolean ctrl = this.ctrlLeftDown | this.ctrlRightDown | isCtrl(event.getMetaState());
-                boolean alt = this.altLeftDown | this.altRightDown | event.isAltPressed();
+                boolean shift = shiftLeftDown | shiftRightDown | event.isShiftPressed();
+                boolean ctrl = ctrlLeftDown | ctrlRightDown | isCtrl(event.getMetaState());
+                boolean alt = altLeftDown | altRightDown | event.isAltPressed();
                 char ch = 65535;
                 int chi = event.getUnicodeChar();
                 if (chi != 0 && !Character.isISOControl(chi)) {
@@ -311,135 +298,81 @@ public class KeyStrokeDetector {
     private void handleMetaKeysDown(int keyCode, boolean isSoftKeyboard) {
         boolean z;
         boolean z2;
-        boolean z3;
-        boolean z4;
-        boolean z5;
-        boolean z6;
-        boolean z7;
-        boolean z8 = true;
         d("onMetaKeysDown " + keyCode);
-        this.altLeftDown = (keyCode == 57) | this.altLeftDown;
-        boolean z9 = this.altRightDown;
-        if (keyCode == 58) {
-            z = true;
-        } else {
-            z = false;
-        }
-        this.altRightDown = z | z9;
-        boolean z10 = this.shiftLeftDown;
-        if (keyCode == 59) {
-            z2 = true;
-        } else {
-            z2 = false;
-        }
-        this.shiftLeftDown = z2 | z10;
-        boolean z11 = this.shiftRightDown;
-        if (keyCode == 60) {
-            z3 = true;
-        } else {
-            z3 = false;
-        }
-        this.shiftRightDown = z3 | z11;
-        boolean z12 = this.realShiftLeftDown;
-        if (keyCode != 59 || isSoftKeyboard) {
-            z4 = false;
-        } else {
-            z4 = true;
-        }
-        this.realShiftLeftDown = z4 | z12;
-        boolean z13 = this.realShiftRightDown;
-        if (keyCode != 60 || isSoftKeyboard) {
-            z5 = false;
-        } else {
-            z5 = true;
-        }
-        this.realShiftRightDown = z5 | z13;
-        boolean z14 = this.unknownDown;
-        if (keyCode == 0) {
-            z6 = true;
-        } else {
-            z6 = false;
-        }
-        this.unknownDown = z6 | z14;
-        boolean z15 = this.ctrlLeftDown;
-        if (keyCode == 113) {
-            z7 = true;
-        } else {
-            z7 = false;
-        }
-        this.ctrlLeftDown = z7 | z15;
-        boolean z16 = this.ctrlRightDown;
-        if (keyCode != 114) {
-            z8 = false;
-        }
-        this.ctrlRightDown = z16 | z8;
+
+        altLeftDown = (keyCode == 57) | altLeftDown;
+
+        z = altRightDown;
+        z2 = keyCode == 58;
+        altRightDown = z2 | z;
+
+        z = shiftLeftDown;
+        z2 = keyCode == 59;
+        shiftLeftDown = z2 | z;
+
+        z = shiftRightDown;
+        z2 = keyCode == 60;
+        shiftRightDown = z2 | z;
+
+        z = realShiftLeftDown;
+        z2 = keyCode == 59 && !isSoftKeyboard;
+        realShiftLeftDown = z2 | z;
+
+        z = realShiftRightDown;
+        z2 = keyCode == 60 && !isSoftKeyboard;
+        realShiftRightDown = z2 | z;
+
+        z = unknownDown;
+        z2 = keyCode == 0;
+        unknownDown = z2 | z;
+
+        z = ctrlLeftDown;
+        z2 = keyCode == 113;
+        ctrlLeftDown = z2 | z;
+
+        z = ctrlRightDown;
+        z2 = keyCode == 114;
+        ctrlRightDown = z2 | z;
     }
 
     private void handleMetaKeysUp(int keyCode, boolean isSoftKeyboard) {
         boolean z;
         boolean z2;
-        boolean z3;
-        boolean z4;
-        boolean z5;
-        boolean z6;
-        boolean z7;
-        boolean z8 = true;
         d("onMetaKeysUp " + keyCode);
-        this.altLeftDown = (keyCode != 57) & this.altLeftDown;
-        boolean z9 = this.altRightDown;
-        if (keyCode != 58) {
-            z = true;
-        } else {
-            z = false;
-        }
-        this.altRightDown = z & z9;
-        boolean z10 = this.shiftLeftDown;
-        if (keyCode != 59) {
-            z2 = true;
-        } else {
-            z2 = false;
-        }
-        this.shiftLeftDown = z2 & z10;
-        boolean z11 = this.shiftRightDown;
-        if (keyCode != 60) {
-            z3 = true;
-        } else {
-            z3 = false;
-        }
-        this.shiftRightDown = z3 & z11;
-        boolean z12 = this.realShiftLeftDown;
-        if (keyCode != 59 || isSoftKeyboard) {
-            z4 = true;
-        } else {
-            z4 = false;
-        }
-        this.realShiftLeftDown = z4 & z12;
-        boolean z13 = this.realShiftRightDown;
-        if (keyCode != 60 || isSoftKeyboard) {
-            z5 = true;
-        } else {
-            z5 = false;
-        }
-        this.realShiftRightDown = z5 & z13;
-        boolean z14 = this.unknownDown;
-        if (keyCode != 0) {
-            z6 = true;
-        } else {
-            z6 = false;
-        }
-        this.unknownDown = z6 & z14;
-        boolean z15 = this.ctrlLeftDown;
-        if (keyCode != 113) {
-            z7 = true;
-        } else {
-            z7 = false;
-        }
-        this.ctrlLeftDown = z7 & z15;
-        boolean z16 = this.ctrlRightDown;
-        if (keyCode == 114) {
-            z8 = false;
-        }
-        this.ctrlRightDown = z16 & z8;
+
+        altLeftDown = (keyCode != 57) & altLeftDown;
+
+        z = altRightDown;
+        z2 = keyCode != 58;
+        altRightDown = z2 & z;
+
+        z = shiftLeftDown;
+        z2 = keyCode != 59;
+        shiftLeftDown = z2 & z;
+
+        z = shiftRightDown;
+        z2 = keyCode != 60;
+        shiftRightDown = z2 & z;
+
+        z = realShiftLeftDown;
+        z2 = keyCode != 59 || isSoftKeyboard;
+        realShiftLeftDown = z2 & z;
+
+        z = realShiftRightDown;
+        z2 = keyCode != 60 || isSoftKeyboard;
+        realShiftRightDown = z2 & z;
+
+        z = unknownDown;
+        z2 = keyCode != 0;
+        unknownDown = z2 & z;
+
+        z = ctrlLeftDown;
+        z2 = keyCode != 113;
+        ctrlLeftDown = z2 & z;
+
+        z = ctrlRightDown;
+        z2 = keyCode != 114;
+        ctrlRightDown = z2 & z;
     }
 
     public interface KeyStrokeHandler {

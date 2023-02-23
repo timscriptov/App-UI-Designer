@@ -59,7 +59,6 @@ public class SocialDialog extends MessageBox {
                 try {
                     return activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0).versionName;
                 } catch (PackageManager.NameNotFoundException e) {
-                    AppLog.e(e);
                     return "(version unknown)";
                 }
             }
@@ -117,7 +116,7 @@ public class SocialDialog extends MessageBox {
 
     @Override
     protected Dialog buildDialog(final Activity activity) {
-        LinearLayout layout = (LinearLayout) LayoutInflater.from(activity).inflate(R.layout.share_dialog, (ViewGroup) null);
+        LinearLayout layout = (LinearLayout) LayoutInflater.from(activity).inflate(R.layout.share_dialog, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setView(layout).setCancelable(true).setTitle(this.title);
         final AlertDialog dialog = builder.create();
@@ -128,8 +127,8 @@ public class SocialDialog extends MessageBox {
             }
         });
         ((TextView) layout.findViewById(R.id.shareDialogMessage)).setText(this.message);
-        final ListView listView = (ListView) layout.findViewById(R.id.shareDialogList);
-        listView.setAdapter((ListAdapter) new ShareEntryAdapter(activity, this.entries1));
+        final ListView listView = layout.findViewById(R.id.shareDialogList);
+        listView.setAdapter(new ShareEntryAdapter(activity, this.entries1));
         listView.setOnItemClickListener((parent, view, position, id) -> {
             SocialListEntry entry = (SocialListEntry) parent.getItemAtPosition(position);
             if (entry.dismiss) {
@@ -140,7 +139,7 @@ public class SocialDialog extends MessageBox {
                     }
                 } else {
                     isExpanded = true;
-                    listView.setAdapter((ListAdapter) new ShareEntryAdapter(activity, entries2));
+                    listView.setAdapter(new ShareEntryAdapter(activity, entries2));
                 }
             }
             if (entry.runnable != null) {
@@ -192,7 +191,7 @@ public class SocialDialog extends MessageBox {
             }
             SocialListEntry entry = getItem(position);
             ((TextView) view.findViewById(R.id.shareDialogEntryText)).setText(entry.label);
-            ImageView imageView = (ImageView) view.findViewById(R.id.shareDialogEntryImage);
+            ImageView imageView = view.findViewById(R.id.shareDialogEntryImage);
             if (entry.icon != 0) {
                 imageView.setImageResource(entry.icon);
             }

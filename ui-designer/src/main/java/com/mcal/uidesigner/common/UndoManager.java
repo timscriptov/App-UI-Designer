@@ -20,51 +20,51 @@ public class UndoManager {
     private final List<UndoRedoListener> listeners = new ArrayList<>();
 
     public void addListener(UndoRedoListener l) {
-        this.listeners.add(l);
+        listeners.add(l);
     }
 
     public void removeListener(UndoRedoListener l) {
-        this.listeners.remove(l);
+        listeners.remove(l);
     }
 
     public void addBaseVersion(String filepath, String content, int change) {
         if (filepath != null && !content.equals(getContent(filepath))) {
-            this.redoContents.clear();
-            this.contents.push(new Change(filepath, content, change));
+            redoContents.clear();
+            contents.push(new Change(filepath, content, change));
             fireUndoRedoStateChange();
         }
     }
 
     public void addVersion(String filepath, String content, int change) {
         if (filepath != null) {
-            this.redoContents.clear();
-            this.contents.push(new Change(filepath, content, change));
+            redoContents.clear();
+            contents.push(new Change(filepath, content, change));
             fireUndoRedoStateChange();
         }
     }
 
     public void load(@NonNull Bundle bundle) {
-        this.contents.clear();
+        contents.clear();
         List<Change> undo = bundle.getParcelableArrayList("undo");
         if (undo != null) {
-            this.contents.addAll(undo);
+            contents.addAll(undo);
         }
-        this.redoContents.clear();
+        redoContents.clear();
         ArrayList<Change> redo = bundle.getParcelableArrayList("redo");
         if (redo != null) {
-            this.redoContents.addAll(redo);
+            redoContents.addAll(redo);
         }
     }
 
     public void save(@NonNull Bundle bundle) {
-        bundle.putParcelableArrayList("undo", new ArrayList<>(this.contents));
-        bundle.putParcelableArrayList("redo", new ArrayList<>(this.redoContents));
+        bundle.putParcelableArrayList("undo", new ArrayList<>(contents));
+        bundle.putParcelableArrayList("redo", new ArrayList<>(redoContents));
     }
 
     public boolean canUndo() {
         Set<String> paths = new HashSet<>();
-        for (int i = this.contents.size() - 1; i >= 0; i--) {
-            String filepath = this.contents.get(i).filepath;
+        for (int i = contents.size() - 1; i >= 0; i--) {
+            String filepath = contents.get(i).filepath;
             if (paths.contains(filepath)) {
                 return true;
             }
@@ -74,38 +74,38 @@ public class UndoManager {
     }
 
     public boolean canRedo() {
-        return this.redoContents.size() > 0;
+        return redoContents.size() > 0;
     }
 
     public void redo() {
-        Change change = this.redoContents.pop();
-        this.contents.push(change);
+        Change change = redoContents.pop();
+        contents.push(change);
         fireUndoRedo(change);
     }
 
     public void undo() {
-        Change change = this.contents.pop();
-        this.redoContents.push(change);
+        Change change = contents.pop();
+        redoContents.push(change);
         fireUndoRedo(change);
     }
 
     private String getContent(String filepath) {
-        for (int i = this.contents.size() - 1; i >= 0; i--) {
-            if (this.contents.get(i).filepath.equals(filepath)) {
-                return this.contents.get(i).content;
+        for (int i = contents.size() - 1; i >= 0; i--) {
+            if (contents.get(i).filepath.equals(filepath)) {
+                return contents.get(i).content;
             }
         }
         return "";
     }
 
     private void fireUndoRedoStateChange() {
-        for (UndoRedoListener l : this.listeners) {
+        for (UndoRedoListener l : listeners) {
             l.undoRedoStateChanged();
         }
     }
 
     private void fireUndoRedo(Change change) {
-        for (UndoRedoListener l : this.listeners) {
+        for (UndoRedoListener l : listeners) {
             l.undoRedoStateChanged();
             l.revertToVersion(change.filepath, getContent(change.filepath), change.change);
         }
@@ -118,7 +118,7 @@ public class UndoManager {
     }
 
     public static class Change implements Parcelable {
-        public static final Parcelable.Creator<Change> CREATOR = new Parcelable.Creator<Change>() {
+        public static final Parcelable.Creator<Change> CREATOR = new Parcelable.Creator<>() {
 
             @NonNull
             @Contract("_ -> new")
@@ -156,9 +156,9 @@ public class UndoManager {
 
         @Override
         public void writeToParcel(@NonNull Parcel dest, int flags) {
-            dest.writeString(this.filepath);
-            dest.writeString(this.content);
-            dest.writeInt(this.change);
+            dest.writeString(filepath);
+            dest.writeString(content);
+            dest.writeInt(change);
         }
     }
 }

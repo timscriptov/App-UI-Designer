@@ -39,52 +39,58 @@ public class KeyStroke {
         if (split.length != 5) {
             return null;
         }
-        return new KeyStroke(Integer.parseInt(split[0]), (char) Integer.parseInt(split[1]), Boolean.parseBoolean(split[2]), Boolean.parseBoolean(split[3]), Boolean.parseBoolean(split[4]));
+        return new KeyStroke(
+                Integer.parseInt(split[0]),
+                (char) Integer.parseInt(split[1]),
+                Boolean.parseBoolean(split[2]),
+                Boolean.parseBoolean(split[3]),
+                Boolean.parseBoolean(split[4]));
     }
 
     public boolean isChar() {
-        return this.ch != 65535;
+        return ch != 65535;
     }
 
     public char getChar() {
-        return this.ch;
+        return ch;
     }
 
     public int getKeyCode() {
-        return this.keyCode;
+        return keyCode;
     }
 
     public boolean isShift() {
-        return this.shift;
+        return shift;
     }
 
     public boolean isCtrl() {
-        return this.ctrl;
+        return ctrl;
     }
 
     public boolean isAlt() {
-        return this.alt;
+        return alt;
     }
 
     public boolean matches(@NonNull KeyStroke pressedKeyStroke) {
-        if (this.alt != pressedKeyStroke.alt || this.ctrl != pressedKeyStroke.ctrl || this.shift != pressedKeyStroke.shift) {
+        if (alt != pressedKeyStroke.alt || ctrl != pressedKeyStroke.ctrl || shift != pressedKeyStroke.shift) {
             return false;
         }
-        if (this.keyCode == -1 || this.keyCode != pressedKeyStroke.keyCode) {
-            return this.ch != 65535 && this.ch == pressedKeyStroke.ch;
+        if (keyCode == -1 || keyCode != pressedKeyStroke.keyCode) {
+            return ch != 65535 && ch == pressedKeyStroke.ch;
         }
         return true;
     }
 
+    @NonNull
     public String toString() {
         String str = "";
-        if (this.shift) {
+        if (shift) {
             str = str + "Shift+";
         }
-        if (this.ctrl) {
+        if (ctrl) {
             str = str + "Ctrl+";
         }
-        if (this.alt) {
+        if (alt) {
             str = str + "Alt+";
         }
         return str + getDisplayLabel();
@@ -93,9 +99,9 @@ public class KeyStroke {
     @NonNull
     @SuppressLint("RestrictedApi")
     private String getDisplayLabel() {
-        switch (this.keyCode) {
+        switch (keyCode) {
             case -1:
-                return Character.toUpperCase(this.ch) + "";
+                return Character.toUpperCase(ch) + "";
             case TimeUtils.HUNDRED_DAY_FIELD_LEN:
                 return "Up";
             case ProxyTextView.INPUTTYPE_date:
@@ -127,20 +133,20 @@ public class KeyStroke {
             case 164:
                 return "VolMute";
             default:
-                String displayLabel = (KeyCharacterMap.load(0).getDisplayLabel(this.keyCode) + "").trim();
+                String displayLabel = (KeyCharacterMap.load(0).getDisplayLabel(keyCode) + "").trim();
                 if (displayLabel.length() > 0) {
                     return displayLabel;
                 }
-                String name = KeyEvent.keyCodeToString(this.keyCode).toLowerCase();
+                String name = KeyEvent.keyCodeToString(keyCode).toLowerCase();
                 if (name.startsWith("keycode_")) {
                     name = name.substring("keycode_".length());
                 }
-                String name2 = name.replace("_", " ");
-                return name2.substring(0, 1).toUpperCase() + name2.substring(1);
+                name = name.replace("_", " ");
+                return name.substring(0, 1).toUpperCase() + name.substring(1);
         }
     }
 
     public String store() {
-        return this.keyCode + "," + ((int) this.ch) + "," + this.shift + "," + this.ctrl + "," + this.alt;
+        return keyCode + "," + ((int) ch) + "," + shift + "," + ctrl + "," + alt;
     }
 }

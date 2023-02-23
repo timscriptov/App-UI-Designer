@@ -2,6 +2,7 @@ package com.mcal.uidesigner.common;
 
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -18,49 +19,66 @@ public class TextToSpeechHelper {
 
     public TextToSpeechHelper(Context context) {
         this.context = context;
-        this.langOperatorWords.put("en", new HashMap<>());
-        this.langOperatorWords.get("en").put("println", "printline");
-        this.langOperatorWords.get("en").put(";", "semicolon");
-        this.langOperatorWords.get("en").put("<", "less than");
-        this.langOperatorWords.get("en").put(">", "greater than");
-        this.langOperatorWords.get("en").put("< =", "less than or equal");
-        this.langOperatorWords.get("en").put("> =", "greater than or equal");
-        this.langOperatorWords.get("en").put("==", "equal equal");
-        this.langOperatorWords.get("en").put("!=", "not equal");
-        this.langOperatorWords.get("en").put("--", "minus minus");
-        this.langOperatorWords.get("en").put("++", "plus plus");
-        this.langOperatorWords.get("en").put("+", "plus");
-        this.langOperatorWords.get("en").put("-", "minus");
-        this.langOperatorWords.get("en").put("*", "star");
-        this.langOperatorWords.get("en").put("/", "slash");
-        this.langOperatorWords.put("de", new HashMap<>());
-        this.langOperatorWords.get("de").put("println", "printlein");
-        this.langOperatorWords.get("de").put(";", "Strichpunkt");
-        this.langOperatorWords.get("de").put("<", "kleiner als");
-        this.langOperatorWords.get("de").put(">", "grösser als");
-        this.langOperatorWords.get("de").put("< =", "kleiner gleich");
-        this.langOperatorWords.get("de").put("> =", "grösser gleich");
-        this.langOperatorWords.get("de").put("==", "gleich gleich");
-        this.langOperatorWords.get("de").put("!=", "ungleich");
-        this.langOperatorWords.get("de").put("--", "minus minus");
-        this.langOperatorWords.get("de").put("++", "plus plus");
-        this.langOperatorWords.get("de").put("+", "plus");
-        this.langOperatorWords.get("de").put("-", "minus");
-        this.langOperatorWords.get("de").put("*", "Stern");
-        this.langOperatorWords.get("de").put("/", "Strich");
+        langOperatorWords.put("en", new HashMap<>());
+        langOperatorWords.get("en").put("println", "printline");
+        langOperatorWords.get("en").put(";", "semicolon");
+        langOperatorWords.get("en").put("<", "less than");
+        langOperatorWords.get("en").put(">", "greater than");
+        langOperatorWords.get("en").put("< =", "less than or equal");
+        langOperatorWords.get("en").put("> =", "greater than or equal");
+        langOperatorWords.get("en").put("==", "equal equal");
+        langOperatorWords.get("en").put("!=", "not equal");
+        langOperatorWords.get("en").put("--", "minus minus");
+        langOperatorWords.get("en").put("++", "plus plus");
+        langOperatorWords.get("en").put("+", "plus");
+        langOperatorWords.get("en").put("-", "minus");
+        langOperatorWords.get("en").put("*", "star");
+        langOperatorWords.get("en").put("/", "slash");
+
+        langOperatorWords.put("de", new HashMap<>());
+        langOperatorWords.get("de").put("println", "printlein");
+        langOperatorWords.get("de").put(";", "Strichpunkt");
+        langOperatorWords.get("de").put("<", "kleiner als");
+        langOperatorWords.get("de").put(">", "grösser als");
+        langOperatorWords.get("de").put("< =", "kleiner gleich");
+        langOperatorWords.get("de").put("> =", "grösser gleich");
+        langOperatorWords.get("de").put("==", "gleich gleich");
+        langOperatorWords.get("de").put("!=", "ungleich");
+        langOperatorWords.get("de").put("--", "minus minus");
+        langOperatorWords.get("de").put("++", "plus plus");
+        langOperatorWords.get("de").put("+", "plus");
+        langOperatorWords.get("de").put("-", "minus");
+        langOperatorWords.get("de").put("*", "Stern");
+        langOperatorWords.get("de").put("/", "Strich");
+
+        langOperatorWords.put("ru", new HashMap<>());
+        langOperatorWords.get("ru").put("println", "принтлайн");
+        langOperatorWords.get("ru").put(";", "точка с запятой");
+        langOperatorWords.get("ru").put("<", "меньше");
+        langOperatorWords.get("ru").put(">", "больше");
+        langOperatorWords.get("ru").put("< =", "меньше или равно");
+        langOperatorWords.get("ru").put("> =", "больше или равно");
+        langOperatorWords.get("ru").put("==", "равно равно");
+        langOperatorWords.get("ru").put("!=", "не равно");
+        langOperatorWords.get("ru").put("--", "минус минус");
+        langOperatorWords.get("ru").put("++", "плюс плюс");
+        langOperatorWords.get("ru").put("+", "плюс");
+        langOperatorWords.get("ru").put("-", "минус");
+        langOperatorWords.get("ru").put("*", "звёздочка");
+        langOperatorWords.get("ru").put("/", "слеш");
     }
 
     public void shutdown() {
-        for (LanguageTTS tts : this.langTTS.values()) {
+        for (LanguageTTS tts : langTTS.values()) {
             tts.shutdown();
         }
     }
 
     public void speak(String language, String html) {
-        if (!this.langTTS.containsKey(language)) {
-            this.langTTS.put(language, new LanguageTTS(language));
+        if (!langTTS.containsKey(language)) {
+            langTTS.put(language, new LanguageTTS(language));
         }
-        this.langTTS.get(language).speak(html);
+        langTTS.get(language).speak(html);
     }
 
 
@@ -72,7 +90,7 @@ public class TextToSpeechHelper {
         private String ttsText;
 
         public LanguageTTS(String language) {
-            this.ttsLanguage = language;
+            ttsLanguage = language;
             Locale[] arr = Locale.getAvailableLocales();
             int len = arr.length;
             int i = 0;
@@ -81,18 +99,18 @@ public class TextToSpeechHelper {
                     break;
                 }
                 Locale l = arr[i];
-                if (this.ttsLanguage.equals(l.getLanguage())) {
-                    this.ttsLocale = l;
+                if (ttsLanguage.equals(l.getLanguage())) {
+                    ttsLocale = l;
                     break;
                 }
                 i++;
             }
-            if (this.ttsLocale != null) {
-                this.tts = new TextToSpeech(context, p1 -> {
+            if (ttsLocale != null) {
+                tts = new TextToSpeech(context, p1 -> {
                     initialized = true;
                     if (tts != null) {
                         int isLanguageAvailable = tts.isLanguageAvailable(ttsLocale);
-                        AppLog.d(ttsLocale + " TTS available: " + isLanguageAvailable);
+                        Log.d("LanguageTTS", ttsLocale + " TTS available: " + isLanguageAvailable);
                         if (isLanguageAvailable == -1) {
                             tts.shutdown();
                             tts = null;
@@ -113,24 +131,24 @@ public class TextToSpeechHelper {
         }
 
         public void shutdown() {
-            if (this.tts != null) {
-                this.tts.shutdown();
+            if (tts != null) {
+                tts.shutdown();
             }
         }
 
         public void speak(String html) {
             String text = cleanHtml(html);
-            if (!this.initialized || this.tts == null) {
-                this.ttsText = text;
+            if (!initialized || tts == null) {
+                ttsText = text;
             } else {
-                this.tts.speak(text, 0, null);
+                tts.speak(text, 0, null);
             }
         }
 
         @NonNull
         private String cleanHtml(@NonNull String html) {
             String text = html.replace("&lt;", "<").replace("&gt;", ">").replace("&quot;", "");
-            Map<String, String> words = (Map) langOperatorWords.get(this.ttsLanguage);
+            Map<String, String> words = langOperatorWords.get(ttsLanguage);
             if (words != null) {
                 for (Map.Entry<String, String> entry : words.entrySet()) {
                     text = text.replace("<b>" + entry.getKey() + "</b>", entry.getValue()).replace(" " + entry.getKey() + " ", entry.getValue());

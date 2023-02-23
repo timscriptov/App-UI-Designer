@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 
@@ -37,16 +38,16 @@ public class TrainerLogo extends Drawable {
     @Override
     public void draw(@NonNull Canvas canvas) {
         Paint paint = new Paint();
-        paint.setColor(-13421773);
+        paint.setColor(0xFFCCCCCD);
         paint.setAntiAlias(true);
         paint.setTextSize(40.0f);
         paint.setTypeface(Typeface.DEFAULT_BOLD);
-        canvas.drawText(this.text[0], 120.0f, 40.0f, paint);
+        canvas.drawText(text[0], 120.0f, 40.0f, paint);
         paint.setTextSize(35.0f);
         paint.setTypeface(Typeface.DEFAULT);
-        canvas.drawText(this.text[1], 120.0f, 90.0f, paint);
-        this.icon.setBounds(0, 0, 100, 100);
-        this.icon.draw(canvas);
+        canvas.drawText(text[1], 120.0f, 90.0f, paint);
+        icon.setBounds(0, 0, 100, 100);
+        icon.draw(canvas);
     }
 
     @Override
@@ -69,6 +70,6 @@ public class TrainerLogo extends Drawable {
 
     @Override
     public int getOpacity() {
-        return -1;
+        return PixelFormat.OPAQUE;
     }
 }
