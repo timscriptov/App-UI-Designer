@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mcal.uidesigner.R;
 
 import org.jetbrains.annotations.Contract;
@@ -45,13 +46,14 @@ public class SocialDialog extends MessageBox {
         entries1.add(new SocialListEntry(R.drawable.ic_email, "Google+", () -> Social.openGooglePlusPage(activity, "101304250883271700981")));
         entries1.add(new SocialListEntry(R.drawable.ic_email, "Twitter", () -> Social.openTwitterPage(activity, "AndroidIDE")));
         entries1.add(new SocialListEntry(R.drawable.ic_email, "Facebook", () -> Social.openFacebookPage(activity, "239564276138537")));
+
         List<SocialListEntry> entries2 = new ArrayList<>(entries1);
         entries2.add(new SocialListEntry(R.drawable.ic_email, "G+ Community", () -> SocialDialog.openGooglePlusCommunity(activity)));
         entries2.add(new SocialListEntry(R.drawable.ic_email, "Google Group", () -> Social.openGoogleGroup(activity, "android-ide")));
         entries2.add(new SocialListEntry(R.drawable.ic_email, "Email", new Runnable() {
             @Override
             public void run() {
-                Social.sendEmail(activity, "support@appfour.com", "App UI Designer Feedback", "With App UI Designer " + getVersionString() + " " + getOnMyDeviceString() + " (SDK " + Build.VERSION.SDK_INT + ")...\n\n[Write text here]");
+                Social.sendEmail(activity, "timscriptov@gmail.com", "App UI Designer Feedback", "With App UI Designer " + getVersionString() + " " + getOnMyDeviceString() + " (SDK " + Build.VERSION.SDK_INT + ")...\n\n[Write text here]");
             }
 
             private String getVersionString() {
@@ -116,7 +118,7 @@ public class SocialDialog extends MessageBox {
     @Override
     protected Dialog buildDialog(final Activity activity) {
         LinearLayout layout = (LinearLayout) LayoutInflater.from(activity).inflate(R.layout.share_dialog, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity);
         builder.setView(layout).setCancelable(true).setTitle(this.title);
         final AlertDialog dialog = builder.create();
         dialog.setCanceledOnTouchOutside(true);
@@ -192,10 +194,10 @@ public class SocialDialog extends MessageBox {
             SocialListEntry entry = getItem(position);
             ((TextView) view.findViewById(R.id.shareDialogEntryText)).setText(entry.label);
             ImageView imageView = view.findViewById(R.id.shareDialogEntryImage);
-            if (entry.icon != View.GONE) {
+            if (entry.icon != View.VISIBLE) {
                 imageView.setImageResource(entry.icon);
             }
-            if (entry.icon == View.GONE) {
+            if (entry.icon == View.VISIBLE) {
                 i = View.INVISIBLE;
             }
             imageView.setVisibility(i);

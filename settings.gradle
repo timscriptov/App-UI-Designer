@@ -6,10 +6,82 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
+    def latestFastAdapterRelease = "5.7.0"
+    def smali_version = "2.5.2"
+    def jetpack_version = '2.5.1'
+    def text_edit = "0.21.0"
+
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
+    }
+    versionCatalogs {
+        jetpack {
+            library('core', 'androidx.core:core-ktx:1.9.0')
+            library('appcompat', 'androidx.appcompat:appcompat:1.6.1')
+            library('preference', 'androidx.preference:preference-ktx:1.2.0')
+            library('mvvm_vm', "androidx.lifecycle:lifecycle-viewmodel-ktx:$jetpack_version")
+            library('mvvm_ld', "androidx.lifecycle:lifecycle-livedata-ktx:$jetpack_version")
+            library('lifecycle', "androidx.lifecycle:lifecycle-runtime-ktx:$jetpack_version")
+            library('fragment', "androidx.navigation:navigation-fragment:$jetpack_version")
+            library('navigation', "androidx.navigation:navigation-ui:$jetpack_version")
+            library('material', 'com.google.android.material:material:1.8.0')
+            library('constraint', "androidx.constraintlayout:constraintlayout:2.1.4")
+            library('coordinatorlayout', "androidx.coordinatorlayout:coordinatorlayout:1.2.0")
+            library('vp2', "androidx.viewpager2:viewpager2:1.0.0")
+            library('cardview', "androidx.cardview:cardview:1.0.0")
+            library('preferences', "androidx.datastore:datastore-preferences:1.0.0")
+            library('preferences_core', "androidx.datastore:datastore-preferences-core:1.0.0")
+        }
+
+        google {
+            library('play', 'com.google.android.gms:play-services-base:18.1.0')
+        }
+
+        ui {
+            library('fastadapter', "com.mikepenz:fastadapter:${latestFastAdapterRelease}")
+            library('fastadapter_binding', "com.mikepenz:fastadapter-extensions-binding:${latestFastAdapterRelease}") // view binding helpers
+            library('imageview', 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0')
+
+        }
+
+        signing {
+            library('spongy_core', 'com.madgag.spongycastle:core:1.58.0.0')
+            library('spongy_prov', 'com.madgag.spongycastle:prov:1.58.0.0')
+        }
+
+        misc {
+            library('leaks', 'com.squareup.leakcanary:leakcanary-android:2.9.1')
+            library('commons_cli', 'commons-cli:commons-cli:1.5.0')
+            library('commons_lang', "org.apache.commons:commons-lang3:3.12.0")
+            library('commons_io', "commons-io:commons-io:2.11.0")
+            library('commons_text', "org.apache.commons:commons-text:1.9")
+            library('guava', 'com.google.guava:guava:31.0.1-android')
+            library('antlr', "org.antlr:antlr-runtime:3.5.2")
+            library('annotations', 'org.jetbrains:annotations:24.0.0')
+            library('annotations_android', 'androidx.annotation:annotation:1.5.0')
+            library('coroutines_core', "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
+            library('coroutines_java', "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.1")
+            library('net', 'com.squareup.okhttp3:okhttp:4.10.0')
+            library('gson', 'com.google.code.gson:gson:2.9.1')
+            library('util_codex', 'com.blankj:utilcodex:1.30.6')
+        }
+
+        rosemoe {
+            library('editor', "io.github.Rosemoe.sora-editor:editor:${text_edit}")
+            library('language_java', "io.github.Rosemoe.sora-editor:language-java:${text_edit}")
+            library('textmate', "io.github.Rosemoe.sora-editor:language-textmate:${text_edit}")
+            library('lsp', "io.github.Rosemoe.sora-editor:editor-lsp:${text_edit}")
+
+        }
+
+        tools {
+            library('apktool', "com.github.TimScriptov:Android-ApkTool-Library:2.7.0.3")
+            library('dexlib2', "org.smali:dexlib2:${smali_version}")
+            library('smali', "org.smali:smali:${smali_version}")
+            library('baksmali', "org.smali:baksmali:${smali_version}")
+        }
     }
 }
 

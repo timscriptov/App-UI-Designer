@@ -320,8 +320,8 @@ public class XmlLayoutWidgetPicker {
         NumberPicker("NumberPicker", "Advanced Widget"),
         RatingBar("RatingBar", "Advanced Widget"),
         // Android SDK: Adapter View
-        ListView("List View", "Adapter View", "ListView", new String[0]),
-        ExpandableListView("Expandable List View", "Adapter View", "ExpandableListView", new String[0]),
+        ListView("List View", "Adapter View", "ListView"),
+        ExpandableListView("Expandable List View", "Adapter View", "ExpandableListView"),
         Spinner("Spinner", "Adapter View"),
         // Android SDK: Layout
         RelativeLayout("RelativeLayout", "Layout"),
@@ -339,8 +339,8 @@ public class XmlLayoutWidgetPicker {
         TableRow("TableRow", "Advanced Layout"),
         AbsoluteLayout("AbsoluteLayout", "Advanced Layout"),
         // Android V4: App Layout
-        DrawerLayout("Drawer Layout", "App Layout", "android.support.v4.widget.DrawerLayout", new String[0]),
-        ViewPager("View Pager", "App Layout", "android.support.v4.widget.ViewPager", new String[0]);
+        DrawerLayout("Drawer Layout", "App Layout", "android.support.v4.widget.DrawerLayout"),
+        ViewPager("View Pager", "App Layout", "android.support.v4.widget.ViewPager");
 
         private final Map<String, String> attributes;
         private final String category;
@@ -349,11 +349,11 @@ public class XmlLayoutWidgetPicker {
         private final WidgetPreview preview;
 
         Widget(String name, String category) {
-            this(name, category, name, new String[0]);
+            this(name, category, name);
         }
 
         Widget(String name, String category, WidgetPreview preview) {
-            this(name, category, preview, name, new String[0]);
+            this(name, category, preview, name);
         }
 
         Widget(String name, String category, String elementName, String... attributes) {
@@ -463,16 +463,16 @@ public class XmlLayoutWidgetPicker {
             View preview = widget.createPreview(context);
             TextView nameView = view.findViewById(R.id.widgetlistName);
             nameView.setText(widget.getName());
-            nameView.setVisibility(preview == null ? 0 : 8);
+            nameView.setVisibility(preview == null ? View.VISIBLE : View.GONE);
             ViewGroup previewContainer = view.findViewById(R.id.widgetlistPreview);
-            previewContainer.setVisibility(preview != null ? 0 : 8);
+            previewContainer.setVisibility(preview != null ? View.VISIBLE : View.GONE);
             previewContainer.removeAllViews();
             if (preview != null) {
                 previewContainer.addView(preview, new ViewGroup.LayoutParams(-2, -2));
             }
             final String helpUrl = widget.getHelpUrl();
             View helpView = view.findViewById(R.id.widgetlistHelp);
-            helpView.setVisibility(helpUrl == null ? 8 : 0);
+            helpView.setVisibility(helpUrl == null ? View.GONE : View.VISIBLE);
             if (helpUrl != null) {
                 helpView.setOnClickListener(v -> ((XmlLayoutDesignActivity) context).showHelp(helpUrl));
             }
@@ -501,7 +501,7 @@ public class XmlLayoutWidgetPicker {
 
         @Override
         public long getGroupId(int groupPosition) {
-            return (long) groupPosition;
+            return groupPosition;
         }
 
         @Override

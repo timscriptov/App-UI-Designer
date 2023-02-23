@@ -18,7 +18,7 @@ public class PropertyObject {
             try {
                 Object setterObj = obj;
                 if (property.setterProxyClass != null && (setterObj = setterObjects.get(property.setterProxyClass)) == null) {
-                    setterObj = property.setterProxyClass.getConstructor(new Class[]{Object.class}).newInstance(new Object[]{this.obj});
+                    setterObj = property.setterProxyClass.getConstructor(new Class[]{Object.class}).newInstance(this.obj);
                     setterObjects.put(property.setterProxyClass, setterObj);
                 }
                 if (property.setterName.endsWith("()")) {
@@ -27,7 +27,7 @@ public class PropertyObject {
                         valueType = property.constantClass;
                     }
                     String methodName = property.setterName.substring(0, property.setterName.length() - 2);
-                    setterObj.getClass().getMethod(methodName, new Class[]{valueType}).invoke(setterObj, new Object[]{value});
+                    setterObj.getClass().getMethod(methodName, new Class[]{valueType}).invoke(setterObj, value);
                     return;
                 }
                 setterObj.getClass().getField(property.setterName).set(setterObj, value);

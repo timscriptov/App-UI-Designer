@@ -41,7 +41,7 @@ dependencies {
     implementation jetpack.material
 
     implementation ui.fastadapter
-    implementation ui.fastadapter_binding
+    implementation ui.fastadapter.binding
 
     implementation misc.annotations
 }
