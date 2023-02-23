@@ -45,13 +45,13 @@ dependencies {
     implementation jetpack.constraint
 
     implementation jetpack.core
-    implementation 'com.google.android.gms:play-services-basement:18.1.0'
-    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation google.play
+    implementation jetpack.swiperefreshlayout
 
-    implementation "androidx.datastore:datastore-preferences:1.0.0"
-    implementation "androidx.datastore:datastore-preferences-core:1.0.0"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
+    implementation jetpack.preferences
+    implementation jetpack.preferences.core
+    implementation jetpack.lifecycle
+    implementation misc.coroutines.core
 }
 
 afterEvaluate {

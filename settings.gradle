@@ -33,6 +33,7 @@ dependencyResolutionManagement {
             library('cardview', "androidx.cardview:cardview:1.0.0")
             library('preferences', "androidx.datastore:datastore-preferences:1.0.0")
             library('preferences_core', "androidx.datastore:datastore-preferences-core:1.0.0")
+            library('swiperefreshlayout', "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
         }
 
         google {
