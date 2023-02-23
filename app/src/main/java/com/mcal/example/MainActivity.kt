@@ -1,6 +1,5 @@
 package com.mcal.example
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -71,19 +70,30 @@ class MainActivity : AppCompatActivity() {
         fastApkAdapter.onClickListener =
             { _: View?, _: IAdapter<LayoutAdapters>, mainMenuItem: LayoutAdapters, _: Int ->
                 mainMenuItem.itemTitle?.let {
-                    startUIDesigner(File(getLayoutDir(), it).path)
+                    XmlLayoutDesignActivity.show(
+                        this,
+                        "xml",
+                        File(getLayoutDir(), it).path,
+                        false,
+                        false
+                    )
+
+//                    XmlLayoutDesignActivity.showTrainer(
+//                        this,
+//                        "xml",
+//                        File(getLayoutDir(), it).path,
+//                        13,
+//                        arrayOf("Hi", "Hello", "Hey"),
+//                        "en",
+//                        "Trainer Task",
+//                        "Layout Viewer",
+//                        "Run",
+//                        "Run 1",
+//                        true,
+//                        true
+//                    )
                 }
                 true
             }
-    }
-
-    private fun startUIDesigner(layoutPath: String) {
-        val intent = Intent(this, XmlLayoutDesignActivity::class.java)
-        intent.putExtra(XmlLayoutDesignActivity.EXTRA_FILE, layoutPath)
-        intent.putExtra(XmlLayoutDesignActivity.EXTRA_LANGUAGE, "xml")
-        intent.putExtra(XmlLayoutDesignActivity.EXTRA_DEMO, false)
-        intent.putExtra(XmlLayoutDesignActivity.EXTRA_STANDALONE, false)
-        intent.putExtra(XmlLayoutDesignActivity.EXTRA_TRAINER, false)
-        startActivity(intent)
     }
 }

@@ -34,56 +34,37 @@ public class XmlLayoutPropertyEditor {
     }
 
     public static void queryValue(Activity activity, XmlLayoutEditView editView, @NonNull AttributeValue attribute) {
-        switch (attribute.property.type) {
-            case Drawable:
-                queryDrawable(activity, editView, attribute);
-                return;
-            case DrawableResource:
-                queryDrawableResource(activity, editView, attribute);
-                return;
-            case Color:
-                queryColor(activity, editView, attribute);
-                return;
-            case Float:
-                queryTextValue(activity, editView, attribute, "1.0");
-                return;
-            case Int:
-                queryTextValue(activity, editView, attribute, "1");
-                return;
-            case TextSize:
-                querySize(activity, editView, attribute, attribute.value, "10sp");
-                return;
-            case Size:
-            case FloatSize:
-                querySize(activity, editView, attribute, attribute.value, "10dp");
-                return;
-            case LayoutSize:
-                queryLayoutSize(activity, editView, attribute);
-                return;
-            case Bool:
-                queryBoolean(activity, editView, attribute);
-                return;
-            case Text:
-                queryTextValue(activity, editView, attribute, "");
-                return;
-            case Event:
-                queryTextValue(activity, editView, attribute, "");
-                return;
-            case EnumConstant:
-                queryEnumValue(activity, editView, attribute);
-                return;
-            case IntConstant:
-                queryIntConstantValue(activity, editView, attribute);
-                return;
-            case ID:
-                queryID(activity, editView, attribute);
-                return;
-            case TextAppearance:
-                queryTextAppearance(activity, editView, attribute);
-                return;
-            default:
-                queryTextValue(activity, editView, attribute, "");
-                return;
+        final XmlLayoutProperties.PropertyType type = attribute.property.type;
+        if (type == XmlLayoutProperties.PropertyType.Drawable) {
+            queryDrawable(activity, editView, attribute);
+        } else if (type == XmlLayoutProperties.PropertyType.DrawableResource) {
+            queryDrawableResource(activity, editView, attribute);
+        } else if (type == XmlLayoutProperties.PropertyType.Color) {
+            queryColor(activity, editView, attribute);
+        } else if (type == XmlLayoutProperties.PropertyType.Float) {
+            queryTextValue(activity, editView, attribute, "1.0");
+        } else if (type == XmlLayoutProperties.PropertyType.Int) {
+            queryTextValue(activity, editView, attribute, "1");
+        } else if (type == XmlLayoutProperties.PropertyType.TextSize) {
+            querySize(activity, editView, attribute, attribute.value, "10sp");
+        } else if (type == XmlLayoutProperties.PropertyType.Size || type == XmlLayoutProperties.PropertyType.FloatSize) {
+            querySize(activity, editView, attribute, attribute.value, "10dp");
+        } else if (type == XmlLayoutProperties.PropertyType.LayoutSize) {
+            queryLayoutSize(activity, editView, attribute);
+        } else if (type == XmlLayoutProperties.PropertyType.Bool) {
+            queryBoolean(activity, editView, attribute);
+        } else if (type == XmlLayoutProperties.PropertyType.Text || type == XmlLayoutProperties.PropertyType.Event) {
+            queryTextValue(activity, editView, attribute, "");
+        } else if (type == XmlLayoutProperties.PropertyType.EnumConstant) {
+            queryEnumValue(activity, editView, attribute);
+        } else if (type == XmlLayoutProperties.PropertyType.IntConstant) {
+            queryIntConstantValue(activity, editView, attribute);
+        } else if (type == XmlLayoutProperties.PropertyType.ID) {
+            queryID(activity, editView, attribute);
+        } else if (type == XmlLayoutProperties.PropertyType.TextAppearance) {
+            queryTextAppearance(activity, editView, attribute);
+        } else {
+            queryTextValue(activity, editView, attribute, "");
         }
     }
 
@@ -139,8 +120,7 @@ public class XmlLayoutPropertyEditor {
             queryTextValue(activity, editView, attribute, "");
         } else {
             List<String> values = new ArrayList<>();
-            Field[] arr$ = attribute.property.constantClass.getFields();
-            for (Field field : arr$) {
+            for (Field field : attribute.property.constantClass.getFields()) {
                 String fieldName = field.getName();
                 if ((field.getModifiers() & 8) != 0 && fieldName.startsWith(attribute.property.constantFieldPrefix)) {
                     values.add(fieldName.substring(attribute.property.constantFieldPrefix.length()).replace("_", ""));
@@ -217,10 +197,10 @@ public class XmlLayoutPropertyEditor {
     }
 
     public static void queryDrawableResource(final Activity activity, @NonNull final XmlLayoutEditView editView, final AttributeValue attribute) {
-        final ArrayList<String> values2 = new ArrayList<>(editView.getAllUserDrawables());
-        Collections.sort(values2);
+        final ArrayList<String> values = new ArrayList<>(editView.getAllUserDrawables());
+        Collections.sort(values);
         final List<String> listValues = new ArrayList<>();
-        for (String s : values2) {
+        for (String s : values) {
             listValues.add(AttributeValue.getDisplayValue(s));
         }
         listValues.add(activity.getString(R.string.other_));
@@ -235,7 +215,7 @@ public class XmlLayoutPropertyEditor {
             } else if (t.equals(activity.getString(R.string.add__))) {
                 XmlLayoutPropertyEditor.queryImageFromPicker(activity, editView, attribute);
             } else {
-                editView.setAttribute(attribute, values2.get(i));
+                editView.setAttribute(attribute, values.get(i));
             }
         });
     }

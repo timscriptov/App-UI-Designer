@@ -65,10 +65,10 @@ public class XmlLayoutWidgetPicker {
         final List<List<Widget>> widgets = getWidgetsToShow(onlyLayouts, onlyRootViews, activity instanceof AppWizardDesignActivity);
         MessageBox.showDialog(activity, new MessageBox() {
             @Override
-            public Dialog buildDialog(Activity activity2) {
-                ExpandableListView listView = new ExpandableListView(activity2);
-                listView.setAdapter(new WidgetListEntryAdapter(activity2, widgets));
-                final MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(activity2)
+            public Dialog buildDialog(Activity activity) {
+                ExpandableListView listView = new ExpandableListView(activity);
+                listView.setAdapter(new WidgetListEntryAdapter(activity, widgets));
+                final MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(activity)
                         .setCancelable(true)
                         .setView(listView)
                         .setTitle(title);
@@ -440,6 +440,7 @@ public class XmlLayoutWidgetPicker {
             this.widgets = widgets;
         }
 
+        @NonNull
         @Override
         public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
             View view = convertView;
@@ -450,6 +451,7 @@ public class XmlLayoutWidgetPicker {
             return view;
         }
 
+        @NonNull
         @SuppressLint("WrongConstant")
         @Override
         public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
