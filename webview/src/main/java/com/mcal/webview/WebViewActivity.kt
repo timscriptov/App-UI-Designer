@@ -35,10 +35,6 @@ class WebViewActivity : BaseActivity() {
         val webView = binding.webView.apply {
             webViewClient = WebViewClient()
             webChromeClient = ChromeClient(this@WebViewActivity)
-            settings.javaScriptEnabled = true
-            settings.allowFileAccess = true
-            settings.allowFileAccessFromFileURLs = true
-            settings.allowUniversalAccessFromFileURLs = true
         }
         val refresh = binding.refresh
         refresh.setOnRefreshListener {
@@ -58,11 +54,7 @@ class WebViewActivity : BaseActivity() {
                         val finalLink =
                             link + "#googtrans(ru|" + ReactivePreferences.getWebViewLanguage(context) + ")"
                         webView.loadDataWithBaseURL(
-                            finalLink,
-                            result,
-                            "text/html",
-                            "UTF-8",
-                            finalLink
+                            finalLink, result, "text/html", "UTF-8", finalLink
                         )
                     }
                 }
@@ -103,12 +95,21 @@ class WebViewActivity : BaseActivity() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        val webView = binding.webView
+        if (webView.canGoBack()) {
+            webView.goBack()
+        } else {
+            finish()
+        }
+    }
+
     private fun webViewLanguageDialog() {
         val context = this
         val dialog = MaterialAlertDialogBuilder(context)
         val items = arrayOf(
-            "Русский",
-            "English"
+            "Русский", "English", "Deutsch", "中文"
         )
         dialog.setItems(items) { p112: DialogInterface, p2: Int ->
             when (p2) {
@@ -126,11 +127,26 @@ class WebViewActivity : BaseActivity() {
                     p112.dismiss()
                     refresh()
                 }
+                DE -> {
+                    lifecycleScope.launch {
+                        ReactivePreferences.setWebViewLanguage(context, "de")
+                    }
+                    p112.dismiss()
+                    refresh()
+                }
+                ZH -> {
+                    lifecycleScope.launch {
+                        ReactivePreferences.setWebViewLanguage(context, "zh")
+                    }
+                    p112.dismiss()
+                    refresh()
+                }
             }
         }
         dialog.create()
         dialog.show()
     }
+
     fun refresh() {
         val refresh = binding.refresh
         refresh.isRefreshing = true
@@ -167,5 +183,7 @@ class WebViewActivity : BaseActivity() {
         const val IS_NIGHT_MODE = "nightMode"
         const val RU = 0
         const val EN = 1
+        const val DE = 2
+        const val ZH = 3
     }
 }

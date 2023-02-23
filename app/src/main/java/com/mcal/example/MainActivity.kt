@@ -1,34 +1,31 @@
 package com.mcal.example
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.mcal.example.adapters.LayoutAdapters
 import com.mcal.example.databinding.ActivityMainBinding
 import com.mcal.example.utils.FileHelper.copyAssetsFile
 import com.mcal.example.utils.ZipHelper.unzip
 import com.mcal.uidesigner.XmlLayoutDesignActivity
+import com.mcal.webview.BaseActivity
+import com.mcal.webview.WebViewActivity
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.IAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import java.io.File
 
-class MainActivity : AppCompatActivity() {
-    private var _binding: ActivityMainBinding? = null
-    private val binding get() = _binding!!
+class MainActivity : BaseActivity() {
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupToolbar()
+        setupToolbar(binding.toolbar.id, "App UI Designer")
         extractRes()
         getLayouts()
-    }
-
-    private fun setupToolbar() {
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.title = "App UI Designer"
+        startWebView()
     }
 
     private fun getResDir(): File {
@@ -95,5 +92,16 @@ class MainActivity : AppCompatActivity() {
                 }
                 true
             }
+    }
+
+    private fun startWebView() {
+        binding.openWebView.setOnClickListener {
+            val intent = Intent(this, WebViewActivity::class.java)
+            intent.putExtra(
+                WebViewActivity.HTML_URL,
+                "https://timscriptov.ru/apkeditor/doc/instructions/index.html"
+            )
+            startActivity(intent)
+        }
     }
 }

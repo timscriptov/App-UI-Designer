@@ -35,7 +35,8 @@ android {
 }
 
 dependencies {
-    implementation project(path: ':ui-designer')
+    implementation project(':ui-designer')
+    implementation project(':webview')
     implementation jetpack.core
     implementation jetpack.appcompat
     implementation jetpack.material
