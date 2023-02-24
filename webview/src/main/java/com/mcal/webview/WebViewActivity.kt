@@ -106,45 +106,44 @@ class WebViewActivity : BaseActivity() {
     }
 
     private fun webViewLanguageDialog() {
-        val context = this
-        val dialog = MaterialAlertDialogBuilder(context)
-        val items = arrayOf(
-            "Русский", "English", "Deutsch", "中文"
-        )
-        dialog.setItems(items) { p112: DialogInterface, p2: Int ->
-            when (p2) {
-                RU -> {
-                    lifecycleScope.launch {
-                        ReactivePreferences.setWebViewLanguage(context, "ru")
+        MaterialAlertDialogBuilder(this).apply {
+            setItems(
+                arrayOf(
+                    "عربي",
+                    "Deutsch",
+                    "English",
+                    "Polski",
+                    "Русский",
+                    "Español",
+                    "Français",
+                    "Italiano",
+                    "Український",
+                    "中国人",
+                    "中國人"
+                )
+            ) { dialogInterface: DialogInterface, p2: Int ->
+                val code = when (p2) {
+                    AR -> "ar"
+                    DE -> "de"
+                    EN -> "en"
+                    PL -> "pl"
+                    ES -> "es"
+                    FR -> "fr"
+                    IT -> "it"
+                    UK -> "uk"
+                    ZH_CN -> "zh-CN"
+                    ZH_TW -> "zh-TW"
+                    else -> {
+                        "ru"
                     }
-                    p112.dismiss()
-                    refresh()
                 }
-                EN -> {
-                    lifecycleScope.launch {
-                        ReactivePreferences.setWebViewLanguage(context, "en")
-                    }
-                    p112.dismiss()
-                    refresh()
+                lifecycleScope.launch {
+                    ReactivePreferences.setWebViewLanguage(this@WebViewActivity, code)
                 }
-                DE -> {
-                    lifecycleScope.launch {
-                        ReactivePreferences.setWebViewLanguage(context, "de")
-                    }
-                    p112.dismiss()
-                    refresh()
-                }
-                ZH -> {
-                    lifecycleScope.launch {
-                        ReactivePreferences.setWebViewLanguage(context, "zh")
-                    }
-                    p112.dismiss()
-                    refresh()
-                }
+                dialogInterface.dismiss()
+                refresh()
             }
-        }
-        dialog.create()
-        dialog.show()
+        }.show()
     }
 
     fun refresh() {
@@ -181,9 +180,16 @@ class WebViewActivity : BaseActivity() {
     companion object {
         const val HTML_URL = "htmlUrl"
         const val IS_NIGHT_MODE = "nightMode"
-        const val RU = 0
-        const val EN = 1
-        const val DE = 2
-        const val ZH = 3
+        const val AR = 0
+        const val DE = 1
+        const val EN = 2
+        const val PL = 3
+        const val RU = 4
+        const val ES = 5
+        const val FR = 6
+        const val IT = 7
+        const val UK = 8
+        const val ZH_CN = 9
+        const val ZH_TW = 10
     }
 }
