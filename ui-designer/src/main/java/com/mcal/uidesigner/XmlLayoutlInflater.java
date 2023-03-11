@@ -1,18 +1,20 @@
 package com.mcal.uidesigner;
 
 import static com.mcal.uidesigner.utils.FileHelper.readFile;
+import static com.mcal.uidesigner.utils.Utils.getColor;
+import static com.mcal.uidesigner.utils.Utils.getDrawable;
+import static com.mcal.uidesigner.utils.Utils.getSystemResourceId;
+import static com.mcal.uidesigner.utils.Utils.getUnit;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.ClipboardManager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,12 +32,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
-import androidx.core.content.res.ResourcesCompat;
 
 import com.mcal.uidesigner.common.PositionalXMLReader;
 import com.mcal.uidesigner.common.UndoManager;
 import com.mcal.uidesigner.common.ValueRunnable;
-import com.mcal.uidesigner.utils.Utils;
 import com.mcal.uidesigner.view.IncludeLayout;
 import com.mcal.uidesigner.widget.ClickableBorder;
 
@@ -761,7 +761,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         try {
             String stringValue = getPropertyValue(node, property).value;
             if (stringValue != null && stringValue.startsWith("?android:attr/")) {
-                int attrID = Utils.getAndroidResourceID(android.R.attr.class.getName(), stringValue);
+                int attrID = getSystemResourceId(android.R.attr.class, stringValue);
                 switch (property.type) {
                     case Size:
                     case TextSize:
@@ -873,16 +873,8 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
     @Nullable
     private Object getDrawableAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
         String value = getResourcePropertyValue(node, property);
-        Drawable drawable = finder.findUserDrawable(value);
-        if (drawable != null) {
-            return drawable;
-        }
-        if (value != null && value.startsWith("@android:drawable/")) {
-            try {
-                return ResourcesCompat.getDrawable(context.getResources(), Utils.getAndroidResourceID(android.R.drawable.class.getName(), "@android:drawable/"), context.getTheme());
-            } catch (Throwable th) {
-                th.printStackTrace();
-            }
+        if (value != null) {
+            return getDrawable(context, finder, value);
         }
         return null;
     }
@@ -953,16 +945,9 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
     private Integer getColorAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
         String value = getResourcePropertyValue(node, property);
         if (value != null) {
-            try {
-                if (value.charAt(0) == '#') {
-                    return Color.parseColor(value);
-                } else if (value.startsWith("@android:color/")) {
-                    return ResourcesCompat.getColor(context.getResources(), Utils.getAndroidResourceID(android.R.color.class.getName(), value), context.getTheme());
-                } else if (value.startsWith("@color/")) {
-                    return Color.parseColor(finder.findUserResourceValue(value));
-                }
-            } catch (Throwable th) {
-                th.printStackTrace();
+            int color = getColor(context, finder, value);
+            if (color != -1) {
+                return color;
             }
         }
         return null;
@@ -981,37 +966,9 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
     private Integer getSizeAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
         String value = getResourcePropertyValue(node, property);
         if (value != null) {
-            try {
-                float v = 0f;
-                if (!(value.startsWith("@") || value.startsWith("?") || value.startsWith("wrap") || value.startsWith("match") || value.startsWith("fill"))) {
-                    v = Float.parseFloat(value.substring(0, value.length() - 2));
-                }
-                if (value.endsWith("px")) {
-                    return (int) v;
-                }
-                if (value.endsWith("dp")) {
-                    return (int) (context.getResources().getDisplayMetrics().density * v);
-                } else if (value.endsWith("dip")) {
-                    return (int) (context.getResources().getDisplayMetrics().density * Float.parseFloat(value.substring(0, value.length() - 3)));
-                } else if (value.endsWith("sp")) {
-                    return (int) (context.getResources().getDisplayMetrics().scaledDensity * v);
-                } else if (value.startsWith("@android:dimen/")) {
-                    return context.getResources().getDimensionPixelSize(Utils.getAndroidResourceID(android.R.dimen.class.getName(), "@android:dimen/"));
-                } else if (value.startsWith("@dimen/")) {
-                    value = finder.findUserResourceValue(value);
-                    if (value != null) {
-                        v = Float.parseFloat(value.substring(0, value.length() - 2));
-                        return (int) v;
-                    }
-                }
-            } catch (Throwable th) {
-                Log.e(getClass().getCanonicalName(), "\n" +
-                        "Line Number: " + node.getUserData(PositionalXMLReader.LINE) + "\n" +
-                        "Column Number: " + node.getUserData(PositionalXMLReader.COLUMN) + "\n" +
-                        node.getNodeName() + "\n" +
-                        property.attrName + " = " + value + "\n"
-                );
-                th.printStackTrace();
+            int unit = getUnit(context, finder, value);
+            if (unit != -1) {
+                return unit;
             }
         }
         return null;
@@ -1069,6 +1026,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         return null;
     }
 
+    @Nullable
     private String getResourcePropertyValue(Node node, XmlLayoutProperties.PropertySpec property) {
         return finder.findResourcePropertyValue(getPropertyValue(node, property).value);
     }

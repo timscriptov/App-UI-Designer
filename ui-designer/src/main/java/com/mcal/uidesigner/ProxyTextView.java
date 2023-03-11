@@ -1,9 +1,14 @@
 package com.mcal.uidesigner;
 
+import static com.mcal.uidesigner.utils.Utils.getAttr;
+import static com.mcal.uidesigner.utils.Utils.getStyle;
+
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.util.TypedValue;
 import android.widget.TextView;
+
+import androidx.core.widget.TextViewCompat;
 
 public class ProxyTextView {
     public static final int INPUTTYPE_date = 20;
@@ -64,15 +69,20 @@ public class ProxyTextView {
 
     public void setTextAppearance(String value) {
         try {
-            if (value.startsWith("?android:attr/")) {
-                int attrID = (Integer) android.R.attr.class.getField(value.substring("?android:attr/".length())).get(null);
-                Resources.Theme theme = this.textView.getContext().getTheme();
-                TypedValue styleID = new TypedValue();
-                if (theme.resolveAttribute(attrID, styleID, true)) {
-                    this.textView.setTextAppearance(this.textView.getContext(), styleID.data);
+            if (value.startsWith("@android:style/")) {
+                int styleID = getStyle(value);
+                if (styleID >= 0) {
+                    TextViewCompat.setTextAppearance(textView, styleID);
                 }
-            } else if (value.startsWith("@android:style/")) {
-                textView.setTextAppearance(textView.getContext(), (Integer) R.style.class.getField(value.substring("@android:style/".length()).replace(".", "_")).get(null));
+            } else {
+                int attrID = getAttr(value);
+                if (attrID >= 0) {
+                    Resources.Theme theme = textView.getContext().getTheme();
+                    TypedValue styleID = new TypedValue();
+                    if (theme.resolveAttribute(attrID, styleID, true)) {
+                        TextViewCompat.setTextAppearance(textView, styleID.data);
+                    }
+                }
             }
         } catch (Throwable th) {
             th.printStackTrace();
