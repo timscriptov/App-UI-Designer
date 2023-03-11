@@ -252,8 +252,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
 
     public List<AttributeValue> getAttributes(PropertyObject viewObj, PropertyObject layoutParamsObj, Element node) {
         List<AttributeValue> attributes = new ArrayList<>();
-        XmlLayoutProperties.PropertySpec[] arr = XmlLayoutProperties.SORTED_PROPERTIES;
-        for (XmlLayoutProperties.PropertySpec property : arr) {
+        for (XmlLayoutProperties.PropertySpec property : XmlLayoutProperties.SORTED_PROPERTIES) {
             if (property.isLayoutProperty) {
                 if (layoutParamsObj.hasProperty(property)) {
                     attributes.add(getPropertyValue(node, property));
@@ -318,8 +317,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
     }
 
     private void removeLayoutAttributes(Element node) {
-        XmlLayoutProperties.PropertySpec[] arr = XmlLayoutProperties.LAYOUT_PROPERTIES;
-        for (XmlLayoutProperties.PropertySpec property : arr) {
+        for (XmlLayoutProperties.PropertySpec property : XmlLayoutProperties.LAYOUT_PROPERTIES) {
             if (!(property == XmlLayoutProperties.LAYOUT_WIDTH || property == XmlLayoutProperties.LAYOUT_HEIGHT || !node.hasAttribute(property.attrName))) {
                 node.removeAttribute(property.attrName);
             }
@@ -738,7 +736,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         }
     }
 
-    private void inflateAttributes(PropertyObject obj, Node node, @NonNull XmlLayoutProperties.PropertySpec[] properties) {
+    private void inflateAttributes(PropertyObject obj, Node node, @NonNull List<XmlLayoutProperties.PropertySpec> properties) {
         int min;
         for (XmlLayoutProperties.PropertySpec property : properties) {
             if (obj.hasProperty(property)) {
