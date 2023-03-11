@@ -1,4 +1,4 @@
-package com.mcal.uidesigner;
+package com.mcal.uidesigner.proxy;
 
 import static com.mcal.uidesigner.utils.Utils.getAttr;
 import static com.mcal.uidesigner.utils.Utils.getStyle;
@@ -60,11 +60,11 @@ public class ProxyTextView {
     private String fontFamily = null;
 
     public ProxyTextView(Object obj) {
-        this.textView = (TextView) obj;
+        textView = (TextView) obj;
     }
 
     public void setInputType(int type) {
-        this.textView.setInputType(type);
+        textView.setInputType(type);
     }
 
     public void setTextAppearance(String value) {
@@ -90,31 +90,31 @@ public class ProxyTextView {
     }
 
     public void setShadowRadius(float val) {
-        this.shadowRadius = val;
+        shadowRadius = val;
         updateShadow();
     }
 
     public void setShadowDx(float val) {
-        this.shadowDx = val;
+        shadowDx = val;
         updateShadow();
     }
 
     public void setShadowDy(float val) {
-        this.shadowDy = val;
+        shadowDy = val;
         updateShadow();
     }
 
     public void setShadowColor(int color) {
-        this.shadowColor = color;
+        shadowColor = color;
         updateShadow();
     }
 
     private void updateShadow() {
-        this.textView.setShadowLayer(this.shadowRadius, this.shadowDx, this.shadowDy, this.shadowColor);
+        textView.setShadowLayer(shadowRadius, shadowDx, shadowDy, shadowColor);
     }
 
     public void setTextStyle(int style) {
-        this.textStyle = style;
+        textStyle = style;
         updateFont();
     }
 
@@ -124,14 +124,14 @@ public class ProxyTextView {
     }
 
     public void setFontFamily(String family) {
-        this.fontFamily = family;
+        fontFamily = family;
         updateFont();
     }
 
     private void updateFont() {
         Typeface tf = null;
-        if (this.fontFamily == null || (tf = Typeface.create(this.fontFamily, this.textStyle)) == null) {
-            switch (this.typeface) {
+        if (fontFamily == null || (tf = Typeface.create(fontFamily, textStyle)) == null) {
+            switch (typeface) {
                 case 1:
                     tf = Typeface.SANS_SERIF;
                     break;
@@ -142,9 +142,9 @@ public class ProxyTextView {
                     tf = Typeface.MONOSPACE;
                     break;
             }
-            this.textView.setTypeface(tf, this.textStyle);
+            textView.setTypeface(tf, textStyle);
             return;
         }
-        this.textView.setTypeface(tf);
+        textView.setTypeface(tf);
     }
 }

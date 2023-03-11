@@ -16,8 +16,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatEditText;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.mcal.uidesigner.ProxyTextView;
 import com.mcal.uidesigner.R;
+import com.mcal.uidesigner.proxy.ProxyTextView;
 import com.mcal.uidesigner.widget.KeyStrokeEditText;
 
 import java.util.ArrayList;

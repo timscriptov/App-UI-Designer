@@ -1,173 +1,196 @@
 package com.mcal.uidesigner;
 
 import android.graphics.drawable.Drawable;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsoluteLayout;
+import android.widget.DatePicker;
+import android.widget.FrameLayout;
+import android.widget.GridLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RatingBar;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.TableRow;
+import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.mcal.uidesigner.common.PositionalXMLReader;
+import com.mcal.uidesigner.proxy.ProxyGridLayoutParams;
+import com.mcal.uidesigner.proxy.ProxyMarginLayoutParams;
+import com.mcal.uidesigner.proxy.ProxyRelativeLayoutParams;
+import com.mcal.uidesigner.proxy.ProxyTextView;
+import com.mcal.uidesigner.proxy.ProxyViewPaddings;
 
 import java.util.Arrays;
 import java.util.Comparator;
 
 public class XmlLayoutProperties {
-    public static PropertySpec LAYOUT_TORIGHTOF = new PropertySpec("android.widget.RelativeLayout$LayoutParams", "layout_toRightOf", "ProxyRelativeLayoutParams", "setRightOf()", PropertyType.ID);
-    public static PropertySpec LAYOUT_TOLEFTOF = new PropertySpec("android.widget.RelativeLayout$LayoutParams", "layout_toLeftOf", "ProxyRelativeLayoutParams", "setLeftOf()", PropertyType.ID);
-    public static PropertySpec LAYOUT_BELOW = new PropertySpec("android.widget.RelativeLayout$LayoutParams", "layout_below", "ProxyRelativeLayoutParams", "setBelow()", PropertyType.ID);
-    public static PropertySpec LAYOUT_ABOVE = new PropertySpec("android.widget.RelativeLayout$LayoutParams", "layout_above", "ProxyRelativeLayoutParams", "setAbove()", PropertyType.ID);
-    public static PropertySpec LAYOUT_WIDTH = new PropertySpec("android.view.ViewGroup$LayoutParams", "layout_width", "width", PropertyType.LayoutSize);
-    public static PropertySpec LAYOUT_HEIGHT = new PropertySpec("android.view.ViewGroup$LayoutParams", "layout_height", "height", PropertyType.LayoutSize);
+    public static PropertySpec LAYOUT_TORIGHTOF = new PropertySpec(RelativeLayout.LayoutParams.class, "android:layout_toRightOf", ProxyRelativeLayoutParams.class, "setRightOf()", PropertyType.ID);
+    public static PropertySpec LAYOUT_TOLEFTOF = new PropertySpec(RelativeLayout.LayoutParams.class, "android:layout_toLeftOf", ProxyRelativeLayoutParams.class, "setLeftOf()", PropertyType.ID);
+    public static PropertySpec LAYOUT_BELOW = new PropertySpec(RelativeLayout.LayoutParams.class, "android:layout_below", ProxyRelativeLayoutParams.class, "setBelow()", PropertyType.ID);
+    public static PropertySpec LAYOUT_ABOVE = new PropertySpec(RelativeLayout.LayoutParams.class, "android:layout_above", ProxyRelativeLayoutParams.class, "setAbove()", PropertyType.ID);
+    public static PropertySpec LAYOUT_WIDTH = new PropertySpec(ViewGroup.LayoutParams.class, "android:layout_width", "width", PropertyType.LayoutSize);
+    public static PropertySpec LAYOUT_HEIGHT = new PropertySpec(ViewGroup.LayoutParams.class, "android:layout_height", "height", PropertyType.LayoutSize);
     public static PropertySpec[] LAYOUT_PROPERTIES = {LAYOUT_WIDTH, LAYOUT_HEIGHT,
-            new PropertySpec("android.view.ViewGroup$MarginLayoutParams", "layout_margin", "ProxyMarginLayoutParams", "setMargin()", PropertyType.Size),
-            new PropertySpec("android.view.ViewGroup$MarginLayoutParams", "layout_marginLeft", "leftMargin", PropertyType.Size),
-            new PropertySpec("android.view.ViewGroup$MarginLayoutParams", "layout_marginRight", "rightMargin", PropertyType.Size),
-            new PropertySpec("android.view.ViewGroup$MarginLayoutParams", "layout_marginTop", "topMargin", PropertyType.Size),
-            new PropertySpec("android.view.ViewGroup$MarginLayoutParams", "layout_marginBottom", "bottomMargin", PropertyType.Size),
-            new PropertySpec("android.view.ViewGroup$MarginLayoutParams", "layout_marginStart", "setMarginStart()", PropertyType.Size),
-            new PropertySpec("android.view.ViewGroup$MarginLayoutParams", "layout_marginEnd", "setMarginEnd()", PropertyType.Size),
-            new PropertySpec("android.widget.LinearLayout$LayoutParams", "layout_gravity", "gravity", PropertyType.IntConstant, "android.view.Gravity", null),
-            new PropertySpec("android.widget.LinearLayout$LayoutParams", "layout_weight", "weight", PropertyType.Float),
+            new PropertySpec(ViewGroup.MarginLayoutParams.class, "android:layout_margin", ProxyMarginLayoutParams.class, "setMargin()", PropertyType.Size),
+            new PropertySpec(ViewGroup.MarginLayoutParams.class, "android:layout_marginLeft", "leftMargin", PropertyType.Size),
+            new PropertySpec(ViewGroup.MarginLayoutParams.class, "android:layout_marginRight", "rightMargin", PropertyType.Size),
+            new PropertySpec(ViewGroup.MarginLayoutParams.class, "android:layout_marginTop", "topMargin", PropertyType.Size),
+            new PropertySpec(ViewGroup.MarginLayoutParams.class, "android:layout_marginBottom", "bottomMargin", PropertyType.Size),
+            new PropertySpec(ViewGroup.MarginLayoutParams.class, "android:layout_marginStart", "setMarginStart()", PropertyType.Size),
+            new PropertySpec(ViewGroup.MarginLayoutParams.class, "android:layout_marginEnd", "setMarginEnd()", PropertyType.Size),
+            new PropertySpec(ViewGroup.MarginLayoutParams.class, "android:layout_gravity", "gravity", PropertyType.IntConstant, Gravity.class, null),
+            new PropertySpec(ViewGroup.MarginLayoutParams.class, "android:layout_weight", "weight", PropertyType.Float),
             LAYOUT_BELOW, LAYOUT_ABOVE, LAYOUT_TORIGHTOF, LAYOUT_TOLEFTOF,
-            new PropertySpec("android.widget.RelativeLayout$LayoutParams", "layout_toEndOf", "ProxyRelativeLayoutParams", "setEndOf()", PropertyType.ID),
-            new PropertySpec("android.widget.RelativeLayout$LayoutParams", "layout_toStartOf", "ProxyRelativeLayoutParams", "setStartOf()", PropertyType.ID),
-            new PropertySpec("android.widget.RelativeLayout$LayoutParams", "layout_alignBaseline", "ProxyRelativeLayoutParams", "setAlignBaseline()", PropertyType.ID),
-            new PropertySpec("android.widget.RelativeLayout$LayoutParams", "layout_alignBottom", "ProxyRelativeLayoutParams", "setAlignBottom()", PropertyType.ID),
-            new PropertySpec("android.widget.RelativeLayout$LayoutParams", "layout_alignTop", "ProxyRelativeLayoutParams", "setAlignTop()", PropertyType.ID),
-            new PropertySpec("android.widget.RelativeLayout$LayoutParams", "layout_alignEnd", "ProxyRelativeLayoutParams", "setAlignEnd()", PropertyType.ID),
-            new PropertySpec("android.widget.RelativeLayout$LayoutParams", "layout_alignStart", "ProxyRelativeLayoutParams", "setAlignStart()", PropertyType.ID),
-            new PropertySpec("android.widget.RelativeLayout$LayoutParams", "layout_alignRight", "ProxyRelativeLayoutParams", "setAlignRight()", PropertyType.ID),
-            new PropertySpec("android.widget.RelativeLayout$LayoutParams", "layout_alignLeft", "ProxyRelativeLayoutParams", "setAlignLeft()", PropertyType.ID),
-            new PropertySpec("android.widget.RelativeLayout$LayoutParams", "layout_alignParentBottom", "ProxyRelativeLayoutParams", "setAlignParentBottom()", PropertyType.Bool),
-            new PropertySpec("android.widget.RelativeLayout$LayoutParams", "layout_alignParentEnd", "ProxyRelativeLayoutParams", "setAlignParentEnd()", PropertyType.Bool),
-            new PropertySpec("android.widget.RelativeLayout$LayoutParams", "layout_alignParentLeft", "ProxyRelativeLayoutParams", "setAlignParentLeft()", PropertyType.Bool),
-            new PropertySpec("android.widget.RelativeLayout$LayoutParams", "layout_alignParentRight", "ProxyRelativeLayoutParams", "setAlignParentRight()", PropertyType.Bool),
-            new PropertySpec("android.widget.RelativeLayout$LayoutParams", "layout_alignParentStart", "ProxyRelativeLayoutParams", "setAlignParentStart()", PropertyType.Bool),
-            new PropertySpec("android.widget.RelativeLayout$LayoutParams", "layout_alignParentTop", "ProxyRelativeLayoutParams", "setAlignParentTop()", PropertyType.Bool),
-            new PropertySpec("android.widget.RelativeLayout$LayoutParams", "layout_centerHorizontal", "ProxyRelativeLayoutParams", "setCenterHorizontal()", PropertyType.Bool),
-            new PropertySpec("android.widget.RelativeLayout$LayoutParams", "layout_centerVertical", "ProxyRelativeLayoutParams", "setCenterVertical()", PropertyType.Bool),
-            new PropertySpec("android.widget.RelativeLayout$LayoutParams", "layout_centerInParent", "ProxyRelativeLayoutParams", "setCenterInParent()", PropertyType.Bool),
-            new PropertySpec("android.widget.GridLayout$LayoutParams", "layout_gravity", "ProxyGridLayoutParams", "setGravity()", PropertyType.IntConstant, "android.view.Gravity", null),
-            new PropertySpec("android.widget.GridLayout$LayoutParams", "layout_column", "ProxyGridLayoutParams", "setColumn()", PropertyType.Int),
-            new PropertySpec("android.widget.GridLayout$LayoutParams", "layout_columnSpan", "ProxyGridLayoutParams", "setColumnSpan()", PropertyType.Int),
-            new PropertySpec("android.widget.GridLayout$LayoutParams", "layout_row", "ProxyGridLayoutParams", "setRow()", PropertyType.Int),
-            new PropertySpec("android.widget.GridLayout$LayoutParams", "layout_rowSpan", "ProxyGridLayoutParams", "setRowSpan()", PropertyType.Int),
-            new PropertySpec("android.widget.FrameLayout$LayoutParams", "layout_gravity", "gravity", PropertyType.IntConstant, "android.view.Gravity", null),
-            new PropertySpec("android.widget.TableRow$LayoutParams", "layout_span", "span", PropertyType.Int),
-            new PropertySpec("android.widget.TableRow$LayoutParams", "layout_column", PositionalXMLReader.COLUMN, PropertyType.Int),
-            new PropertySpec("android.widget.AbsoluteLayout$LayoutParams", "layout_x", "x", PropertyType.Size),
-            new PropertySpec("android.widget.AbsoluteLayout$LayoutParams", "layout_y", "y", PropertyType.Size)};
+            new PropertySpec(RelativeLayout.LayoutParams.class, "android:layout_toEndOf", ProxyRelativeLayoutParams.class, "setEndOf()", PropertyType.ID),
+            new PropertySpec(RelativeLayout.LayoutParams.class, "android:layout_toStartOf", ProxyRelativeLayoutParams.class, "setStartOf()", PropertyType.ID),
+            new PropertySpec(RelativeLayout.LayoutParams.class, "android:layout_alignBaseline", ProxyRelativeLayoutParams.class, "setAlignBaseline()", PropertyType.ID),
+            new PropertySpec(RelativeLayout.LayoutParams.class, "android:layout_alignBottom", ProxyRelativeLayoutParams.class, "setAlignBottom()", PropertyType.ID),
+            new PropertySpec(RelativeLayout.LayoutParams.class, "android:layout_alignTop", ProxyRelativeLayoutParams.class, "setAlignTop()", PropertyType.ID),
+            new PropertySpec(RelativeLayout.LayoutParams.class, "android:layout_alignEnd", ProxyRelativeLayoutParams.class, "setAlignEnd()", PropertyType.ID),
+            new PropertySpec(RelativeLayout.LayoutParams.class, "android:layout_alignStart", ProxyRelativeLayoutParams.class, "setAlignStart()", PropertyType.ID),
+            new PropertySpec(RelativeLayout.LayoutParams.class, "android:layout_alignRight", ProxyRelativeLayoutParams.class, "setAlignRight()", PropertyType.ID),
+            new PropertySpec(RelativeLayout.LayoutParams.class, "android:layout_alignLeft", ProxyRelativeLayoutParams.class, "setAlignLeft()", PropertyType.ID),
+            new PropertySpec(RelativeLayout.LayoutParams.class, "android:layout_alignParentBottom", ProxyRelativeLayoutParams.class, "setAlignParentBottom()", PropertyType.Bool),
+            new PropertySpec(RelativeLayout.LayoutParams.class, "android:layout_alignParentEnd", ProxyRelativeLayoutParams.class, "setAlignParentEnd()", PropertyType.Bool),
+            new PropertySpec(RelativeLayout.LayoutParams.class, "android:layout_alignParentLeft", ProxyRelativeLayoutParams.class, "setAlignParentLeft()", PropertyType.Bool),
+            new PropertySpec(RelativeLayout.LayoutParams.class, "android:layout_alignParentRight", ProxyRelativeLayoutParams.class, "setAlignParentRight()", PropertyType.Bool),
+            new PropertySpec(RelativeLayout.LayoutParams.class, "android:layout_alignParentStart", ProxyRelativeLayoutParams.class, "setAlignParentStart()", PropertyType.Bool),
+            new PropertySpec(RelativeLayout.LayoutParams.class, "android:layout_alignParentTop", ProxyRelativeLayoutParams.class, "setAlignParentTop()", PropertyType.Bool),
+            new PropertySpec(RelativeLayout.LayoutParams.class, "android:layout_centerHorizontal", ProxyRelativeLayoutParams.class, "setCenterHorizontal()", PropertyType.Bool),
+            new PropertySpec(RelativeLayout.LayoutParams.class, "android:layout_centerVertical", ProxyRelativeLayoutParams.class, "setCenterVertical()", PropertyType.Bool),
+            new PropertySpec(RelativeLayout.LayoutParams.class, "android:layout_centerInParent", ProxyRelativeLayoutParams.class, "setCenterInParent()", PropertyType.Bool),
+            new PropertySpec(GridLayout.LayoutParams.class, "android:layout_gravity", ProxyGridLayoutParams.class, "setGravity()", PropertyType.IntConstant, Gravity.class, null),
+            new PropertySpec(GridLayout.LayoutParams.class, "android:layout_column", ProxyGridLayoutParams.class, "setColumn()", PropertyType.Int),
+            new PropertySpec(GridLayout.LayoutParams.class, "android:layout_columnSpan", ProxyGridLayoutParams.class, "setColumnSpan()", PropertyType.Int),
+            new PropertySpec(GridLayout.LayoutParams.class, "android:layout_row", ProxyGridLayoutParams.class, "setRow()", PropertyType.Int),
+            new PropertySpec(GridLayout.LayoutParams.class, "android:layout_rowSpan", ProxyGridLayoutParams.class, "setRowSpan()", PropertyType.Int),
+            new PropertySpec(FrameLayout.LayoutParams.class, "android:layout_gravity", "gravity", PropertyType.IntConstant, Gravity.class, null),
+            new PropertySpec(TableRow.LayoutParams.class, "android:layout_span", "span", PropertyType.Int),
+            new PropertySpec(TableRow.LayoutParams.class, "android:layout_column", PositionalXMLReader.COLUMN, PropertyType.Int),
+            new PropertySpec(AbsoluteLayout.LayoutParams.class, "android:layout_x", "x", PropertyType.Size),
+            new PropertySpec(AbsoluteLayout.LayoutParams.class, "android:layout_y", "y", PropertyType.Size)};
     public static PropertySpec[] SORTED_PROPERTIES;
     public static PropertySpec[] VIEW_PROPERTIES = {
-            new PropertySpec("android.view.View", "padding", "ProxyViewPaddings", "setPadding()", PropertyType.Size),
-            new PropertySpec("android.view.View", "paddingLeft", "ProxyViewPaddings", "setPaddingLeft()", PropertyType.Size),
-            new PropertySpec("android.view.View", "paddingRight", "ProxyViewPaddings", "setPaddingRight()", PropertyType.Size),
-            new PropertySpec("android.view.View", "paddingTop", "ProxyViewPaddings", "setPaddingTop()", PropertyType.Size),
-            new PropertySpec("android.view.View", "paddingBottom", "ProxyViewPaddings", "setPaddingBottom()", PropertyType.Size),
-            new PropertySpec("android.view.View", "paddingStart", "ProxyViewPaddings", "setPaddingStart()", PropertyType.Size),
-            new PropertySpec("android.view.View", "paddingEnd", "ProxyViewPaddings", "setPaddingEnd()", PropertyType.Size),
-            new PropertySpec("android.view.View", "alpha", "setAlpha()", PropertyType.Float),
-            new PropertySpec("android.view.View", "scaleX", "setScaleX()", PropertyType.Float),
-            new PropertySpec("android.view.View", "scaleY", "setScaleY()", PropertyType.Float),
-            new PropertySpec("android.view.View", "translationX", "setTranslationX()", PropertyType.FloatSize),
-            new PropertySpec("android.view.View", "translationY", "setTranslationY()", PropertyType.FloatSize),
-            new PropertySpec("android.view.View", "translationZ", "setTranslationZ()", PropertyType.FloatSize),
-            new PropertySpec("android.view.View", "rotation", "setRotation()", PropertyType.Float),
-            new PropertySpec("android.view.View", "rotationX", "setRotationX()", PropertyType.Float),
-            new PropertySpec("android.view.View", "rotationY", "setRotationY()", PropertyType.Float),
-            new PropertySpec("android.view.View", "elevation", "setElevation()", PropertyType.FloatSize),
-            new PropertySpec("android.view.View", "minHeight", "setMinimumHeight()", PropertyType.Size),
-            new PropertySpec("android.view.View", "minWidth", "setMinimumWidth()", PropertyType.Size),
-            new PropertySpec("android.view.View", "textAlignment", "setTextAlignment()", PropertyType.IntConstant, "android.view.View", "TEXT_ALIGNMENT"),
-            new PropertySpec("android.view.View", "visibility", "setVisibility()", PropertyType.IntConstant),
-            new PropertySpec("android.view.View", "background", "setBackgroundDrawable()", PropertyType.Drawable),
-            new PropertySpec("android.view.View", "onClick", "", PropertyType.Event),
-            new PropertySpec("android.view.ViewGroup", "clipChildren", "setClipChildren()", PropertyType.Bool),
-            new PropertySpec("android.view.ViewGroup", "clipToPadding", "setClipToPadding()", PropertyType.Bool),
-            new PropertySpec("android.widget.LinearLayout", "orientation", "setOrientation()", PropertyType.IntConstant),
-            new PropertySpec("android.widget.LinearLayout", "gravity", "setGravity()", PropertyType.IntConstant, "android.view.Gravity", null),
-            new PropertySpec("android.widget.LinearLayout", "baselineAligned", "setBaselineAligned()", PropertyType.Bool),
-            new PropertySpec("android.widget.LinearLayout", "baselineAlignedChildIndex", "setBaselineAlignedChildIndex()", PropertyType.Int),
-            new PropertySpec("android.widget.LinearLayout", "measureWithLargestChild", "setMeasureWithLargestChildEnabled()", PropertyType.Bool),
-            new PropertySpec("android.widget.LinearLayout", "weightSum", "setWeightSum()", PropertyType.Float),
-            new PropertySpec("android.widget.RelativeLayout", "gravity", "setGravity()", PropertyType.IntConstant, "android.view.Gravity", null),
-            new PropertySpec("android.widget.RelativeLayout", "ignoreGravity", "setIgnoreGravity()", PropertyType.ID),
-            new PropertySpec("android.widget.FrameLayout", "foregroundGravity", "setForegroundGravity()", PropertyType.IntConstant, "android.view.Gravity", null),
-            new PropertySpec("android.widget.FrameLayout", "measureAllChildren", "setMeasureAllChildren()", PropertyType.Bool),
-            new PropertySpec("android.widget.GridLayout", "columnCount", "setColumnCount()", PropertyType.Int),
-            new PropertySpec("android.widget.GridLayout", "rowCount", "setRowCount()", PropertyType.Int),
-            new PropertySpec("android.widget.GridLayout", "orientation", "setOrientation()", PropertyType.IntConstant),
-            new PropertySpec("android.widget.GridLayout", "columnOrderPreserved", "setColumnOrderPreserved()", PropertyType.Bool),
-            new PropertySpec("android.widget.GridLayout", "rowOrderPreserved", "setRowOrderPreserved()", PropertyType.Bool),
-            new PropertySpec("android.widget.GridLayout", "useDefaultMargins", "setUseDefaultMargins()", PropertyType.Bool),
-            new PropertySpec("android.widget.GridLayout", "alignmentMode", "setAlignmentMode()", PropertyType.IntConstant, "android.widget.GridLayout", "ALIGN"),
-            new PropertySpec("android.widget.TextView", "textAppearance", "ProxyTextView", "setTextAppearance()", PropertyType.TextAppearance),
-            new PropertySpec("android.widget.TextView", "text", "setText()", PropertyType.Text),
-            new PropertySpec("android.widget.TextView", "hint", "setHint()", PropertyType.Text),
-            new PropertySpec("android.widget.TextView", "height", "setHeight()", PropertyType.Size),
-            new PropertySpec("android.widget.TextView", "width", "setWidth()", PropertyType.Size),
-            new PropertySpec("android.widget.TextView", "maxHeight", "setMaxHeight()", PropertyType.Size),
-            new PropertySpec("android.widget.TextView", "maxWidth", "setMaxWidth()", PropertyType.Size),
-            new PropertySpec("android.widget.TextView", "ems", "setEms()", PropertyType.Int),
-            new PropertySpec("android.widget.TextView", "minEms", "setMinEms()", PropertyType.Int),
-            new PropertySpec("android.widget.TextView", "maxEms", "setMaxEms()", PropertyType.Int),
-            new PropertySpec("android.widget.TextView", "gravity", "setGravity()", PropertyType.IntConstant, "android.view.Gravity", null),
-            new PropertySpec("android.widget.TextView", "textScaleX", "setTextScaleX()", PropertyType.Float),
-            new PropertySpec("android.widget.TextView", "textScaleY", "setTextScaleY()", PropertyType.Float),
-            new PropertySpec("android.widget.TextView", "textIsSelectable", "setTextIsSelectable()", PropertyType.Bool),
-            new PropertySpec("android.widget.TextView", "singleLine", "setSingleLine()", PropertyType.Bool),
-            new PropertySpec("android.widget.TextView", "lines", "setLines()", PropertyType.Int),
-            new PropertySpec("android.widget.TextView", "minLines", "setMinLines()", PropertyType.Int),
-            new PropertySpec("android.widget.TextView", "maxLines", "setMaxLines()", PropertyType.Int),
-            new PropertySpec("android.widget.TextView", "textColor", "setTextColor()", PropertyType.Color),
-            new PropertySpec("android.widget.TextView", "textColorHighlight", "setHighlightColor()", PropertyType.Color),
-            new PropertySpec("android.widget.TextView", "textColorHint", "setHintTextColor()", PropertyType.Color),
-            new PropertySpec("android.widget.TextView", "textColorLink", "setLinkTextColor()", PropertyType.Color),
-            new PropertySpec("android.widget.TextView", "ellipsize", "setEllipsize()", PropertyType.EnumConstant, "android.text.TextUtils$TruncateAt", null),
-            new PropertySpec("android.widget.TextView", "textStyle", "ProxyTextView", "setTextStyle()", PropertyType.IntConstant, "ProxyTextView", "TEXTSTYLE"),
-            new PropertySpec("android.widget.TextView", "typeface", "ProxyTextView", "setTypeface()", PropertyType.IntConstant, "ProxyTextView", "TYPEFACE"),
-            new PropertySpec("android.widget.TextView", "inputType", "ProxyTextView", "setInputType()", PropertyType.IntConstant, "ProxyTextView", "INPUTTYPE"),
-            new PropertySpec("android.widget.TextView", "textSize", "setTextSize()", PropertyType.TextSize),
-            new PropertySpec("android.widget.TextView", "shadowColor", "ProxyTextView", "setShadowColor()", PropertyType.Color),
-            new PropertySpec("android.widget.TextView", "shadowDx", "ProxyTextView", "setShadowDx()", PropertyType.Float),
-            new PropertySpec("android.widget.TextView", "shadowDy", "ProxyTextView", "setShadowDy()", PropertyType.Float),
-            new PropertySpec("android.widget.TextView", "shadowRadius", "ProxyTextView", "setShadowRadius()", PropertyType.Float),
-            new PropertySpec("android.widget.ScrollView", "fillViewport", "setFillViewport()", PropertyType.Bool),
-            new PropertySpec("android.widget.ImageView", "src", "setImageDrawable()", PropertyType.DrawableResource),
-            new PropertySpec("android.widget.ImageView", "scaleType", "setScaleType()", PropertyType.EnumConstant, "android.widget.ImageView$ScaleType", null),
-            new PropertySpec("android.widget.ImageView", "adjustViewBounds", "setAdjustViewBounds()", PropertyType.Bool),
-            new PropertySpec("android.widget.ImageView", "baseLine", "setBaseLine()", PropertyType.Size),
-            new PropertySpec("android.widget.ImageView", "baselineAlignBottom", "setBaselineAlignBottom()", PropertyType.Bool),
-            new PropertySpec("android.widget.ImageView", "cropToPadding", "setCropToPadding()", PropertyType.Bool),
-            new PropertySpec("android.widget.ImageView", "maxHeight", "setMaxHeight()", PropertyType.Size),
-            new PropertySpec("android.widget.ImageView", "maxWidth", "setMaxWidth()", PropertyType.Size),
-            new PropertySpec("android.widget.ProgressBar", "indeterminate", "setIndeterminate()", PropertyType.Bool),
-            new PropertySpec("android.widget.ProgressBar", "indeterminateOnly", "setIndeterminate()", PropertyType.Bool),
-            new PropertySpec("android.widget.ProgressBar", "indeterminateDrawable", "setIndeterminateDrawable()", PropertyType.DrawableResource),
-            new PropertySpec("android.widget.ProgressBar", "progressDrawable", "setProgressDrawable()", PropertyType.DrawableResource),
-            new PropertySpec("android.widget.Switch", "switchMinWidth", "setSwitchMinWidth()", PropertyType.Size),
-            new PropertySpec("android.widget.Switch", "switchPadding", "setSwitchPadding()", PropertyType.Size),
-            new PropertySpec("android.widget.Switch", "textOff", "setTextOff()", PropertyType.Text),
-            new PropertySpec("android.widget.Switch", "textOn", "setTextOn()", PropertyType.Text),
-            new PropertySpec("android.widget.Switch", "thumbTextPadding", "setThumbTextPadding()", PropertyType.Size),
-            new PropertySpec("android.widget.Switch", "thumb", "setThumbDrawable()", PropertyType.Drawable),
-            new PropertySpec("android.widget.Switch", "track", "setTrackDrawable()", PropertyType.Drawable),
-            new PropertySpec("android.widget.ToggleButton", "textOff", "setTextOff()", PropertyType.Text),
-            new PropertySpec("android.widget.ToggleButton", "textOn", "setTextOn()", PropertyType.Text),
-            new PropertySpec("android.widget.Spinner", "gravity", "setGravity()", PropertyType.IntConstant, "android.view.Gravity", null),
-            new PropertySpec("android.widget.Spinner", "dropDownWidth", "setDropDownWidth()", PropertyType.Size),
-            new PropertySpec("android.widget.Spinner", "dropDownHorizontalOffset", "setDropDownHorizontalOffset()", PropertyType.Size),
-            new PropertySpec("android.widget.Spinner", "prompt", "setPrompt()", PropertyType.Text),
-            new PropertySpec("android.widget.Spinner", "dropDownVerticalOffset", "setDropDownVerticalOffset()", PropertyType.Size),
-            new PropertySpec("android.widget.Spinner", "popupBackground", "setPopupBackgroundDrawable()", PropertyType.Drawable),
-            new PropertySpec("android.widget.RatingBar", "numStars", "setNumStars()", PropertyType.Int),
-            new PropertySpec("android.widget.RatingBar", "rating", "setRating()", PropertyType.Float),
-            new PropertySpec("android.widget.RatingBar", "stepSize", "setStepSize()", PropertyType.Float),
-            new PropertySpec("android.widget.RatingBar", "isIndicator", "setIsIndicator()", PropertyType.Bool),
-            new PropertySpec("android.widget.DatePicker", "calendarViewShown", "setCalendarViewShown()", PropertyType.Bool),
-            new PropertySpec("android.widget.DatePicker", "spinnersShown", "setSpinnersShown()", PropertyType.Bool),
-            new PropertySpec("android.widget.ListView", "divider", "setDivider()", PropertyType.Drawable),
-            new PropertySpec("android.widget.ListView", "dividerHeight", "setDividerHeight()", PropertyType.Size),
-            new PropertySpec("com.mcal.uidesigner.view.IncludeLayout", "layout", "setLayout()", PropertyType.Text)};
+            new PropertySpec(View.class, "android:padding", ProxyViewPaddings.class, "setPadding()", PropertyType.Size),
+            new PropertySpec(View.class, "android:paddingLeft", ProxyViewPaddings.class, "setPaddingLeft()", PropertyType.Size),
+            new PropertySpec(View.class, "android:paddingRight", ProxyViewPaddings.class, "setPaddingRight()", PropertyType.Size),
+            new PropertySpec(View.class, "android:paddingTop", ProxyViewPaddings.class, "setPaddingTop()", PropertyType.Size),
+            new PropertySpec(View.class, "android:paddingBottom", ProxyViewPaddings.class, "setPaddingBottom()", PropertyType.Size),
+            new PropertySpec(View.class, "android:paddingStart", ProxyViewPaddings.class, "setPaddingStart()", PropertyType.Size),
+            new PropertySpec(View.class, "android:paddingEnd", ProxyViewPaddings.class, "setPaddingEnd()", PropertyType.Size),
+            new PropertySpec(View.class, "android:alpha", "setAlpha()", PropertyType.Float),
+            new PropertySpec(View.class, "android:scaleX", "setScaleX()", PropertyType.Float),
+            new PropertySpec(View.class, "android:scaleY", "setScaleY()", PropertyType.Float),
+            new PropertySpec(View.class, "android:translationX", "setTranslationX()", PropertyType.FloatSize),
+            new PropertySpec(View.class, "android:translationY", "setTranslationY()", PropertyType.FloatSize),
+            new PropertySpec(View.class, "android:translationZ", "setTranslationZ()", PropertyType.FloatSize),
+            new PropertySpec(View.class, "android:rotation", "setRotation()", PropertyType.Float),
+            new PropertySpec(View.class, "android:rotationX", "setRotationX()", PropertyType.Float),
+            new PropertySpec(View.class, "android:rotationY", "setRotationY()", PropertyType.Float),
+            new PropertySpec(View.class, "android:elevation", "setElevation()", PropertyType.FloatSize),
+            new PropertySpec(View.class, "android:minHeight", "setMinimumHeight()", PropertyType.Size),
+            new PropertySpec(View.class, "android:minWidth", "setMinimumWidth()", PropertyType.Size),
+            new PropertySpec(View.class, "android:textAlignment", "setTextAlignment()", PropertyType.IntConstant, View.class, "TEXT_ALIGNMENT"),
+            new PropertySpec(View.class, "android:visibility", "setVisibility()", PropertyType.IntConstant),
+            new PropertySpec(View.class, "android:background", "setBackgroundDrawable()", PropertyType.Drawable),
+            new PropertySpec(View.class, "android:onClick", "", PropertyType.Event),
+            new PropertySpec(ViewGroup.class, "android:clipChildren", "setClipChildren()", PropertyType.Bool),
+            new PropertySpec(ViewGroup.class, "android:clipToPadding", "setClipToPadding()", PropertyType.Bool),
+            new PropertySpec(LinearLayout.class, "android:orientation", "setOrientation()", PropertyType.IntConstant),
+            new PropertySpec(LinearLayout.class, "android:gravity", "setGravity()", PropertyType.IntConstant, Gravity.class, null),
+            new PropertySpec(LinearLayout.class, "android:baselineAligned", "setBaselineAligned()", PropertyType.Bool),
+            new PropertySpec(LinearLayout.class, "android:baselineAlignedChildIndex", "setBaselineAlignedChildIndex()", PropertyType.Int),
+            new PropertySpec(LinearLayout.class, "android:measureWithLargestChild", "setMeasureWithLargestChildEnabled()", PropertyType.Bool),
+            new PropertySpec(LinearLayout.class, "android:weightSum", "setWeightSum()", PropertyType.Float),
+            new PropertySpec(RelativeLayout.class, "android:gravity", "setGravity()", PropertyType.IntConstant, Gravity.class, null),
+            new PropertySpec(RelativeLayout.class, "android:ignoreGravity", "setIgnoreGravity()", PropertyType.ID),
+            new PropertySpec(FrameLayout.class, "android:foregroundGravity", "setForegroundGravity()", PropertyType.IntConstant, Gravity.class, null),
+            new PropertySpec(FrameLayout.class, "android:measureAllChildren", "setMeasureAllChildren()", PropertyType.Bool),
+            new PropertySpec(GridLayout.class, "android:columnCount", "setColumnCount()", PropertyType.Int),
+            new PropertySpec(GridLayout.class, "android:rowCount", "setRowCount()", PropertyType.Int),
+            new PropertySpec(GridLayout.class, "android:orientation", "setOrientation()", PropertyType.IntConstant),
+            new PropertySpec(GridLayout.class, "android:columnOrderPreserved", "setColumnOrderPreserved()", PropertyType.Bool),
+            new PropertySpec(GridLayout.class, "android:rowOrderPreserved", "setRowOrderPreserved()", PropertyType.Bool),
+            new PropertySpec(GridLayout.class, "android:useDefaultMargins", "setUseDefaultMargins()", PropertyType.Bool),
+            new PropertySpec(GridLayout.class, "android:alignmentMode", "setAlignmentMode()", PropertyType.IntConstant, GridLayout.class, "ALIGN"),
+            new PropertySpec(TextView.class, "android:textAppearance", ProxyTextView.class, "setTextAppearance()", PropertyType.TextAppearance),
+            new PropertySpec(TextView.class, "android:text", "setText()", PropertyType.Text),
+            new PropertySpec(TextView.class, "android:hint", "setHint()", PropertyType.Text),
+            new PropertySpec(TextView.class, "android:height", "setHeight()", PropertyType.Size),
+            new PropertySpec(TextView.class, "android:width", "setWidth()", PropertyType.Size),
+            new PropertySpec(TextView.class, "android:maxHeight", "setMaxHeight()", PropertyType.Size),
+            new PropertySpec(TextView.class, "android:maxWidth", "setMaxWidth()", PropertyType.Size),
+            new PropertySpec(TextView.class, "android:ems", "setEms()", PropertyType.Int),
+            new PropertySpec(TextView.class, "android:minEms", "setMinEms()", PropertyType.Int),
+            new PropertySpec(TextView.class, "android:maxEms", "setMaxEms()", PropertyType.Int),
+            new PropertySpec(TextView.class, "android:gravity", "setGravity()", PropertyType.IntConstant, Gravity.class, null),
+            new PropertySpec(TextView.class, "android:textScaleX", "setTextScaleX()", PropertyType.Float),
+            new PropertySpec(TextView.class, "android:textScaleY", "setTextScaleY()", PropertyType.Float),
+            new PropertySpec(TextView.class, "android:textIsSelectable", "setTextIsSelectable()", PropertyType.Bool),
+            new PropertySpec(TextView.class, "android:singleLine", "setSingleLine()", PropertyType.Bool),
+            new PropertySpec(TextView.class, "android:lines", "setLines()", PropertyType.Int),
+            new PropertySpec(TextView.class, "android:minLines", "setMinLines()", PropertyType.Int),
+            new PropertySpec(TextView.class, "android:maxLines", "setMaxLines()", PropertyType.Int),
+            new PropertySpec(TextView.class, "android:textColor", "setTextColor()", PropertyType.Color),
+            new PropertySpec(TextView.class, "android:textColorHighlight", "setHighlightColor()", PropertyType.Color),
+            new PropertySpec(TextView.class, "android:textColorHint", "setHintTextColor()", PropertyType.Color),
+            new PropertySpec(TextView.class, "android:textColorLink", "setLinkTextColor()", PropertyType.Color),
+            new PropertySpec(TextView.class, "android:ellipsize", "setEllipsize()", PropertyType.EnumConstant, android.text.TextUtils.TruncateAt.class, null),
+            new PropertySpec(TextView.class, "android:textStyle", ProxyTextView.class, "setTextStyle()", PropertyType.IntConstant, ProxyTextView.class, "TEXTSTYLE"),
+            new PropertySpec(TextView.class, "android:typeface", ProxyTextView.class, "setTypeface()", PropertyType.IntConstant, ProxyTextView.class, "TYPEFACE"),
+            new PropertySpec(TextView.class, "android:inputType", ProxyTextView.class, "setInputType()", PropertyType.IntConstant, ProxyTextView.class, "INPUTTYPE"),
+            new PropertySpec(TextView.class, "android:textSize", "setTextSize()", PropertyType.TextSize),
+            new PropertySpec(TextView.class, "android:shadowColor", ProxyTextView.class, "setShadowColor()", PropertyType.Color),
+            new PropertySpec(TextView.class, "android:shadowDx", ProxyTextView.class, "setShadowDx()", PropertyType.Float),
+            new PropertySpec(TextView.class, "android:shadowDy", ProxyTextView.class, "setShadowDy()", PropertyType.Float),
+            new PropertySpec(TextView.class, "android:shadowRadius", ProxyTextView.class, "setShadowRadius()", PropertyType.Float),
+            new PropertySpec(ScrollView.class, "android:fillViewport", "setFillViewport()", PropertyType.Bool),
+            new PropertySpec(ImageView.class, "android:src", "setImageDrawable()", PropertyType.DrawableResource),
+            new PropertySpec(ImageView.class, "android:scaleType", "setScaleType()", PropertyType.EnumConstant, ImageView.ScaleType.class, null),
+            new PropertySpec(ImageView.class, "android:adjustViewBounds", "setAdjustViewBounds()", PropertyType.Bool),
+            new PropertySpec(ImageView.class, "android:baseLine", "setBaseLine()", PropertyType.Size),
+            new PropertySpec(ImageView.class, "android:baselineAlignBottom", "setBaselineAlignBottom()", PropertyType.Bool),
+            new PropertySpec(ImageView.class, "android:cropToPadding", "setCropToPadding()", PropertyType.Bool),
+            new PropertySpec(ImageView.class, "android:maxHeight", "setMaxHeight()", PropertyType.Size),
+            new PropertySpec(ImageView.class, "android:maxWidth", "setMaxWidth()", PropertyType.Size),
+            new PropertySpec(ProgressBar.class, "android:indeterminate", "setIndeterminate()", PropertyType.Bool),
+            new PropertySpec(ProgressBar.class, "android:indeterminateOnly", "setIndeterminate()", PropertyType.Bool),
+            new PropertySpec(ProgressBar.class, "android:indeterminateDrawable", "setIndeterminateDrawable()", PropertyType.DrawableResource),
+            new PropertySpec(ProgressBar.class, "android:progressDrawable", "setProgressDrawable()", PropertyType.DrawableResource),
+            new PropertySpec(Switch.class, "android:switchMinWidth", "setSwitchMinWidth()", PropertyType.Size),
+            new PropertySpec(Switch.class, "android:switchPadding", "setSwitchPadding()", PropertyType.Size),
+            new PropertySpec(Switch.class, "android:textOff", "setTextOff()", PropertyType.Text),
+            new PropertySpec(Switch.class, "android:textOn", "setTextOn()", PropertyType.Text),
+            new PropertySpec(Switch.class, "android:thumbTextPadding", "setThumbTextPadding()", PropertyType.Size),
+            new PropertySpec(Switch.class, "android:thumb", "setThumbDrawable()", PropertyType.Drawable),
+            new PropertySpec(Switch.class, "android:track", "setTrackDrawable()", PropertyType.Drawable),
+            new PropertySpec(ToggleButton.class, "android:textOff", "setTextOff()", PropertyType.Text),
+            new PropertySpec(ToggleButton.class, "android:textOn", "setTextOn()", PropertyType.Text),
+            new PropertySpec(Spinner.class, "android:gravity", "setGravity()", PropertyType.IntConstant, Gravity.class, null),
+            new PropertySpec(Spinner.class, "android:dropDownWidth", "setDropDownWidth()", PropertyType.Size),
+            new PropertySpec(Spinner.class, "android:dropDownHorizontalOffset", "setDropDownHorizontalOffset()", PropertyType.Size),
+            new PropertySpec(Spinner.class, "android:prompt", "setPrompt()", PropertyType.Text),
+            new PropertySpec(Spinner.class, "android:dropDownVerticalOffset", "setDropDownVerticalOffset()", PropertyType.Size),
+            new PropertySpec(Spinner.class, "android:popupBackground", "setPopupBackgroundDrawable()", PropertyType.Drawable),
+            new PropertySpec(RatingBar.class, "android:numStars", "setNumStars()", PropertyType.Int),
+            new PropertySpec(RatingBar.class, "android:rating", "setRating()", PropertyType.Float),
+            new PropertySpec(RatingBar.class, "android:stepSize", "setStepSize()", PropertyType.Float),
+            new PropertySpec(RatingBar.class, "android:isIndicator", "setIsIndicator()", PropertyType.Bool),
+            new PropertySpec(DatePicker.class, "android:calendarViewShown", "setCalendarViewShown()", PropertyType.Bool),
+            new PropertySpec(DatePicker.class, "android:spinnersShown", "setSpinnersShown()", PropertyType.Bool),
+            new PropertySpec(ListView.class, "android:divider", "setDivider()", PropertyType.Drawable),
+            new PropertySpec(ListView.class, "android:dividerHeight", "setDividerHeight()", PropertyType.Size),
+            new PropertySpec(com.mcal.uidesigner.view.IncludeLayout.class, "layout", "setLayout()", PropertyType.Text)};
 
     static {
         SORTED_PROPERTIES = new PropertySpec[LAYOUT_PROPERTIES.length + VIEW_PROPERTIES.length];
@@ -214,47 +237,31 @@ public class XmlLayoutProperties {
         public PropertyType type;
         private String displayName;
 
-        public PropertySpec(String className, String name, String setterProxyClassName, String setterName, PropertyType type, String constantClassName, String constantFieldPrefix) {
-            this(className, name, setterName, type, constantClassName, constantFieldPrefix);
-            this.setterProxyClass = resolveType(setterProxyClassName);
+        public PropertySpec(Class<?> clazz, String name, Class<?> setterProxyClazz, String setterName, PropertyType type, Class<?> constantClazz, String constantFieldPrefix) {
+            this(clazz, name, setterName, type, constantClazz, constantFieldPrefix);
+            this.setterProxyClass = setterProxyClazz;
         }
 
-        public PropertySpec(String className, String name, String setterName, PropertyType type, String constantClassName, String constantFieldPrefix) {
-            this(className, name, setterName, type);
-            this.constantClass = resolveType(constantClassName);
-            this.constantClassName = constantClassName;
+        public PropertySpec(Class<?> clazz, String name, String setterName, PropertyType type, Class<?> constantClazz, String constantFieldPrefix) {
+            this(clazz, name, setterName, type);
+            this.constantClass = constantClazz;
+            this.constantClassName = constantClazz.getName();
             this.constantFieldPrefix = constantFieldPrefix;
         }
 
-        public PropertySpec(String className, String name, String setterProxyClassName, String setterName, PropertyType type) {
-            this(className, name, setterName, type);
-            this.setterProxyClass = resolveType(setterProxyClassName);
+        public PropertySpec(Class<?> clazz, String name, Class<?> setterProxyClazz, String setterName, PropertyType type) {
+            this(clazz, name, setterName, type);
+            this.setterProxyClass = setterProxyClazz;
         }
 
-        public PropertySpec(String className, @NonNull String name, String setterName, PropertyType type) {
-            Class<?> resolveType = resolveType(className);
-            this.constantClass = resolveType;
-            this.targetClass = resolveType;
+        public PropertySpec(Class<?> clazz, @NonNull String name, String setterName, PropertyType type) {
+            this.constantClass = clazz;
+            this.targetClass = clazz;
             this.setterName = setterName;
-            this.attrName = "android:" + name;
+            this.attrName = name;
             this.type = type;
             this.isLayoutProperty = name.startsWith("layout_");
             createDisplayName();
-        }
-
-        @Nullable
-        private Class<?> resolveType(@NonNull String className) {
-            Class<?> cls;
-            try {
-                if (!className.contains(".")) {
-                    cls = Class.forName(XmlLayoutProperties.class.getPackage().getName() + "." + className);
-                } else {
-                    cls = Class.forName(className);
-                }
-                return cls;
-            } catch (ClassNotFoundException e) {
-                return null;
-            }
         }
 
         public String getDisplayName() {
@@ -262,7 +269,7 @@ public class XmlLayoutProperties {
         }
 
         private void createDisplayName() {
-            String name = attrName.substring("android:".length());
+            String name = attrName;
             StringBuilder result = new StringBuilder();
             result.append(Character.toUpperCase(name.charAt(0)));
             boolean nextUpper = false;

@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.TimeUtils;
 
-import com.mcal.uidesigner.ProxyTextView;
+import com.mcal.uidesigner.proxy.ProxyTextView;
 
 public class KeyStroke {
     private final boolean alt;

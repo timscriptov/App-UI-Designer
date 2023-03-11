@@ -13,7 +13,7 @@ import android.view.inputmethod.InputConnection;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.mcal.uidesigner.ProxyTextView;
+import com.mcal.uidesigner.proxy.ProxyTextView;
 
 import org.jetbrains.annotations.Contract;
 
