@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.mcal.example.adapters.LayoutAdapters
 import com.mcal.example.databinding.ActivityMainBinding
 import com.mcal.example.utils.FileHelper.copyAssetsFile
+import com.mcal.example.utils.Utils.isAndroidXLayout
 import com.mcal.example.utils.ZipHelper.unzip
 import com.mcal.uidesigner.XmlLayoutDesignActivity
 import com.mcal.webview.BaseActivity
@@ -52,7 +53,7 @@ class MainActivity : BaseActivity() {
         }
 
         var i = 0L
-        getLayoutDir().walk().forEach { file ->
+        getLayoutDir().walk().filter { !isAndroidXLayout(it.name) }.forEach { file ->
             val name = file.name
             if (name.endsWith(".xml")) {
                 apkItemAdapter.add(
