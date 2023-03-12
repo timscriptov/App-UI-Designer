@@ -116,11 +116,11 @@ public class XmlLayoutPropertyEditor {
             querySingleValue(activity, editView, attribute, "inherit", "gravity", "textStart", "textEnd", "center", "viewStart", "viewEnd");
         } else if ("android.view.Gravity".equals(attribute.property.constantClassName)) {
             queryMultipleValues(activity, editView, attribute, "top", "bottom", "left", "right", "center", "center_vertical", "center_horizontal", "fill", "fill_vertical", "fill_horizontal", "clip_vertical", "clip_horizontal", "start", "end");
-        } else if (attribute.property.constantFieldPrefix == null || attribute.property.setterProxyClass == null) {
+        } else if (attribute.property.constantFieldPrefix == null || attribute.property.setterProxyClazz == null) {
             queryTextValue(activity, editView, attribute, "");
         } else {
             List<String> values = new ArrayList<>();
-            for (Field field : attribute.property.constantClass.getFields()) {
+            for (Field field : attribute.property.constantClazz.getFields()) {
                 String fieldName = field.getName();
                 if ((field.getModifiers() & 8) != 0 && fieldName.startsWith(attribute.property.constantFieldPrefix)) {
                     values.add(fieldName.substring(attribute.property.constantFieldPrefix.length()).replace("_", ""));

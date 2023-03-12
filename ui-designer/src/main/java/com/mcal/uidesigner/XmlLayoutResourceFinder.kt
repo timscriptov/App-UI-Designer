@@ -105,6 +105,15 @@ class XmlLayoutResourceFinder(private val context: Context, resDirPath: String?)
         }
     }
 
+    fun findUserMenu(resName: String?): String? {
+        if (resourcesDir != null && resourcesDir.exists() || resName == null || !resName.startsWith(
+                "@menu/"
+            )
+        ) {
+            return resourcesDir.toString() + "/" + resName?.substring("@".length)
+        }
+        return null
+    }
     fun findResourcePropertyValue(value: String?): String? {
         return findUserResourceValue(findUserAttributeValue(value))
     }

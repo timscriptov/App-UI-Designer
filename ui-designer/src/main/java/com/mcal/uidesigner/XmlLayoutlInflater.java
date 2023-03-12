@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.view.menu.ListMenuItemView;
 import androidx.core.content.FileProvider;
 
 import com.mcal.uidesigner.common.PositionalXMLReader;
@@ -667,6 +668,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         view.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, items));
     }
 
+    @SuppressLint("RestrictedApi")
     @Nullable
     private View inflateView(Node node, @NonNull String elementName) {
         if ("View".equals(elementName) || "view".equals(elementName)) {
@@ -692,6 +694,15 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
                 return (View) Class.forName(elementName).getConstructor(Context.class, AttributeSet.class, Integer.TYPE).newInstance(context, null, R.attr.class.getField(baseStyle.substring("?android:attr/".length())).get(null));
             } catch (Throwable th) {
                 th.printStackTrace();
+            }
+        }
+
+        if (elementName.contains("androidx.appcompat.view.menu.ListMenuItemView")) {
+            try {
+            return new ListMenuItemView(context, (AttributeSet) null, (Integer) 0);
+            } catch (Throwable th) {
+                th.printStackTrace();
+                return null;
             }
         }
 
@@ -761,6 +772,8 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
             if (stringValue != null && stringValue.startsWith("?android:attr/")) {
                 int attrID = getSystemResourceId(android.R.attr.class, stringValue);
                 switch (property.type) {
+                    case Menu:
+                        return getMenuReferenceAttributeValue(node, property);
                     case Size:
                     case TextSize:
                     case LayoutSize:
@@ -859,6 +872,11 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         }
     }
 
+    private String getMenuReferenceAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
+        String value = getResourcePropertyValue(node, property);
+        return finder.findUserMenu(value);
+    }
+
     @Nullable
     private Boolean getBoolAttributeValue(Node node, XmlLayoutProperties.PropertySpec property) {
         String value = getResourcePropertyValue(node, property);
@@ -882,7 +900,7 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
         try {
             String value = getResourcePropertyValue(node, property);
             if (value != null) {
-                Field[] arr$ = property.constantClass.getFields();
+                Field[] arr$ = property.constantClazz.getFields();
                 for (Field field : arr$) {
                     String fieldName = field.getName();
                     if ((field.getModifiers() & 8) != 0 && fieldName.replace("_", "").equals(value.toUpperCase())) {
@@ -916,12 +934,12 @@ public abstract class XmlLayoutlInflater implements UndoManager.UndoRedoListener
     private Integer getIntConstantAttributeValue(String value, @NonNull XmlLayoutProperties.PropertySpec property) {
         if (property.constantFieldPrefix == null) {
             try {
-                return (Integer) property.constantClass.getField(value.toUpperCase()).get(null);
+                return (Integer) property.constantClazz.getField(value.toUpperCase()).get(null);
             } catch (IllegalAccessException | NoSuchFieldException e) {
                 e.printStackTrace();
             }
         }
-        Field[] arr$ = property.constantClass.getFields();
+        Field[] arr$ = property.constantClazz.getFields();
         for (Field field : arr$) {
             String fieldName = field.getName();
             if ((field.getModifiers() & 8) != 0 && fieldName.startsWith(property.constantFieldPrefix) && fieldName.substring(property.constantFieldPrefix.length()).replace("_", "").equalsIgnoreCase(value)) {

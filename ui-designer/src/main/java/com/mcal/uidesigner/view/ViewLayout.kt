@@ -2,11 +2,12 @@ package com.mcal.uidesigner.view
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
-import android.widget.LinearLayout
+import android.view.View
+import androidx.appcompat.widget.LinearLayoutCompat
 
-class IncludeLayout : LinearLayout {
+class ViewLayout : LinearLayoutCompat {
     private lateinit var mContext: Context
+
     constructor(context: Context) : super(context) {
         init(context)
     }
@@ -28,6 +29,15 @@ class IncludeLayout : LinearLayout {
         orientation = VERTICAL
     }
 
-    fun setLayout(layout: CharSequence) {
+    fun setViewClass(clazz: CharSequence) {
+        try {
+            addView(
+                Class.forName(clazz.toString()).getConstructor(
+                    Context::class.java
+                ).newInstance(mContext) as View
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }
