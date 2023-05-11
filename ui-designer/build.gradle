@@ -22,8 +22,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     namespace 'com.mcal.uidesigner'
 }
@@ -33,16 +33,14 @@ dependencies {
     implementation project(':vectormaster')
     implementation project(':webview')
 
-    implementation misc.annotations
-
+    implementation jetpack.core
     implementation jetpack.preference
-
     implementation jetpack.appcompat
     implementation jetpack.material
     implementation jetpack.cardview
     implementation jetpack.constraint
 
-    implementation jetpack.core
+    implementation misc.annotations
 }
 
 afterEvaluate {

@@ -22,8 +22,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     buildFeatures {
         viewBinding true
@@ -35,22 +35,20 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':vectormaster')
 
-    implementation misc.annotations
-
+    implementation jetpack.core
     implementation jetpack.preference
-
     implementation jetpack.appcompat
     implementation jetpack.material
     implementation jetpack.cardview
     implementation jetpack.constraint
-
-    implementation jetpack.core
-    implementation google.play
     implementation jetpack.swiperefreshlayout
-
     implementation jetpack.preferences
     implementation jetpack.preferences.core
     implementation jetpack.lifecycle
+
+    implementation google.play
+
+    implementation misc.annotations
     implementation misc.coroutines.core
 }
 

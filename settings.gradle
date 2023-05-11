@@ -1,32 +1,41 @@
 pluginManagement {
     repositories {
+        gradlePluginPortal()
         google()
         mavenCentral()
-        gradlePluginPortal()
+        maven { url 'https://jitpack.io' }
+        maven { url "https://www.jabylon.org/maven/" }
     }
 }
 dependencyResolutionManagement {
     def latestFastAdapterRelease = "5.7.0"
-    def smali_version = "2.5.2"
-    def jetpack_version = '2.5.1'
+    def smali_version = "3.0.3"
     def text_edit = "0.21.0"
 
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        gradlePluginPortal()
         google()
         mavenCentral()
+        maven { url 'https://jitpack.io' }
+        maven { url "https://www.jabylon.org/maven/" }
     }
     versionCatalogs {
+        mcal {
+            library('uidesigner', 'com.github.TimScriptov.App-UI-Designer:uidesigner:1.0.9')
+            library('webview', 'com.github.TimScriptov.App-UI-Designer:webview:1.0.9')
+        }
+
         jetpack {
-            library('core', 'androidx.core:core-ktx:1.9.0')
+            library('core', 'androidx.core:core-ktx:1.10.0')
             library('appcompat', 'androidx.appcompat:appcompat:1.6.1')
             library('preference', 'androidx.preference:preference-ktx:1.2.0')
-            library('mvvm_vm', "androidx.lifecycle:lifecycle-viewmodel-ktx:$jetpack_version")
-            library('mvvm_ld', "androidx.lifecycle:lifecycle-livedata-ktx:$jetpack_version")
-            library('lifecycle', "androidx.lifecycle:lifecycle-runtime-ktx:$jetpack_version")
-            library('fragment', "androidx.navigation:navigation-fragment:$jetpack_version")
-            library('navigation', "androidx.navigation:navigation-ui:$jetpack_version")
-            library('material', 'com.google.android.material:material:1.8.0')
+            library('mvvm_vm', "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+            library('mvvm_ld', "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
+            library('lifecycle', "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+            library('fragment', "androidx.navigation:navigation-fragment-ktx:2.5.3")
+            library('navigation', "androidx.navigation:navigation-ui-ktx:2.5.3")
+            library('material', 'com.google.android.material:material:1.9.0')
             library('constraint', "androidx.constraintlayout:constraintlayout:2.1.4")
             library('coordinatorlayout', "androidx.coordinatorlayout:coordinatorlayout:1.2.0")
             library('vp2', "androidx.viewpager2:viewpager2:1.0.0")
@@ -37,13 +46,14 @@ dependencyResolutionManagement {
         }
 
         google {
-            library('play', 'com.google.android.gms:play-services-base:18.1.0')
+            library('play', 'com.google.android.gms:play-services-base:18.2.0')
         }
 
         ui {
             library('fastadapter', "com.mikepenz:fastadapter:${latestFastAdapterRelease}")
             library('fastadapter_binding', "com.mikepenz:fastadapter-extensions-binding:${latestFastAdapterRelease}") // view binding helpers
             library('imageview', 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0')
+            library('fastscroll', "me.zhanghai.android.fastscroll:library:1.2.0")
 
         }
 
@@ -53,20 +63,23 @@ dependencyResolutionManagement {
         }
 
         misc {
-            library('leaks', 'com.squareup.leakcanary:leakcanary-android:2.9.1')
+            library('leaks', 'com.squareup.leakcanary:leakcanary-android:2.10')
             library('commons_cli', 'commons-cli:commons-cli:1.5.0')
             library('commons_lang', "org.apache.commons:commons-lang3:3.12.0")
             library('commons_io', "commons-io:commons-io:2.11.0")
-            library('commons_text', "org.apache.commons:commons-text:1.9")
+            library('commons_text', "org.apache.commons:commons-text:1.10.0")
             library('guava', 'com.google.guava:guava:31.0.1-android')
-            library('antlr', "org.antlr:antlr-runtime:3.5.2")
-            library('annotations', 'org.jetbrains:annotations:24.0.0')
-            library('annotations_android', 'androidx.annotation:annotation:1.5.0')
-            library('coroutines_core', "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
-            library('coroutines_java', "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.1")
-            library('net', 'com.squareup.okhttp3:okhttp:4.10.0')
-            library('gson', 'com.google.code.gson:gson:2.9.1')
-            library('util_codex', 'com.blankj:utilcodex:1.30.6')
+            library('antlr', "org.antlr:antlr-runtime:3.5.3")
+            library('annotations', 'org.jetbrains:annotations:24.0.1')
+            library('annotations_android', 'androidx.annotation:annotation:1.6.0')
+            library('coroutines_core', "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0")
+            library('coroutines_java', "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.7.0")
+            library('net', 'com.squareup.okhttp3:okhttp:4.11.0')
+            library('gson', 'com.google.code.gson:gson:2.10.1')
+            library('util_codex', 'com.blankj:utilcodex:1.31.1')
+//            library('xpp3', 'xpp3:xpp3:1.1.4c')
+            library('xpp3', 'org.ogce:xpp3:1.1.6')
+            library('yaml', 'org.yaml:snakeyaml:2.0')
         }
 
         rosemoe {
@@ -74,14 +87,13 @@ dependencyResolutionManagement {
             library('language_java', "io.github.Rosemoe.sora-editor:language-java:${text_edit}")
             library('textmate', "io.github.Rosemoe.sora-editor:language-textmate:${text_edit}")
             library('lsp', "io.github.Rosemoe.sora-editor:editor-lsp:${text_edit}")
-
         }
 
         tools {
-            library('apktool', "com.github.TimScriptov:Android-ApkTool-Library:2.7.0.3")
-            library('dexlib2', "org.smali:dexlib2:${smali_version}")
-            library('smali', "org.smali:smali:${smali_version}")
-            library('baksmali', "org.smali:baksmali:${smali_version}")
+            library('apktool', "com.github.TimScriptov:Android-ApkTool-Library:2.7.0.8")
+            library('dexlib2', "com.android.tools.smali:smali-dexlib2:${smali_version}")
+            library('smali', "com.android.tools.smali:smali:${smali_version}")
+            library('baksmali', "com.android.tools.smali:smali-baksmali:${smali_version}")
         }
     }
 }
