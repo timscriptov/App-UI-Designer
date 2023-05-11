@@ -14,19 +14,21 @@ android {
         minSdkVersion project.minSDK.toInteger()
         targetSdkVersion project.targetSDK.toInteger()
     }
-
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
     buildFeatures {
         viewBinding true
+    }
+    kotlinOptions {
+        jvmTarget = project.jvmTarget
+    }
+    compileOptions {
+        sourceCompatibility project.sourceCompatibility.toInteger()
+        targetCompatibility project.targetCompatibility.toInteger()
     }
     namespace 'com.mcal.webview'
 }

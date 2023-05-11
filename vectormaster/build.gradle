@@ -20,9 +20,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    kotlinOptions {
+        jvmTarget = project.jvmTarget
+    }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility project.sourceCompatibility.toInteger()
+        targetCompatibility project.targetCompatibility.toInteger()
     }
     namespace 'com.mcal.vectormaster'
 }
